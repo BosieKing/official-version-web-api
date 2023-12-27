@@ -1,0 +1,18 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using IDataSphere.Repositoty;
+
+namespace IDao.Interface.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>
+{
+     /// <summary>
+    /// <#=this.data.ChinesesName#>数据访问接口
+    /// </summary>
+    public interface I<#=this.data.ClassNamePrefix#>Dao: IBaseDao<<#=this.data.TableName#>>
+    {        
+       Task<PageResult> Get<#= this.data.TableName.Split("_")[1]#>Page(Get<#= this.data.TableName.Split("_")[1]#>PageInput input);
+    }
+}

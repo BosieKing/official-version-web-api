@@ -1,0 +1,7 @@
+{
+  "CaptchaConfig": {
+    "GraphicCaptchaExpirationTime": 1, // 图像验证码过期时间，单位分钟
+    "PasswordErrorCountExpirationTime": 15, // 
+    "PasswordErrorMaxCount": 5
+  }
+} 

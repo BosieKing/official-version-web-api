@@ -1,0 +1,147 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+	<DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningsAsErrors>$(WarningsAsErrors);NU1605</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\Background\**" />
+    <Content Remove="Controllers\Background\**" />
+    <EmbeddedResource Remove="Controllers\Background\**" />
+    <None Remove="Controllers\Background\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ConfigFiles\sensitive-words.txt" />
+    <None Remove="ConfigFiles\swaggerindex.html" />
+    <None Remove="swaggerindex.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ConfigFiles\sensitive-words.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.0.0" />
+    <PackageReference Include="Autofac.AspNetCore.Multitenant" Version="7.0.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="log4net" Version="2.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.CodeDom" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\FrontDesk\" />
+    <Folder Include="OtherFiles\Log\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BusinesLogic\BusinesLogic.csproj" />
+    <ProjectReference Include="..\DataSphere\DataSphere.csproj" />
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
+    <ProjectReference Include="..\UtilityToolkit\UtilityToolkit.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="ConfigFiles\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\ActionFilterTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ActionFilterTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ControllerTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>DataSphereTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>IDataSphereTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\InputTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InputTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\IBusinesLogicTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>IBusinesLogicTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>BusinesLogicImplTemplate.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\ActionFilterTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ActionFilterTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataSphereTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IDataSphereTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\InputTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InputTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\IBusinesLogicTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IBusinesLogicTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BusinesLogicImplTemplate.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

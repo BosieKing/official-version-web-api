@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActionNameRequired" xml:space="preserve">
+    <value>按钮对应方法名称不能为空</value>
+  </data>
+  <data name="ActionNameTooLong50" xml:space="preserve">
+    <value>按钮对应方法名称长度不能超过50个字符</value>
+  </data>
+  <data name="AddError" xml:space="preserve">
+    <value>新增失败</value>
+  </data>
+  <data name="AddressRequired" xml:space="preserve">
+    <value>培训地点不能为空</value>
+  </data>
+  <data name="AddressTooLong100" xml:space="preserve">
+    <value>培训地点字符长度不能超过100个字符</value>
+  </data>
+  <data name="CodeRequired" xml:space="preserve">
+    <value>编号不能为空</value>
+  </data>
+  <data name="ComponentRequired" xml:space="preserve">
+    <value>组件地址不能为空</value>
+  </data>
+  <data name="ComponentTooLong100" xml:space="preserve">
+    <value>组件地址长度不能超过100个字符</value>
+  </data>
+  <data name="ContentRequired" xml:space="preserve">
+    <value>培训内容不能为空</value>
+  </data>
+  <data name="ContentTooLong1000" xml:space="preserve">
+    <value>培训内容长度不能超过1000个字符</value>
+  </data>
+  <data name="ContextRequired" xml:space="preserve">
+    <value>内容不能为空</value>
+  </data>
+  <data name="ContextTooLong200" xml:space="preserve">
+    <value>内容长度不能超过200个字符</value>
+  </data>
+  <data name="DataExisted" xml:space="preserve">
+    <value>相同的数据已存在，请检查如名称等是否有重复数据</value>
+  </data>
+  <data name="DataNotExist" xml:space="preserve">
+    <value>数据不存在或已被删除</value>
+  </data>
+  <data name="DeleteError" xml:space="preserve">
+    <value>删除失败</value>
+  </data>
+  <data name="DepartmentIdRequired" xml:space="preserve">
+    <value>科室不能为空</value>
+  </data>
+  <data name="DepartmentNotExist" xml:space="preserve">
+    <value>科室不存在或已被删除</value>
+  </data>
+  <data name="DirectoryIdRequired" xml:space="preserve">
+    <value>归属目录不能为空</value>
+  </data>
+  <data name="DirectoryNotExist" xml:space="preserve">
+    <value>目录不存在</value>
+  </data>
+  <data name="DirectoryNotUnbound" xml:space="preserve">
+    <value>目录没有解除绑定，请解除绑定关系后再删除</value>
+  </data>
+  <data name="EmailFormatError" xml:space="preserve">
+    <value>邮箱格式错误</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>邮箱不能为空</value>
+  </data>
+  <data name="EmailTooLong50" xml:space="preserve">
+    <value>邮箱长度不能超过50个字符</value>
+  </data>
+  <data name="ExamEndTimeRequired" xml:space="preserve">
+    <value>考核结束时间不能为空</value>
+  </data>
+  <data name="ExamPaperIdRequired" xml:space="preserve">
+    <value>试卷不能为空</value>
+  </data>
+  <data name="ExamStartTimeRequired" xml:space="preserve">
+    <value>考核开始时间不能为空</value>
+  </data>
+  <data name="GraphicCaptchaError" xml:space="preserve">
+    <value>图像验证码错误，请重新获取新验证码</value>
+  </data>
+  <data name="GraphicCaptchaExpired" xml:space="preserve">
+    <value>图像验证码已失效，请重新获取新验证码</value>
+  </data>
+  <data name="GraphicCaptchaRequired" xml:space="preserve">
+    <value>请填写图像验证码框内的对应的数字或字母</value>
+  </data>
+  <data name="IconRequired" xml:space="preserve">
+    <value>图标不能为空</value>
+  </data>
+  <data name="IconTooLong50" xml:space="preserve">
+    <value>图标长度不能超过50个字符</value>
+  </data>
+  <data name="IdentityTypeIdRequired" xml:space="preserve">
+    <value>身份类型不能为空</value>
+  </data>
+  <data name="IdentityTypeNotExist" xml:space="preserve">
+    <value>身份类型不存在或已被删除</value>
+  </data>
+  <data name="IdRequried" xml:space="preserve">
+    <value>Id不能为空</value>
+  </data>
+  <data name="InviteCodeError" xml:space="preserve">
+    <value>邀请码错误</value>
+  </data>
+  <data name="InviteCodeRequired" xml:space="preserve">
+    <value>邀请码不能为空</value>
+  </data>
+  <data name="IsNotManage" xml:space="preserve">
+    <value>非管理员禁止登录</value>
+  </data>
+  <data name="IsPublishedRequired" xml:space="preserve">
+    <value>需要选择是保存还是发布</value>
+  </data>
+  <data name="MaxExamCountRequired" xml:space="preserve">
+    <value>最多考核次数不能为空</value>
+  </data>
+  <data name="MaxSignUpCountRequired" xml:space="preserve">
+    <value>最多报名人数不能为空</value>
+  </data>
+  <data name="MentorAuditExisted" xml:space="preserve">
+    <value>导师已注册，正在审核中，请勿重复注册</value>
+  </data>
+  <data name="MentorBindMentorError" xml:space="preserve">
+    <value>导师无需绑定导师</value>
+  </data>
+  <data name="MentorExisted" xml:space="preserve">
+    <value>导师已注册成功，请勿重复注册</value>
+  </data>
+  <data name="MentorIdRequired" xml:space="preserve">
+    <value>需要绑定导师</value>
+  </data>
+  <data name="MentorNotExist" xml:space="preserve">
+    <value>导师未注册或正在审核中</value>
+  </data>
+  <data name="MenuNotExist" xml:space="preserve">
+    <value>菜单不存在</value>
+  </data>
+  <data name="MenuNotUnboundByRole" xml:space="preserve">
+    <value>菜单没有与角色解除绑定，请解除绑定关系后再删除</value>
+  </data>
+  <data name="NameExisted" xml:space="preserve">
+    <value>名称已存在</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>名称不能为空</value>
+  </data>
+  <data name="NameTooLong50" xml:space="preserve">
+    <value>名称长度不能超过50个字符</value>
+  </data>
+  <data name="NewPasswordFormatError" xml:space="preserve">
+    <value>新密码应由6-15位字符组成，必须包含一个大写、小写字符、数字、和一个特殊字符</value>
+  </data>
+  <data name="NewPasswordRequired" xml:space="preserve">
+    <value>新密码不能为空</value>
+  </data>
+  <data name="NickNameRequired" xml:space="preserve">
+    <value>昵称不能为空</value>
+  </data>
+  <data name="NickNameTooLong50" xml:space="preserve">
+    <value>昵称长度不允许超过50个字符</value>
+  </data>
+  <data name="OldPasswordError" xml:space="preserve">
+    <value>原密码错误</value>
+  </data>
+  <data name="OldPasswordRequired" xml:space="preserve">
+    <value>旧密码不能为空</value>
+  </data>
+  <data name="PasswordFormatError" xml:space="preserve">
+    <value>密码应由6-15位字符组成，必须包含一个大写、小写字符、数字、和一个特殊字符</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>密码不能为空</value>
+  </data>
+  <data name="PasswrodError" xml:space="preserve">
+    <value>手机号或密码错误，剩余@次数</value>
+  </data>
+  <data name="PasswrodMaxErrorWait" xml:space="preserve">
+    <value>手机号或密码错误次数已达上限，请耐心等待@分钟后重试</value>
+  </data>
+  <data name="PathRequired" xml:space="preserve">
+    <value>路径不能为空</value>
+  </data>
+  <data name="PathTooLong100" xml:space="preserve">
+    <value>路径的长度不能超过100个字符</value>
+  </data>
+  <data name="PenaltyClauseIdRequired" xml:space="preserve">
+    <value>条款不能为空</value>
+  </data>
+  <data name="PersonTypeIdRequired" xml:space="preserve">
+    <value>人员类型不能为空</value>
+  </data>
+  <data name="PersonTypeNotExist" xml:space="preserve">
+    <value>人员类型不存在或已被删除</value>
+  </data>
+  <data name="PhoneExisted" xml:space="preserve">
+    <value>电话号码已被注册</value>
+  </data>
+  <data name="PhoneFormatError" xml:space="preserve">
+    <value>电话号码格式错误</value>
+  </data>
+  <data name="PhoneRequired" xml:space="preserve">
+    <value>电话号码不能为空</value>
+  </data>
+  <data name="PrimaryCardNumberTooLong200" xml:space="preserve">
+    <value>主卡长度不能超过200个字符</value>
+  </data>
+  <data name="RealNameRequired" xml:space="preserve">
+    <value>真实姓名不能为空</value>
+  </data>
+  <data name="RealNameTooLong50" xml:space="preserve">
+    <value>真实姓名长度不允许超过50个字符</value>
+  </data>
+  <data name="RemarkTooLong500" xml:space="preserve">
+    <value>备注长度不能超过500个字符</value>
+  </data>
+  <data name="RoleNotExist" xml:space="preserve">
+    <value>角色不存在</value>
+  </data>
+  <data name="RouterRequired" xml:space="preserve">
+    <value>路由地址不能为空</value>
+  </data>
+  <data name="RouterTooLong100" xml:space="preserve">
+    <value>路由地址长度不能超过100个字符</value>
+  </data>
+  <data name="ScoresRequired" xml:space="preserve">
+    <value>分数不能为空</value>
+  </data>
+  <data name="SearchError" xml:space="preserve">
+    <value>查询失败</value>
+  </data>
+  <data name="SendCodeError" xml:space="preserve">
+    <value>发送验证码失败</value>
+  </data>
+  <data name="SexRequried" xml:space="preserve">
+    <value>性别不能为空</value>
+  </data>
+  <data name="SignInEndTimeRequired" xml:space="preserve">
+    <value>签到结束时间不能为空</value>
+  </data>
+  <data name="SignInStartTimeRequired" xml:space="preserve">
+    <value>签到开始时间不能为空</value>
+  </data>
+  <data name="SignOutEndTimeRequired" xml:space="preserve">
+    <value>签退结束时间不能为空</value>
+  </data>
+  <data name="SignOutStartTimeRequired" xml:space="preserve">
+    <value>签退开始时间不能为空</value>
+  </data>
+  <data name="SignUpEndTimeRequired" xml:space="preserve">
+    <value>报名结束时间不能为空</value>
+  </data>
+  <data name="SignUpStartTimeRequired" xml:space="preserve">
+    <value>报名开始时间不能为空</value>
+  </data>
+  <data name="TeacherNameRequired" xml:space="preserve">
+    <value>老师名称不能为空</value>
+  </data>
+  <data name="TeacherNameTooLong50" xml:space="preserve">
+    <value>老师名称长度不能超过50个字符</value>
+  </data>
+  <data name="TenantCodeExisted" xml:space="preserve">
+    <value>租户编号已存在</value>
+  </data>
+  <data name="TrainingEndTimeRequired" xml:space="preserve">
+    <value>培训结束时间不能为空</value>
+  </data>
+  <data name="TrainingIdRequired" xml:space="preserve">
+    <value>归属培训不能为空</value>
+  </data>
+  <data name="TrainingStartTimeRequired" xml:space="preserve">
+    <value>培训开始时间不能为空</value>
+  </data>
+  <data name="TrainingTypeRequired" xml:space="preserve">
+    <value>培训类型不能为空</value>
+  </data>
+  <data name="TypeRequired" xml:space="preserve">
+    <value>类型不能为空</value>
+  </data>
+  <data name="UpdateError" xml:space="preserve">
+    <value>更新失败</value>
+  </data>
+  <data name="UserCodeTooLong100" xml:space="preserve">
+    <value>工号/学号长度不能超过100个字符</value>
+  </data>
+  <data name="UserExisted" xml:space="preserve">
+    <value>用户已存在</value>
+  </data>
+  <data name="UserNotRegister" xml:space="preserve">
+    <value>用户不存在</value>
+  </data>
+  <data name="VerifCodeError" xml:space="preserve">
+    <value>验证码错误，剩余@次数</value>
+  </data>
+  <data name="VerifCodeExpired" xml:space="preserve">
+    <value>验证码已失效，请重新获取新验证码</value>
+  </data>
+  <data name="VerifCodeRequired" xml:space="preserve">
+    <value>验证码不能为空</value>
+  </data>
+  <data name="VerifCodeWork" xml:space="preserve">
+    <value>验证码仍在有效期内，请勿重复发送</value>
+  </data>
+  <data name="ViceCardNumberTooLong200" xml:space="preserve">
+    <value>副卡长度不能超过200个字符</value>
+  </data>
+</root>

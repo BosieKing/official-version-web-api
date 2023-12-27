@@ -1,0 +1,45 @@
+{
+  //在 launchSettings.json 用于配置应用的启动工作，包括环境变量和开发端口，和右键配置项目属性可以达到同样的目的。
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  //IIS配置
+  "iisSettings": {
+    "windowsAuthentication": false, //IIS是否启用 Windows 身份验证
+    "anonymousAuthentication": true, //IIS是否启用匿名身份验证
+    "iisExpress": {
+      "applicationUrl": "http://localhost:52624", //指定 IIS 服务器的地址
+      "sslPort": 0 //指定 IIS 服务器的端口
+    }
+  },
+  //节点定义了一系列用于表示应用启动场景的概要
+  "profiles": {
+    //使用当前项目名称来命名
+    "WebApi": {
+      "commandName": "Project",
+      "launchUrl": "swagger", //：如果launchBrowser被设置为true，浏览器采用的初始化路径通过该属性进行设置。
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development" //属性用来设置环境变量
+      },
+      "applicationUrl": "http://localhost:8001",
+      "dotnetRunMessages": true //是否在运行时给予反馈信息。
+    },
+    //默认创建--IIS进程内
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true, //表示应用程序的时候是否自动启动浏览器
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    //
+    "WSL": {
+      "commandName": "WSL2",
+      "launchUrl": "http://localhost:8001/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:8001"
+      },
+      "distributionName": ""
+    }
+  }
+}

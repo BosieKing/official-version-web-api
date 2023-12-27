@@ -1,0 +1,96 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Enums;
+using SharedLibrary.Consts;
+using SharedLibrary.NormalizeModel;
+using BusinesLogic.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>;
+using BusinesLogic.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>.Dto;
+using WebAPI.ActionFilters.<#=this.data.SwaggerGroupEnumName#>;
+using IDataSphere.Interface.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix #>;
+
+namespace WebAPI.Controllers.<#=this.data.SwaggerGroupEnumName #>
+{
+    /// <summary>
+    /// <#=this.data.ChinesesName #>控制层
+    /// </summary>
+    [ApiController]
+    [Route("<#=this.data.ClassNamePrefix#>")]
+    [ApiDescription(SwaggerGroupEnum.<#= this.data.SwaggerGroupEnumName #>)]
+    [ServiceFilter(typeof(<#=this.data.ClassNamePrefix#>ActionFilter))]
+    public class <#=this.data.ClassNamePrefix#>Controller : <#= this.data.ControllerBase#>
+    {
+        #region 构造函数
+        private readonly I<#=this.data.ClassNamePrefix#>Service _<#=this.data.ParameterName#>Service;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public <#=this.data.ClassNamePrefix#>Controller(I<#=this.data.ClassNamePrefix#>Service <#=this.data.ParameterName#>Service, IHttpContextAccessor httpContextAccessor)
+        {
+            this._<#=this.data.ParameterName#>Service = <#=this.data.ParameterName#>Service;
+            this._httpContextAccessor = httpContextAccessor;
+        }
+        #endregion
+
+        #region 查询
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpGet("get<#= this.data.TableName.Split("_")[1]#>Page")]
+        public async Task<ActionResult<ServiceResult>> Get<#= this.data.TableName.Split("_")[1]#>Page([FromQuery] Get<#=this.data.TableName.Split("_")[1]#>PageInput input)
+        {
+            var data = await _<#=this.data.ParameterName#>Service.Get<#= this.data.TableName.Split("_")[1]#>Page(input);
+            return ServiceResult.SetData(data);
+        }
+        #endregion
+
+        #region 新增
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("add<#= this.data.TableName.Split("_")[1]#>")]
+        public async Task<ActionResult<ServiceResult>> Add<#= this.data.TableName.Split("_")[1]#>([FromBody] Add<#=this.data.TableName.Split("_")[1]#>Input input)
+        {
+            var result = await _<#=this.data.ParameterName#>Service.Add<#= this.data.TableName.Split("_")[1]#>(input);
+            return ServiceResult.SetData(result);
+        }
+        #endregion
+
+        #region 更新
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("update<#= this.data.TableName.Split("_")[1]#>")]
+        public async Task<ActionResult<ServiceResult>> Update<#= this.data.TableName.Split("_")[1]#>([FromBody] Update<#=this.data.TableName.Split("_")[1]#>Input input)
+        {
+            var result = await _<#=this.data.ParameterName#>Service.Update<#= this.data.TableName.Split("_")[1]#>(input);
+            return ServiceResult.SetData(result);
+        }
+        #endregion
+
+        #region 删除
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("delete<#= this.data.TableName.Split("_")[1]#>")]
+        public async Task<ActionResult<ServiceResult>> Delete<#= this.data.TableName.Split("_")[1]#>([FromBody] IdInput input)
+        {
+            var result = await _<#=this.data.ParameterName#>Service.Delete<#= this.data.TableName.Split("_")[1]#>(input.Id);
+            return ServiceResult.SetData(result);
+        }
+        #endregion
+    }
+}

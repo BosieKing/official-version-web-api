@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Background\**" />
+    <EmbeddedResource Remove="Background\**" />
+    <None Remove="Background\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Center\" />
+    <Folder Include="FrontDesk\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataSphere\DataSphere.csproj" />
+    <ProjectReference Include="..\IDataSphere\IDataSphere.csproj" />
+    <ProjectReference Include="..\UtilityToolkit\UtilityToolkit.csproj" />
+  </ItemGroup>
+
+</Project>

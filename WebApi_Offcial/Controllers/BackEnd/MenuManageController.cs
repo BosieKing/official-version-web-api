@@ -1,0 +1,185 @@
+﻿using BusinesLogic.BackEnd.MenuManage;
+using BusinesLogic.BackEnd.MenuManage.Dto;
+using IDataSphere.Interface.BackEnd.MenuManage;
+using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Enums;
+using SharedLibrary.Models.DomainModels;
+using SharedLibrary.Models.SharedDataModels;
+using WebApi_Offcial.ActionFilters.BackEnd;
+
+namespace WebApi_Offcial.Controllers.BackEnd
+{
+    /// <summary>
+    /// 菜单控制层
+    /// </summary>
+    [ApiController]
+    [Route("MenuManage")]
+    [ApiDescription(SwaggerGroupEnum.System)]
+    [ServiceFilter(typeof(MenuManageActionFilter))]
+    public class MenuManageController : BaseController
+    {
+        #region 构造函数
+        private readonly IMenuManageService _menuManageService;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public MenuManageController(IMenuManageService menuManageService)
+        {
+            _menuManageService = menuManageService;
+
+        }
+        #endregion
+
+        #region 查询     
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpGet("getMenuPage")]
+        public async Task<ActionResult<DataResponseModel>> GetMenuPage([FromQuery] GetMenuPageInput input)
+        {
+            var data = await _menuManageService.GetMenuPage(input);
+            return DataResponseModel.SetData(data);
+        }
+
+        /// <summary>
+        /// 获取目录下拉
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getDirectoryList")]
+        public async Task<ActionResult<DataResponseModel>> GetDirectoryList()
+        {
+            var data = await _menuManageService.GetDirectoryList();
+            return DataResponseModel.SetData(data);
+        }
+
+        /// <summary>
+        /// 获取菜单下拉
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getMenuList")]
+        public async Task<ActionResult<DataResponseModel>> GetMenuList()
+        {
+            var data = await _menuManageService.GetMenuList();
+            return DataResponseModel.SetData(data);
+        }
+        #endregion
+
+        #region 新增
+        /// <summary>
+        /// 添加目录
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("addDirectory")]
+        public async Task<ActionResult<DataResponseModel>> AddDirectory([FromBody] AddDirectoryInput input)
+        {
+            var result = await _menuManageService.AddDirectory(input);
+            return DataResponseModel.SetData(result);
+        }
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("addMenu")]
+        public async Task<ActionResult<DataResponseModel>> AddMenu([FromBody] AddMenuInput input)
+        {
+            var result = await _menuManageService.AddMenu(input);
+            return DataResponseModel.SetData(result);
+        }
+
+        /// <summary>
+        /// 添加按钮
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("addMenuButton")]
+        public async Task<ActionResult<DataResponseModel>> AddMenuButton([FromBody] AddMenuButtonInput input)
+        {
+            var result = await _menuManageService.AddMenuButton(input);
+            return DataResponseModel.SetData(result);
+        }
+        #endregion
+
+        #region 更新
+        /// <summary>
+        /// 更新目录
+        /// </summary>  
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("updateDirectory")]
+        public async Task<ActionResult<DataResponseModel>> UpdateDirectory([FromBody] UpdateDirectoryInput input)
+        {
+            var result = await _menuManageService.UpdateDirectory(input);
+            return DataResponseModel.SetData(result);
+        }
+
+        /// <summary>
+        /// 更新菜单
+        /// </summary>  
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("updateMenu")]
+        public async Task<ActionResult<DataResponseModel>> UpdateMenu([FromBody] UpdateMeunInput input)
+        {
+            var result = await _menuManageService.UpdateMenu(input);
+            return DataResponseModel.SetData(result);
+        }
+
+        /// <summary>
+        /// 更新按钮
+        /// </summary>  
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("updateMenuButton")]
+        public async Task<ActionResult<DataResponseModel>> UpdateMenuButton([FromBody] UpdateMenuButtonInput input)
+        {
+            var result = await _menuManageService.UpdateMenuButton(input);
+            return DataResponseModel.SetData(result);
+        }
+        #endregion
+
+        #region 删除
+        /// <summary>
+        /// 删除目录
+        /// </summary>  
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("deleteDirectory")]
+        public async Task<ActionResult<DataResponseModel>> DeleteDirectory([FromBody] IdInput input)
+        {
+            var result = await _menuManageService.DeleteDirectory(input.Id);
+            return DataResponseModel.SetData(result);
+        }
+
+        /// <summary>
+        /// 删除菜单
+        /// </summary>  
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("deleteMenu")]
+        public async Task<ActionResult<DataResponseModel>> DeleteMenu([FromBody] IdInput input)
+        {
+            var result = await _menuManageService.DelteMenu(input.Id);
+            return DataResponseModel.SetData(result);
+        }
+
+        /// <summary>
+        /// 删除按钮
+        /// </summary>  
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("deleteMenuButton")]
+        public async Task<ActionResult<DataResponseModel>> DelteMenuButton([FromBody] IdInput input)
+        {
+            var result = await _menuManageService.DelteMenuButton(input.Id);
+            return DataResponseModel.SetData(result);
+        }
+        #endregion
+
+    }
+}

@@ -1,0 +1,83 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using IDataSphere.Interface.<#=this.data.SwaggerGroupEnumName#>;
+using IDataSphere.Repositoty;
+using Mapster;
+using Microsoft.EntityFrameworkCore;
+using SharedLibrary.NormalizeModel;
+using BusinesLogic.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>.Dto;
+using IDataSphere.Interface.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix #>;
+using System.Text;
+using UtilityToolkit.Utils;
+
+namespace Service.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>
+{
+    /// <summary>
+    /// <#=this.data.ChinesesName #>业务类
+    /// </summary>
+    public class <#=this.data.ClassNamePrefix#>ServiceImpl : I<#=this.data.ClassNamePrefix#>Service
+    {
+        #region 构造函数
+        private readonly I<#=this.data.ClassNamePrefix#>Dao _<#=this.data.ParameterName#>Dao;
+        public <#=this.data.ClassNamePrefix#>ServiceImpl(I<#=this.data.ClassNamePrefix#>Dao <#=this.data.ParameterName#>Dao)
+        {
+            this._<#=this.data.ParameterName#>Dao = <#=this.data.ParameterName#>Dao;
+        }
+        #endregion
+
+        #region 查询
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public Task<PageResult> Get<#= this.data.TableName.Split("_")[1]#>Page(Get<#= this.data.TableName.Split("_")[1]#>PageInput input);
+        {
+            return await _<#=this.data.ParameterName#>Dao.Get<#= this.data.TableName.Split("_")[1]#>Page(input);
+        }
+        #endregion
+
+        #region 新增
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<bool> Add<#= this.data.TableName.Split("_")[1]#>(Add<#=this.data.TableName.Split("_")[1]#>Input input)
+        {          
+            <#=this.data.TableName#> data = input.Adapt<<#=this.data.TableName#>>();
+            return await _<#=this.data.ParameterName#>Dao.AddAsync(data);
+        }
+        #endregion
+
+        #region 更新
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<bool> Update<#= this.data.TableName.Split("_")[1]#>(Update<#=this.data.TableName.Split("_")[1]#>Input input) 
+        {
+            <#=this.data.TableName#> data = input.Adapt<<#=this.data.TableName#>>();
+            data.Id = input.Id;
+            return await _<#=this.data.ParameterName#>Dao.UpdateAsync(data);
+        }
+        #endregion
+
+        #region 删除
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> Delete<#= this.data.TableName.Split("_")[1]#>(long id)
+        {        
+            return await _<#=this.data.ParameterName#>Dao.DeleteAsync(id);
+        }
+        #endregion
+    }
+}

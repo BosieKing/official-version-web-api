@@ -1,0 +1,43 @@
+代码规范化
+1.所有类名、方法名称必须使用大驼峰式；
+
+2.所有参数、局部变量使用小写，禁止使用拼音、缩写、特殊符号等不规范命名（包含属性名、字段名、局部变量、参数）名称需要一看就只知道是干什么的；
+
+3.方法名称命名：
+以user为例
+新增
+AddUser
+BatchAddUser
+
+更新
+UpdateUser
+BatchUpdateUser
+
+删除
+DeleteUser
+BatchDeleteUser
+
+查询
+GetUserById
+GetUserList
+GetUserCount
+GetUserPage，
+按照CURD种类，使用#region标签划分，按照访问等级排序 public-protected-private；
+
+4.接口实现类统一加后缀Impl，采用了设计模式需要在类名上体现关键字，抽象类需要用Abstract开头；
+
+5.枚举分类分为系统和业务，枚举成员全部采用大写；
+
+6.工具类分为helper（需要实例）、Util（静态）；
+
+7.注释规范，//加一个空格在写注释。小括号等代码缩进规范，不要出现多余的空行；
+
+8.方法只在该类使用，必须为private ，在类和子类中使用，必须为protected；
+
+9.常量必须全部大写（不要在乎多长，单词用下划线连接）公共常量收归到Consts中管理，按照用途分类，如果是只在一个类的内部使用，全局常量必须为private；
+
+10.代码中不允许出现任何魔法值，如 string a =“你好”+b；其中“你好”就是魔法值；
+
+11.属性为bool类型的属性、字段不允许加前缀is；
+
+12.循环体内的字符相加必须使用stringbulider；
