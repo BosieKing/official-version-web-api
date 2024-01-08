@@ -1,10 +1,10 @@
-﻿using BusinesLogic.FrontDesk.FrontDeskOAuth.Dto;
-using IDataSphere.Interface.FronDesk;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.Interfaces.FronDesk;
 using Mapster;
+using Model.Commons.CoreData;
+using Model.DTOs.FronDesk.FrontDeskOAuth;
+using Model.Repositotys;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.CoreDataModels;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
@@ -50,7 +50,7 @@ namespace BusinesLogic.FrontDesk.FrontDeskOAuth
             else
             {
                 user.UniqueNumber = YitIdHelper.NextId();
-            }           
+            }
             user.CreatedTime = DateTime.Now;
             var tenantInfo = await _frontDeskOAuthDao.GetIdByInviteCode(input.InviteCode);
             user.TenantId = tenantInfo.Id;

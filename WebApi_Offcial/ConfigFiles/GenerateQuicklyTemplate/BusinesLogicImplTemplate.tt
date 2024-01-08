@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using IDataSphere.Interface.<#=this.data.SwaggerGroupEnumName#>;
-using IDataSphere.Repositoty;
+using Model.PO;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using SharedLibrary.NormalizeModel;

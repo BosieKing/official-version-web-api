@@ -1,8 +1,8 @@
 ﻿using CSRedis;
+using Model.Commons.CoreData;
+using Model.Commons.Domain;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.CoreDataModels;
-using SharedLibrary.Models.DomainModels;
 using System.IdentityModel.Tokens.Jwt;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;

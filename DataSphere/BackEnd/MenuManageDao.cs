@@ -1,15 +1,19 @@
-﻿using IDataSphere.Interface.BackEnd.MenuManage;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.DatabaseContexts;
+using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
+using Model.Commons.CoreData;
+using Model.DTOs.BackEnd.MenuManage;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.CoreDataModels;
 
 namespace DataSphere.BackEnd
 {
-    public class MenuManageDao : BaseDao<T_Menu>, IMenuManageDao
+    /// <summary>
+    /// 后台菜单库管理数据访问实现类
+    /// </summary>
+    public class MenuManageDao : BaseDao, IMenuManageDao
     {
         #region 构造函数
-        public MenuManageDao(SqlDbContext dMDbContext) : base(dMDbContext)
+        public MenuManageDao(SqlDbContext dbContext) : base(dbContext)
         {
         }
         #endregion
@@ -17,16 +21,16 @@ namespace DataSphere.BackEnd
         #region 查询
         public async Task<(int count, List<MenuTreeModel> menuListInfo, List<MenuTreeModel> buttonListInfo)> GetMenuPage(GetMenuPageInput input)
         {
-            int count = await dMDbContext.DirectoryRep.CountAsync();
-            var menuInfo = dMDbContext.DirectoryRep.Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize)
-                                          .GroupJoin(dMDbContext.MenuRep, d => d.Id, m => m.DirectoryId, (d, m) => new { d, m })
+            int count = await dbContext.DirectoryRep.CountAsync();
+            var menuInfo = dbContext.DirectoryRep.Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize)
+                                          .GroupJoin(dbContext.MenuRep, d => d.Id, m => m.DirectoryId, (d, m) => new { d, m })
                                           .SelectMany(dm => dm.m.DefaultIfEmpty(), (dm, m) => new MenuTreeModel
                                           {
                                               Id = m == null ? 0 : m.Id,
                                               Name = m == null ? "" : m.Name,
                                               Icon = m == null ? "" : m.Icon,
                                               Router = m == null ? "" : m.Router,
-                                              Path = m == null ? "" : m.StrPath,
+                                              BrowserPath = m == null ? "" : m.BrowserPath,
                                               IsHidden = m == null ? true : m.IsHidden,
                                               Weight = m == null ? 0 : m.Weight,
                                               Remark = m == null ? "" : m.Remark,
@@ -34,10 +38,10 @@ namespace DataSphere.BackEnd
                                               PId = dm.d.Id,
                                               PName = dm.d.Name,
                                               PIcon = dm.d.Icon,
-                                              PPath = dm.d.StrPath,
+                                              PPath = dm.d.BrowserPath,
                                           })
                                           .ToList();
-            var buttonList = dMDbContext.MenuButtonRep.Where(p => menuInfo.Select(m => m.Id).Contains(p.MenuId)).Select(p => new MenuTreeModel
+            var buttonList = dbContext.MenuButtonRep.Where(p => menuInfo.Select(m => m.Id).Contains(p.MenuId)).Select(p => new MenuTreeModel
             {
                 Id = p.Id,
                 Name = p.Name,

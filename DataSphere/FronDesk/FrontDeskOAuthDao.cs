@@ -1,18 +1,19 @@
-﻿using IDataSphere.Extensions;
-using IDataSphere.Interface.FronDesk;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.DatabaseContexts;
+using IDataSphere.Extensions;
+using IDataSphere.Interfaces.FronDesk;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Models.CoreDataModels;
+using Model.Commons.CoreData;
+using Model.Repositotys;
 
 namespace DataSphere.FronDesk
 {
     /// <summary>
-    /// 前台权限数据库访问类
+    /// 前台权限业务数据访问实现类
     /// </summary>
-    public class FrontDeskOAuthDao : BaseDao<T_User>, IFrontDeskOAuthDao
+    public class FrontDeskOAuthDao : BaseDao, IFrontDeskOAuthDao
     {
         #region 构造函数
-        public FrontDeskOAuthDao(SqlDbContext dMDbContext) : base(dMDbContext)
+        public FrontDeskOAuthDao(SqlDbContext dbContext) : base(dbContext)
         {
         }
         #endregion
@@ -26,14 +27,14 @@ namespace DataSphere.FronDesk
         public async Task<TokenInfoModel> GetUserInfoByPhone(string phone)
         {
             // 获取用户最近一次登陆的租户账号
-            return await dMDbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone).OrderByDescending(p => p.LoginTime)
-                                      .Join(dMDbContext.TenantRep, u => u.TenantId, t => t.Id, (u, t) => new TokenInfoModel
+            return await dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone).OrderByDescending(p => p.LoginTime)
+                                      .Join(dbContext.TenantRep, u => u.TenantId, t => t.Id, (u, t) => new TokenInfoModel
                                       {
                                           UserId = u.Id.ToString(),
                                           TenantId = u.TenantId.ToString(),
                                           SchemeName = t.Code.ToString(),
                                           UniqueNumber = u.UniqueNumber.ToString(),
-                                          RoleId = string.Join(",", dMDbContext.UserRoleRep.Where(p => p.UserId == u.Id).Select(p => p.RoleId))
+                                          RoleId = string.Join(",", dbContext.UserRoleRep.Where(p => p.UserId == u.Id).Select(p => p.RoleId))
                                       }).FirstOrDefaultAsync();
         }
 
@@ -45,7 +46,7 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<(long Id, string Code)> GetIdByInviteCode(string inviteCode)
         {
-            var id = await dMDbContext.TenantRep.IgnoreTenantFilter()
+            var id = await dbContext.TenantRep.IgnoreTenantFilter()
                                        .Where(p => p.InviteCode == inviteCode)
                                        .Select(p => new ValueTuple<long, string>(p.Id, p.Name))
                                        .FirstOrDefaultAsync();
@@ -59,7 +60,7 @@ namespace DataSphere.FronDesk
         /// <returns>true已注册，false未注册</returns>
         public async Task<bool> PhoneExiste(string phone, long tenantId = 0)
         {
-            return await dMDbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone)
+            return await dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone)
                                    .Where(!tenantId.Equals(0), p => p.TenantId == tenantId)
                                    .AnyAsync();
         }
@@ -72,7 +73,7 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> PassWordExiste(string phone, string password)
         {
-            return await dMDbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone && p.Password == password)
+            return await dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone && p.Password == password)
                                    .AnyAsync();
         }
         #endregion
@@ -99,10 +100,10 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdateLastLoginPassWord(string phone, string newPassword)
         {
-            var user = await dMDbContext.UserRep.IgnoreTenantFilter().FirstOrDefaultAsync(p => p.Phone == phone);
+            var user = await dbContext.UserRep.IgnoreTenantFilter().FirstOrDefaultAsync(p => p.Phone == phone);
             user.Password = newPassword;
-            dMDbContext.Update(user);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.Update(user);
+            await dbContext.SaveChangesAsync();
             return true;
         }
 
@@ -113,10 +114,10 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdateLastLoginTime(long userId)
         {
-            var user = await dMDbContext.UserRep.IgnoreTenantFilter().FirstOrDefaultAsync(p => p.Id == userId);
+            var user = await dbContext.UserRep.IgnoreTenantFilter().FirstOrDefaultAsync(p => p.Id == userId);
             user.LoginTime = DateTime.Now;
-            dMDbContext.Update(user);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.Update(user);
+            await dbContext.SaveChangesAsync();
             return true;
         }
         #endregion

@@ -1,14 +1,13 @@
-﻿using BusinesLogic.FrontDesk.UserInfoManage.Dto;
-using IDataSphere.Interface.FronDesk;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.Interfaces.FronDesk;
 using Mapster;
-using SharedLibrary.NormalizeModel;
+using Model.DTOs.FronDesk.UserInfoManage;
+using Model.Repositotys;
 using UtilityToolkit.Helpers;
 
 namespace BusinesLogic.FrontDesk.UserInfoManage
 {
     /// <summary>
-    /// 用户中心业务实现类
+    /// 前台用户中心实现类
     /// </summary>
     public class UserInfoManageServiceImpl : IUserInfoManageService
     {
@@ -63,7 +62,7 @@ namespace BusinesLogic.FrontDesk.UserInfoManage
         public async Task<bool> UploadAvatar(string url, long userId)
         {
             return await _userInfoDao.UpdateAvatar(url, userId);
-        }      
+        }
 
         /// <summary>
         /// 更新密码
@@ -80,6 +79,5 @@ namespace BusinesLogic.FrontDesk.UserInfoManage
 
         #region 删除
         #endregion
-
     }
 }

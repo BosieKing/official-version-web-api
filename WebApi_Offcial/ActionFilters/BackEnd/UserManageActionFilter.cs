@@ -1,10 +1,10 @@
-using BusinesLogic.BackEnd.UserManage.Dto;
-using IDataSphere.Interface.BackEnd.UserManage;
-using IDataSphere.Repositoty;
+using IDataSphere.Interfaces.BackEnd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
-using SharedLibrary.Models.DomainModels;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.UserManage;
+using Model.Repositotys;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.ActionFilters.BackEnd
@@ -70,7 +70,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<DataResponseModel> AddUserVerify(AddUserInput input)
         {
             // 判断账号是否注册
-            bool accountExist = await _userManageDao.DataExisted(p => p.Phone == input.Phone);
+            bool accountExist = await _userManageDao.DataExisted<T_User>(p => p.Phone == input.Phone);
             if (accountExist)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["PhoneExisted"].Value);
@@ -84,7 +84,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<DataResponseModel> AddUserRoleVerify(AddUserRoleInput input)
         {
-            bool accountExist = await _userManageDao.IdExisted(input.UserId);
+            bool accountExist = await _userManageDao.IdExisted<T_User>(input.UserId);
             if (!accountExist)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);
@@ -107,7 +107,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<DataResponseModel> UpdateUserVerify(UpdateUserInput input)
         {
             // 判断账号是否注册
-            bool accountExist = await _userManageDao.DataExisted(p => p.Phone == input.Phone && p.Id != input.Id);
+            bool accountExist = await _userManageDao.DataExisted<T_User>(p => p.Phone == input.Phone && p.Id != input.Id);
             if (accountExist)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["PhoneExisted"].Value);

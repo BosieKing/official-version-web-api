@@ -1,18 +1,18 @@
-﻿using BusinesLogic.FrontDesk.UserInfoManage.Dto;
-using SharedLibrary.NormalizeModel;
+﻿using Model.DTOs.FronDesk.UserInfoManage;
 
 namespace BusinesLogic.FrontDesk.UserInfoManage
 {
+    /// <summary>
+    /// 前台用户中心业务接口
+    /// </summary>
     public interface IUserInfoManageService
-    {      
-
+    {
         /// <summary>
         /// 根据id获取用户信息
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<dynamic> GetUserInfo(long userId);
-       
 
         /// <summary>
         /// 修改密码

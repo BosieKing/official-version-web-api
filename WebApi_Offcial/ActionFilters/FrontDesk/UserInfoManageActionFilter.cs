@@ -1,12 +1,13 @@
 ﻿using BusinesLogic.Center.Captcha;
-using BusinesLogic.FrontDesk.UserInfoManage.Dto;
-using IDataSphere.Interface.FronDesk;
+using IDataSphere.Interfaces.FronDesk;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
+using Model.Commons.Domain;
+using Model.DTOs.FronDesk.UserInfoManage;
+using Model.Repositotys;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.ActionFilters.FrontDesk
@@ -20,14 +21,14 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private readonly IUserInfoManageDao _userInfoDao;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStringLocalizer<UserTips> _stringLocalizer;
-        private readonly CaptchaService _captchaService;
+        private readonly ICaptchaService _captchaService;
         /// <summary>
         /// 构造函数
         /// </summary>
         public UserInfoManageActionFilter(IUserInfoManageDao userInfoDao,
             IHttpContextAccessor httpContextAccessor,
             IStringLocalizer<UserTips> stringLocalizer,
-            CaptchaService captchaService)
+            ICaptchaService captchaService)
         {
             _userInfoDao = userInfoDao;
             _httpContextAccessor = httpContextAccessor;
@@ -85,7 +86,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         {
             // 根据id找到用户信息
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var result = await _userInfoDao.IdExisted(userId);
+            var result = await _userInfoDao.IdExisted<T_User>(userId);
             if (!result)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);

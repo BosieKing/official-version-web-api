@@ -1,16 +1,16 @@
-using BusinesLogic.BackEnd.UserManage.Dto;
-using IDataSphere.Interface.BackEnd.UserManage;
-using IDataSphere.Repositoty;
+using IDataSphere.Interfaces.BackEnd;
 using Mapster;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.UserManage;
+using Model.Repositotys;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
 using UtilityToolkit.Helpers;
 
 namespace BusinesLogic.BackEnd.UserManage
 {
     /// <summary>
-    /// 用户管理业务类
+    /// 后台用户管理业务实现类
     /// </summary>
     public class UserManageServiceImpl : IUserManageService
     {
@@ -98,7 +98,7 @@ namespace BusinesLogic.BackEnd.UserManage
         public async Task<bool> ResetPassword(ResetPasswordInput input)
         {
             return await _userManageDao.ResetPassword(input.UserId, input.Password);
-        }     
+        }
         #endregion
 
         #region 删除

@@ -18,7 +18,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+    #line 1 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "17.0.0.0")]
     public partial class IDataSphereTemplate : IDataSphereTemplateBase
     {
@@ -28,51 +28,51 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using IDataSphere.Repositoty;\r\n\r\nnamespace IDao.Interface.");
+            this.Write("using Model.PO;\r\n\r\nnamespace IDao.Interface.");
             
-            #line 9 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+            #line 9 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 9 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+            #line 9 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n     /// <summary>\r\n    /// ");
             
-            #line 12 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+            #line 12 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ChinesesName));
             
             #line default
             #line hidden
             this.Write("数据访问接口\r\n    /// </summary>\r\n    public interface I");
             
-            #line 14 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+            #line 14 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Dao: IBaseDao<");
             
-            #line 14 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+            #line 14 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName));
             
             #line default
             #line hidden
             this.Write(">\r\n    {        \r\n       Task<PageResult> Get");
             
-            #line 16 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+            #line 16 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("Page(Get");
             
-            #line 16 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
+            #line 16 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default

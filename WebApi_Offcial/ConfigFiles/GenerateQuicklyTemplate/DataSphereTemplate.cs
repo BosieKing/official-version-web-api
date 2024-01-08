@@ -18,7 +18,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+    #line 1 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "17.0.0.0")]
     public partial class DataSphereTemplate : DataSphereTemplateBase
     {
@@ -30,62 +30,62 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
         {
             this.Write("using IDataSphere.Interface.");
             
-            #line 7 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 7 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 7 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 7 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
-            this.Write(";\r\nusing IDataSphere.Repositoty;\r\nusing Microsoft.EntityFrameworkCore;\r\nusing Uti" +
-                    "lityToolkit.Utils;\r\nusing SharedLibrary.NormalizeModel;\r\nnamespace Dao.");
+            this.Write(";\r\nusing Model.PO;\r\nusing Microsoft.EntityFrameworkCore;\r\nusing UtilityToolkit.Ut" +
+                    "ils;\r\nusing SharedLibrary.NormalizeModel;\r\nnamespace Dao.");
             
-            #line 12 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 12 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    /// <summary>\r\n    /// ");
             
-            #line 15 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 15 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ChinesesName));
             
             #line default
             #line hidden
             this.Write("数据访问层\r\n    /// </summary>\r\n    public class ");
             
-            #line 17 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 17 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Dao : BaseDao<");
             
-            #line 17 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 17 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName));
             
             #line default
             #line hidden
             this.Write(">, I");
             
-            #line 17 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 17 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Dao\r\n    {\r\n      \r\n        #region 构造函数\r\n        public ");
             
-            #line 21 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 21 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
-            this.Write(@"Dao(DMDbContext dMDbContext) : base(dMDbContext)
+            this.Write(@"Dao(DMDbContext dbContext) : base(dbContext)
         {
 
         }
@@ -99,21 +99,21 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
         /// <returns></returns>
         public async Task<PageResult> Get");
             
-            #line 33 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 33 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("Page(Get");
             
-            #line 33 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 33 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
-            this.Write("PageInput input) \r\n        {\r\n            var query = dMDbContext.");
+            this.Write("PageInput input) \r\n        {\r\n            var query = dbContext.");
             
-            #line 35 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
+            #line 35 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default

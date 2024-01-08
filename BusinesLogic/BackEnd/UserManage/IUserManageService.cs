@@ -1,11 +1,10 @@
-using BusinesLogic.BackEnd.UserManage.Dto;
-using IDataSphere.Interface.BackEnd.UserManage;
-using SharedLibrary.Models.DomainModels;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.UserManage;
 
 namespace BusinesLogic.BackEnd.UserManage
 {
     /// <summary>
-    /// 用户管理业务接口
+    /// 后台用户管理业务接口
     /// </summary>
     public interface IUserManageService
     {

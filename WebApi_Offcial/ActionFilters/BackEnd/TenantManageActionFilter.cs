@@ -1,9 +1,9 @@
-﻿using BusinesLogic.BackEnd.TenantManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantManage;
+﻿using IDataSphere.Interfaces.BackEnd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
-using SharedLibrary.Models.DomainModels;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.TenantManage;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.ActionFilters.BackEnd

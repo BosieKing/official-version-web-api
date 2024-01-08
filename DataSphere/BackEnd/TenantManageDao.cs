@@ -1,22 +1,24 @@
-﻿using IDataSphere.Extensions;
-using IDataSphere.Interface.BackEnd.TenantManage;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.DatabaseContexts;
+using IDataSphere.Extensions;
+using IDataSphere.Interfaces.BackEnd;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.TenantManage;
+using Model.Repositotys;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
 using UtilityToolkit.Utils;
 using Yitter.IdGenerator;
 
 namespace DataSphere.BackEnd
 {
     /// <summary>
-    /// 租户数据库访问实现类
+    /// 后台租户管理数据访问实现类
     /// </summary>
-    public class TenantManageDao : BaseDao<T_Tenant>, ITenantManageDao
+    public class TenantManageDao : BaseDao, ITenantManageDao
     {
         #region 构造函数
-        public TenantManageDao(SqlDbContext dMDbContext) : base(dMDbContext)
+        public TenantManageDao(SqlDbContext dbContext) : base(dbContext)
         {
         }
         #endregion
@@ -30,7 +32,7 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> CodeExist(string code, long id = 0)
         {
-            var data = await dMDbContext.TenantRep.Where(!code.IsNullOrEmpty() && id.Equals(0), p => p.Code == code)
+            var data = await dbContext.TenantRep.Where(!code.IsNullOrEmpty() && id.Equals(0), p => p.Code == code)
                                          .Where(!code.IsNullOrEmpty() && !id.Equals(0), p => p.Id != id && p.Code == code).AnyAsync();
             return data;
         }
@@ -44,9 +46,9 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<List<DropdownSelectionModel>> GetTenantMenuList(long tenandId)
         {
-            var checkList = await dMDbContext.TenantMenuRep.IgnoreTenantFilter().Where(t => t.TenantId == tenandId)
+            var checkList = await dbContext.TenantMenuRep.IgnoreTenantFilter().Where(t => t.TenantId == tenandId)
                                              .Select(p => p.UniqueNumber).ToListAsync();
-            var list = await dMDbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization)
+            var list = await dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization)
                                        .Select(p => new DropdownSelectionModel
                                        {
                                            IsCheck = checkList.Contains(p.UniqueNumber),
@@ -63,12 +65,12 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<PaginationResultModel> GetTenantPage(GetTenantPageInput input)
         {
-            var query = from data in dMDbContext.TenantRep
+            var query = from data in dbContext.TenantRep
                         .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $"%{input.Name}%"))
                         .Where(!input.Code.IsNullOrEmpty(), p => EF.Functions.Like(p.Code, $"%{input.Code}%"))
-                        join createUser in dMDbContext.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
+                        join createUser in dbContext.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
                         from createUser in createUserResult.DefaultIfEmpty()
-                        join updateUser in dMDbContext.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult
+                        join updateUser in dbContext.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult
                         from updateUser in updateUserResult.DefaultIfEmpty()
                         select new
                         {
@@ -104,12 +106,12 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> AddTenantMenu(long tenantId)
         {
-            var menuQuery = dMDbContext.Set<T_Menu>().Where(p => p.Weight == (int)MenuWeightTypeEnum.Service)
+            var menuQuery = dbContext.Set<T_Menu>().Where(p => p.Weight == (int)MenuWeightTypeEnum.Service)
                                            .Select(p => new { p.DirectoryId, MenuId = p.Id }).ToList();
             var dirIds = menuQuery.GroupBy(p => p.DirectoryId).Select(p => p.Key);
-            var dbDirectoryList = await dMDbContext.DirectoryRep.Where(p => dirIds.Contains(p.Id)).ToListAsync();
-            var dbMenuList = await dMDbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.Service).ToListAsync();
-            var dbButtonList = await dMDbContext.MenuButtonRep.Where(p => menuQuery.Select(p => p.MenuId).Contains(p.MenuId)).ToListAsync();
+            var dbDirectoryList = await dbContext.DirectoryRep.Where(p => dirIds.Contains(p.Id)).ToListAsync();
+            var dbMenuList = await dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.Service).ToListAsync();
+            var dbButtonList = await dbContext.MenuButtonRep.Where(p => menuQuery.Select(p => p.MenuId).Contains(p.MenuId)).ToListAsync();
             List<T_TenantDirectory> tenantDirectorieList = new List<T_TenantDirectory>();
             List<T_TenantMenu> tenantMenuList = new List<T_TenantMenu>();
             List<T_TenantMenuButton> tenantMenuButtonList = new List<T_TenantMenuButton>();
@@ -137,10 +139,10 @@ namespace DataSphere.BackEnd
                     tenantMenuList.Add(tenantMenu);
                 }
             }
-            await dMDbContext.TenantDirectoryRep.AddRangeAsync(tenantDirectorieList);
-            await dMDbContext.TenantMenuRep.AddRangeAsync(tenantMenuList);
-            await dMDbContext.TenantMenuButtonRep.AddRangeAsync(tenantMenuButtonList);
-            await dMDbContext.SaveChangesAsync();
+            await dbContext.TenantDirectoryRep.AddRangeAsync(tenantDirectorieList);
+            await dbContext.TenantMenuRep.AddRangeAsync(tenantMenuList);
+            await dbContext.TenantMenuButtonRep.AddRangeAsync(tenantMenuButtonList);
+            await dbContext.SaveChangesAsync();
             return true;
         }
 
@@ -151,7 +153,7 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> PushTenantMenu(long menuId, long directoryId, long tenantId)
         {
-            var menu = await dMDbContext.Set<T_Menu>().Where(p => p.Id == menuId && p.Weight == (int)MenuWeightTypeEnum.Service)
+            var menu = await dbContext.Set<T_Menu>().Where(p => p.Id == menuId && p.Weight == (int)MenuWeightTypeEnum.Service)
                                            .FirstOrDefaultAsync();
             T_TenantMenu tenantMenu = menu.Adapt<T_TenantMenu>();
             tenantMenu.Id = YitIdHelper.NextId();
@@ -171,10 +173,10 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UptateInviteCode(long id, string inviteCode)
         {
-            var data = await dMDbContext.TenantRep.FirstOrDefaultAsync(p => p.Id == id);
+            var data = await dbContext.TenantRep.FirstOrDefaultAsync(p => p.Id == id);
             data.InviteCode = inviteCode;
-            dMDbContext.TenantRep.Update(data);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.TenantRep.Update(data);
+            await dbContext.SaveChangesAsync();
             return true;
         }
 
@@ -184,11 +186,11 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdateTenant(string name, string code, long Id)
         {
-            var data = await dMDbContext.TenantRep.FirstOrDefaultAsync(p => p.Id == Id);
+            var data = await dbContext.TenantRep.FirstOrDefaultAsync(p => p.Id == Id);
             data.Name = name;
             data.Code = code;
-            dMDbContext.TenantRep.Update(data);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.TenantRep.Update(data);
+            await dbContext.SaveChangesAsync();
             return true;
         }
         #endregion

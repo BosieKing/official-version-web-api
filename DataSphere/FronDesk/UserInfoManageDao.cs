@@ -1,19 +1,19 @@
-﻿using IDataSphere.Extensions;
-using IDataSphere.Interface.FronDesk;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.DatabaseContexts;
+using IDataSphere.Extensions;
+using IDataSphere.Interfaces.FronDesk;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Models.DomainModels;
-using UtilityToolkit.Utils;
+using Model.Commons.Domain;
+using Model.Repositotys;
 
 namespace DataSphere.FronDesk
 {
     /// <summary>
-    /// 用户中心访问数据库类
+    /// 前台用户中心数据访问实现类
     /// </summary>
-    public class UserInfoManageDao : BaseDao<T_User>, IUserInfoManageDao
+    public class UserInfoManageDao : BaseDao, IUserInfoManageDao
     {
         #region 构造函数
-        public UserInfoManageDao(SqlDbContext dMDbContext) : base(dMDbContext)
+        public UserInfoManageDao(SqlDbContext dbContext) : base(dbContext)
         {
         }
         #endregion
@@ -27,15 +27,15 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<T_User> GetUserInfoById(long userId)
         {
-            return await dMDbContext.UserRep.Where(p => p.Id == userId).Select(p => new T_User
+            return await dbContext.UserRep.Where(p => p.Id == userId).Select(p => new T_User
             {
-                Id = p.Id,             
+                Id = p.Id,
                 Phone = p.Phone,
                 NickName = p.NickName,
                 Email = p.Email,
-                Code = p.Code,              
-                TenantId = p.TenantId,              
-                Sex = p.Sex             
+                Code = p.Code,
+                TenantId = p.TenantId,
+                Sex = p.Sex
             }).FirstOrDefaultAsync();
         }
         /// <summary>
@@ -45,10 +45,10 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<List<DropdownDataModel>> GetTenantBindList(long userId)
         {
-            var userPhones = dMDbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
+            var userPhones = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
                                            .Select(p => p.Phone);
-            var tenantIdsQuery = dMDbContext.UserRep.IgnoreTenantFilter().Where(p => userPhones.Contains(p.Phone)).Select(p => p.TenantId);
-            return await dMDbContext.TenantRep.Where(p => tenantIdsQuery.Contains(p.Id)).Select(p => new DropdownDataModel { Id = p.Id, Name = p.Name }).ToListAsync();
+            var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => userPhones.Contains(p.Phone)).Select(p => p.TenantId);
+            return await dbContext.TenantRep.Where(p => tenantIdsQuery.Contains(p.Id)).Select(p => new DropdownDataModel { Id = p.Id, Name = p.Name }).ToListAsync();
         }
 
         /// <summary>
@@ -58,11 +58,10 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<(string Password, string Phone)> GetUserPassword(long userId)
         {
-            return await dMDbContext.UserRep.Where(p => p.Id == userId).Select(p => new ValueTuple<string, string>(p.Password, p.Phone))
+            return await dbContext.UserRep.Where(p => p.Id == userId).Select(p => new ValueTuple<string, string>(p.Password, p.Phone))
                                    .FirstOrDefaultAsync();
         }
-        #endregion
-            
+        #endregion            
 
         #region 更新
         /// <summary>
@@ -72,16 +71,16 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdateUserInfo(T_User input)
         {
-            var user = await dMDbContext.UserRep.FirstOrDefaultAsync(p => p.Id == input.Id);        
+            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == input.Id);
             user.NickName = input.NickName;
             user.Email = input.Email;
-            user.Code = input.Code;     
-            user.Sex = input.Sex;        
-            dMDbContext.Update(user);
-            await dMDbContext.SaveChangesAsync();
+            user.Code = input.Code;
+            user.Sex = input.Sex;
+            dbContext.Update(user);
+            await dbContext.SaveChangesAsync();
             return true;
         }
-      
+
         /// <summary>
         /// 修改头像
         /// </summary>
@@ -89,10 +88,10 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdateAvatar(string url, long userId)
         {
-            var data = await dMDbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            var data = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
             data.AvatarUrl = url;
-            dMDbContext.UserRep.Update(data);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.UserRep.Update(data);
+            await dbContext.SaveChangesAsync();
             return true;
         }
 
@@ -103,10 +102,10 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdatePassword(string newPassword, long userId)
         {
-            var data = await dMDbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            var data = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
             data.Password = newPassword;
-            dMDbContext.UserRep.Update(data);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.UserRep.Update(data);
+            await dbContext.SaveChangesAsync();
             return true;
         }
         #endregion

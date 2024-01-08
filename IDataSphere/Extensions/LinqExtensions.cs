@@ -1,8 +1,8 @@
 ﻿using IDataSphere.Extensions;
-using IDataSphere.Repositoty;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.Repositotys;
 using System.Linq.Expressions;
 using System.Reflection;
 using UtilityToolkit.Utils;

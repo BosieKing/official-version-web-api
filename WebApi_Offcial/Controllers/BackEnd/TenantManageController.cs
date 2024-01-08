@@ -1,11 +1,10 @@
 ﻿using BusinesLogic.BackEnd.TenantManage;
-using BusinesLogic.BackEnd.TenantManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantManage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.TenantManage;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
 using WebApi_Offcial.ActionFilters.BackEnd;
 
 namespace WebApi_Offcial.Controllers.BackEnd

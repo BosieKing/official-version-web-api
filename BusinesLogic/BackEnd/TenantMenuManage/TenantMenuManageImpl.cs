@@ -1,15 +1,15 @@
-using BusinesLogic.BackEnd.TenantMenuManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantMenuManage;
-using IDataSphere.Repositoty;
+using IDataSphere.Interfaces.BackEnd;
 using Mapster;
+using Model.Commons.CoreData;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.TenantMenuManage;
+using Model.Repositotys;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.CoreDataModels;
-using SharedLibrary.Models.DomainModels;
 
 namespace BusinesLogic.BackEnd.TenantMenuManage
 {
     /// <summary>
-    /// 租户菜单管理业务类
+    /// 后台租户菜单管理业务实现类
     /// </summary>
     public class TenantMenuManageServiceImpl : ITenantMenuManageService
     {
@@ -42,7 +42,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
                                      Component = "/",
                                      Weight = 0,
                                      Type = (int)MenuTreeTypeEnum.Directory,
-                                     Children = d.Where(m => !m.Id.Equals(0)).GroupBy(m => new { m.Id, m.Remark, m.Name, m.Router, m.Component, m.Path, m.IsHidden, m.Icon, m.Weight }).Select(m => new
+                                     Children = d.Where(m => !m.Id.Equals(0)).GroupBy(m => new { m.Id, m.Remark, m.Name, m.Router, m.Component, m.BrowserPath, m.IsHidden, m.Icon, m.Weight }).Select(m => new
                                      {
                                          d.Key.PId,
                                          m.Key.Id,
@@ -50,7 +50,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
                                          m.Key.Icon,
                                          m.Key.Router,
                                          m.Key.Weight,
-                                         m.Key.Path,
+                                         m.Key.BrowserPath,
                                          m.Key.IsHidden,
                                          m.Key.Remark,
                                          m.Key.Component,
@@ -58,7 +58,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
                                          Children = data.buttonListInfo.Where(b => m.Key.Id == b.PId).Select(r => r.Adapt<MenuTreeModel>())
                                      })
                                  }).ToList();
-            return new PageResult(input.PageNo, input.PageSize, data.count, result);
+            return new PaginationResultModel(input.PageNo, input.PageSize, data.count, result);
 
         }
 
@@ -68,7 +68,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         /// <returns></returns>
         public async Task<List<DropdownDataModel>> GetTenantDirectory()
         {
-            return await _tenantMenuManageDao.GetList<T_TenantDirectory>();
+            return await _tenantMenuManageDao.GetStringList<T_TenantDirectory>();
         }
 
         #endregion
@@ -82,7 +82,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         public async Task<bool> AddTenantMenu(AddTenantMenuInput input)
         {
             T_TenantMenu data = input.Adapt<T_TenantMenu>();
-            data.StrPath = input.Path;
+            data.BrowserPath = input.BrowserPath;
             data.Weight = (int)MenuWeightTypeEnum.Customization;
             return await _tenantMenuManageDao.AddAsync(data);
         }
@@ -95,7 +95,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         public async Task<bool> AddTenantDirectory(AddTenantDirectoryInput input)
         {
             T_TenantDirectory data = input.Adapt<T_TenantDirectory>();
-            data.StrPath = input.Path;
+            data.BrowserPath = input.BrowserPath;
             return await _tenantMenuManageDao.AddAsync<T_TenantDirectory>(data);
         }
 
@@ -159,7 +159,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         /// <returns></returns>
         public async Task<bool> DeleteTenantMenu(long id)
         {
-            return await _tenantMenuManageDao.DeleteAsync(id);
+            return await _tenantMenuManageDao.DeleteAsync<T_TenantMenu>(id);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<bool> DelteTenantMenuButton(long id)
+        public async Task<bool> DeleteTenantMenuButton(long id)
         {
             return await _tenantMenuManageDao.DeleteAsync<T_TenantMenuButton>(id);
         }

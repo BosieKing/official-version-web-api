@@ -1,11 +1,11 @@
-using BusinesLogic.BackEnd.TenantMenuManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantMenuManage;
-using IDataSphere.Repositoty;
+using IDataSphere.Interfaces.BackEnd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.TenantMenuManage;
+using Model.Repositotys;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.ActionFilters.BackEnd
@@ -90,7 +90,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<DataResponseModel> AddTenantDirectoryVerify(AddTenantDirectoryInput input)
         {
-            bool result = await _tenantMenuManageDao.DataExisted<T_TenantDirectory>(p => p.Name == input.Name && p.StrPath == input.Path);
+            bool result = await _tenantMenuManageDao.DataExisted<T_TenantDirectory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath);
             if (result)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -110,7 +110,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
-            bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenu>(p => p.Name == input.Name && p.StrPath == input.Path && p.Router == input.Router);
+            bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router);
             if (result)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -145,7 +145,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<DataResponseModel> UpdateTenantDirectoryVerify(UpdateTenantDirectoryInput input)
         {
-            bool result = await _tenantMenuManageDao.DataExisted<T_TenantDirectory>(p => p.Name == input.Name && p.StrPath == input.Path && p.Id != input.Id);
+            bool result = await _tenantMenuManageDao.DataExisted<T_TenantDirectory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Id != input.Id);
             if (result)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -165,7 +165,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
-            bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenu>(p => p.Name == input.Name && p.StrPath == input.Path && p.Router == input.Router && p.Id != input.Id);
+            bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router && p.Id != input.Id);
             if (result)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);

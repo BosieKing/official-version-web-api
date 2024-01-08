@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Model.Commons.CoreData;
 using SharedLibrary.Consts;
-using SharedLibrary.Models.CoreDataModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

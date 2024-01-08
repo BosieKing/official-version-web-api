@@ -1,5 +1,6 @@
 ﻿using Autofac;
-using DataSphere;
+using IDataSphere.DatabaseContexts;
+
 using SharedLibrary.Consts;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -22,29 +23,29 @@ namespace WebApi_Offcial.ConfigureServices
         /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
-            // 程序集服务类注入，单例
-            builder.RegisterAssemblyTypes(GetAssembly(ServiceAssemblyName))
-                   .Where(p => p.Name.EndsWith("Service"))
-                   .InstancePerLifetimeScope();
+            //// 程序集服务类注入，作用域
+            //builder.RegisterAssemblyTypes(GetAssembly(ServiceAssemblyName))
+            //       .Where(p => p.Name.EndsWith("Service"))
+            //       .InstancePerLifetimeScope();
 
-            // 程序集服务类注入，单例
+            // 程序集服务类注入，作用域
             builder.RegisterAssemblyTypes(GetAssembly(WebAPIAssemblyName))
                    .Where(p => p.Name.EndsWith("ActionFilter"))
                    .InstancePerLifetimeScope();
 
-            // 程序集实现类与接口注入，单例
+            // 程序集实现类与接口注入，作用域
             builder.RegisterAssemblyTypes(GetAssembly(ServiceAssemblyName))
                    .Where(p => p.Name.EndsWith("ServiceImpl"))
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope();
 
-            // 程序集实现类与接口注入，单例
+            // 程序集实现类与接口注入，作用域
             builder.RegisterAssemblyTypes(GetAssembly(DaoAssemblyName))
                    .Where(p => p.Name.EndsWith("Dao"))
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope();
 
-            // 单个类注入，单例
+            // 单个类注入，作用域
             builder.RegisterType<HttpContextAccessor>().InstancePerLifetimeScope();
             // 注册用户信息类
             builder.Register<UserProvider>(p =>

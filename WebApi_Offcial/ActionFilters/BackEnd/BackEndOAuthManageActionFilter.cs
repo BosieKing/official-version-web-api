@@ -1,13 +1,14 @@
-﻿using BusinesLogic.BackEnd.BackEndOAuthManage.Dto;
-using BusinesLogic.Center.Captcha;
-using IDataSphere.Interface.BackEnd;
+﻿using BusinesLogic.Center.Captcha;
+using IDataSphere.Interfaces.BackEnd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.BackEndOAuthManage;
+using Model.Repositotys;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
@@ -22,14 +23,14 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         #region 参数和构造函数
 
         private readonly IBackEndOAuthDao _backEndOAuthDao;
-        private readonly CaptchaService _captchaService;
+        private readonly ICaptchaService _captchaService;
         private readonly IStringLocalizer<UserTips> _stringLocalizer;
         private readonly IHttpContextAccessor _httpContextAccessor;
         /// <summary>
         /// 构造函数
         /// </summary>
         public BackEndOAuthManageActionFilter(IBackEndOAuthDao backEndOAuthDao,
-            IStringLocalizer<UserTips> stringLocalizer, CaptchaService captchaService,
+            IStringLocalizer<UserTips> stringLocalizer, ICaptchaService captchaService,
             IHttpContextAccessor httpContextAccess)
         {
             _httpContextAccessor = httpContextAccess;
@@ -195,7 +196,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         {
             // 判断账号是否注册
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            bool accountExist = await _backEndOAuthDao.IdExisted(userId);
+            bool accountExist = await _backEndOAuthDao.IdExisted<T_User>(userId);
             if (!accountExist)
             {
                 return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);

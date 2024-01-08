@@ -18,7 +18,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+    #line 1 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "17.0.0.0")]
     public partial class BusinesLogicImplTemplate : BusinesLogicImplTemplateBase
     {
@@ -30,120 +30,120 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
         {
             this.Write("using IDataSphere.Interface.");
             
-            #line 7 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 7 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
             
             #line default
             #line hidden
-            this.Write(";\r\nusing IDataSphere.Repositoty;\r\nusing Mapster;\r\nusing Microsoft.EntityFramework" +
-                    "Core;\r\nusing SharedLibrary.NormalizeModel;\r\nusing BusinesLogic.");
+            this.Write(";\r\nusing Model.PO;\r\nusing Mapster;\r\nusing Microsoft.EntityFrameworkCore;\r\nusing S" +
+                    "haredLibrary.NormalizeModel;\r\nusing BusinesLogic.");
             
-            #line 12 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 12 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 12 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 12 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write(".Dto;\r\nusing IDataSphere.Interface.");
             
-            #line 13 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 13 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 13 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 13 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write(";\r\nusing System.Text;\r\nusing UtilityToolkit.Utils;\r\n\r\nnamespace Service.");
             
-            #line 17 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 17 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 17 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 17 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    /// <summary>\r\n    /// ");
             
-            #line 20 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 20 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ChinesesName));
             
             #line default
             #line hidden
             this.Write("业务类\r\n    /// </summary>\r\n    public class ");
             
-            #line 22 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 22 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("ServiceImpl : I");
             
-            #line 22 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 22 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Service\r\n    {\r\n        #region 构造函数\r\n        private readonly I");
             
-            #line 25 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 25 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Dao _");
             
-            #line 25 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 25 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default
             #line hidden
             this.Write("Dao;\r\n        public ");
             
-            #line 26 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 26 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("ServiceImpl(I");
             
-            #line 26 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 26 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Dao ");
             
-            #line 26 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 26 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default
             #line hidden
             this.Write("Dao)\r\n        {\r\n            this._");
             
-            #line 28 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 28 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default
             #line hidden
             this.Write("Dao = ");
             
-            #line 28 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 28 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default
@@ -152,28 +152,28 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
                     "\n        /// 分页查询\r\n        /// </summary>\r\n        /// <param name=\"input\"></par" +
                     "am>\r\n        /// <returns></returns>\r\n        public Task<PageResult> Get");
             
-            #line 38 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 38 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("Page(Get");
             
-            #line 38 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 38 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("PageInput input);\r\n        {\r\n            return await _");
             
-            #line 40 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 40 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default
             #line hidden
             this.Write("Dao.Get");
             
-            #line 40 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 40 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
@@ -182,35 +182,35 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
                     "ummary>\r\n        /// 新增\r\n        /// </summary>\r\n        /// <param name=\"input\"" +
                     "></param>\r\n        /// <returns></returns>\r\n        public async Task<bool> Add");
             
-            #line 50 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 50 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("(Add");
             
-            #line 50 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 50 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("Input input)\r\n        {          \r\n            ");
             
-            #line 52 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 52 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName));
             
             #line default
             #line hidden
             this.Write(" data = input.Adapt<");
             
-            #line 52 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 52 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName));
             
             #line default
             #line hidden
             this.Write(">();\r\n            return await _");
             
-            #line 53 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 53 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default
@@ -220,35 +220,35 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
                     "\"input\"></param>\r\n        /// <returns></returns>\r\n        public async Task<boo" +
                     "l> Update");
             
-            #line 63 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 63 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("(Update");
             
-            #line 63 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 63 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("Input input) \r\n        {\r\n            ");
             
-            #line 65 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 65 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName));
             
             #line default
             #line hidden
             this.Write(" data = input.Adapt<");
             
-            #line 65 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 65 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName));
             
             #line default
             #line hidden
             this.Write(">();\r\n            data.Id = input.Id;\r\n            return await _");
             
-            #line 67 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 67 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default
@@ -258,14 +258,14 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
                     "me=\"id\"></param>\r\n        /// <returns></returns>\r\n        public async Task<boo" +
                     "l> Delete");
             
-            #line 77 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 77 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
             
             #line default
             #line hidden
             this.Write("(long id)\r\n        {        \r\n            return await _");
             
-            #line 79 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
+            #line 79 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
             
             #line default

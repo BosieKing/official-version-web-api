@@ -1,10 +1,12 @@
-﻿using BusinesLogic.BackEnd.RoleManage.Dto;
-using IDataSphere.Interface.BackEnd.RoleManage;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
+﻿using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.RoleManage;
 
 namespace BusinesLogic.BackEnd.RoleManage
 {
+    /// <summary>
+    /// 后台角色管理业务接口
+    /// </summary>
     public interface IRoleManageService
     {
         Task<bool> AddRole(AddRoleInput input);

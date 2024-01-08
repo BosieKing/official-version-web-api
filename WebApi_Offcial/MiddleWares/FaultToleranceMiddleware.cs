@@ -1,5 +1,5 @@
 ﻿using log4net;
-using SharedLibrary.Models.DomainModels;
+using Model.Commons.Domain;
 using UtilityToolkit.Utils;
 
 namespace WebApi_Offcial.MiddleWares

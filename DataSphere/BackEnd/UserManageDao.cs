@@ -1,19 +1,21 @@
+using IDataSphere.DatabaseContexts;
 using IDataSphere.Extensions;
-using IDataSphere.Interface.BackEnd.UserManage;
-using IDataSphere.Repositoty;
+using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Models.DomainModels;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.UserManage;
+using Model.Repositotys;
 using UtilityToolkit.Utils;
 
 namespace DataSphere.BackEnd
 {
     /// <summary>
-    /// 用户管理数据访问层
+    /// 后台用户管理数据访问实现类
     /// </summary>
-    public class UserManageDao : BaseDao<T_User>, IUserManageDao
+    public class UserManageDao : BaseDao, IUserManageDao
     {
         #region 构造函数
-        public UserManageDao(SqlDbContext dMDbContext) : base(dMDbContext)
+        public UserManageDao(SqlDbContext dbContext) : base(dbContext)
         {
         }
         #endregion
@@ -26,17 +28,17 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<PaginationResultModel> GetUserPage(GetUserPageInput input)
         {
-            var query = from user in dMDbContext.UserRep
+            var query = from user in dbContext.UserRep
                         .Where(!input.NickName.IsNullOrEmpty(), p => EF.Functions.Like(p.NickName, $"%{input.NickName}%"))
-                        .Where(!input.Phone.IsNullOrEmpty(), p => EF.Functions.Like(p.Phone, $"%{input.Phone}%"))   
+                        .Where(!input.Phone.IsNullOrEmpty(), p => EF.Functions.Like(p.Phone, $"%{input.Phone}%"))
                         select new
                         {
-                            user.Id,                       
+                            user.Id,
                             user.NickName,
                             user.Phone,
                             user.Sex,
                             user.Email,
-                            user.Code,   
+                            user.Code,
                             user.IsDisableLogin,
                             user.CreatedTime,
                             user.UpdateTime
@@ -52,8 +54,8 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<List<DropdownSelectionModel>> GetUserRoleList(long userId)
         {
-            var ids = await dMDbContext.UserRoleRep.Where(p => p.UserId == userId).Select(p => p.RoleId).ToListAsync();
-            var list = await dMDbContext.RoleRep.Select(p => new DropdownSelectionModel
+            var ids = await dbContext.UserRoleRep.Where(p => p.UserId == userId).Select(p => p.RoleId).ToListAsync();
+            var list = await dbContext.RoleRep.Select(p => new DropdownSelectionModel
             {
 
                 Id = p.Id,
@@ -77,10 +79,10 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> ResetPassword(long userId, string pwd)
         {
-            var user = await dMDbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
             user.Password = pwd;
-            dMDbContext.UserRep.Update(user);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.UserRep.Update(user);
+            await dbContext.SaveChangesAsync();
             return true;
         }
 
@@ -93,15 +95,15 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdateUser(T_User newUser)
         {
-            var user = await dMDbContext.UserRep.FirstOrDefaultAsync(p => p.Id == newUser.Id);        
+            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == newUser.Id);
             user.Phone = newUser.Phone;
             user.NickName = newUser.NickName;
-            user.Email = newUser.Email;         
+            user.Email = newUser.Email;
             user.Code = newUser.Code;
             user.Sex = newUser.Sex;
             user.IsDisableLogin = newUser.IsDisableLogin;
-            dMDbContext.UserRep.Update(user);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.UserRep.Update(user);
+            await dbContext.SaveChangesAsync();
             return true;
         }
         /// <summary>
@@ -112,10 +114,10 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdateIsDisableLogin(long userId, bool isDisableLogin)
         {
-            var user = await dMDbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
             user.IsDisableLogin = isDisableLogin;
-            dMDbContext.UserRep.Update(user);
-            await dMDbContext.SaveChangesAsync();
+            dbContext.UserRep.Update(user);
+            await dbContext.SaveChangesAsync();
             return true;
         }
         #endregion

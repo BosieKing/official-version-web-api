@@ -1,10 +1,9 @@
 ﻿using BusinesLogic.BackEnd.MenuManage;
-using BusinesLogic.BackEnd.MenuManage.Dto;
-using IDataSphere.Interface.BackEnd.MenuManage;
 using Microsoft.AspNetCore.Mvc;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.MenuManage;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
 using WebApi_Offcial.ActionFilters.BackEnd;
 
 namespace WebApi_Offcial.Controllers.BackEnd
@@ -164,7 +163,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("deleteMenu")]
         public async Task<ActionResult<DataResponseModel>> DeleteMenu([FromBody] IdInput input)
         {
-            var result = await _menuManageService.DelteMenu(input.Id);
+            var result = await _menuManageService.DeleteMenu(input.Id);
             return DataResponseModel.SetData(result);
         }
 
@@ -174,9 +173,9 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> DelteMenuButton([FromBody] IdInput input)
+        public async Task<ActionResult<DataResponseModel>> DeleteMenuButton([FromBody] IdInput input)
         {
-            var result = await _menuManageService.DelteMenuButton(input.Id);
+            var result = await _menuManageService.DeleteMenuButton(input.Id);
             return DataResponseModel.SetData(result);
         }
         #endregion

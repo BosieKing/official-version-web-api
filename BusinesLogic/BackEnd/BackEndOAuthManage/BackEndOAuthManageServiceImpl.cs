@@ -1,9 +1,9 @@
-﻿using BusinesLogic.BackEnd.BackEndOAuthManage.Dto;
-using IDataSphere.Interface.BackEnd;
+﻿using IDataSphere.Interfaces.BackEnd;
+using Model.Commons.CoreData;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.BackEndOAuthManage;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.CoreDataModels;
-using SharedLibrary.Models.DomainModels;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
@@ -11,7 +11,7 @@ using UtilityToolkit.Utils;
 namespace BusinesLogic.BackEnd.BackEndOAuthManage
 {
     /// <summary>
-    /// 后台登录授权服务
+    /// 后台权限管理业务实现类
     /// </summary>
     public class BackEndOAuthManageServiceImpl : IBackEndOAuthManageService
     {
@@ -199,11 +199,6 @@ namespace BusinesLogic.BackEnd.BackEndOAuthManage
             return await _backEndOAuthDao.UpdatePassword(input.NewPassword, userId);
         }
         #endregion
-
-
-
-
-
 
     }
 }

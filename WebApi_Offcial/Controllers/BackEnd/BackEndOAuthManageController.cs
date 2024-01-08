@@ -1,13 +1,13 @@
 ﻿using BusinesLogic.BackEnd.BackEndOAuthManage;
-using BusinesLogic.BackEnd.BackEndOAuthManage.Dto;
 using BusinesLogic.Center.Captcha;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.Commons.CoreData;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.BackEndOAuthManage;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.CoreDataModels;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
 using System.ComponentModel.DataAnnotations;
 using UtilityToolkit.Helpers;
 using WebApi_Offcial.ActionFilters.BackEnd;
@@ -24,14 +24,14 @@ namespace WebApi_Offcial.Controllers.BackEnd
     public class BackEndOAuthManageController : ControllerBase
     {
         #region 构造函数
-        private readonly CaptchaService _captchaService;
+        private readonly ICaptchaService _captchaService;
         private readonly IBackEndOAuthManageService _backEndOAuthManageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         /// <summary>
         /// 构造函数
         /// </summary>
         public BackEndOAuthManageController(IBackEndOAuthManageService backEndOAuthManageService,
-            CaptchaService captchaService,
+            ICaptchaService captchaService,
             IHttpContextAccessor httpContextAccess)
         {
             _backEndOAuthManageService = backEndOAuthManageService;
@@ -57,7 +57,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
             }
             else
             {
-                var roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID).Value;
+                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID).Value;
                 list = await _backEndOAuthManageService.GetMenuTree(roleIds);
             }
             return DataResponseModel.SetData(list);
@@ -87,7 +87,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
             bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
             if (isSuperManage)
             {
-                var list = await _backEndOAuthManageService.GetSuperManageButtonArray();
+                string[] list = await _backEndOAuthManageService.GetSuperManageButtonArray();
                 return DataResponseModel.SetData(list);
             }
             else

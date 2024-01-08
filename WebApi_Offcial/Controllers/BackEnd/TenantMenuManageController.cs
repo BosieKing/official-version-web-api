@@ -1,10 +1,9 @@
 using BusinesLogic.BackEnd.TenantMenuManage;
-using BusinesLogic.BackEnd.TenantMenuManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantMenuManage;
 using Microsoft.AspNetCore.Mvc;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.TenantMenuManage;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
 using WebApi_Offcial.ActionFilters.BackEnd;
 
 namespace WebApi_Offcial.Controllers.BackEnd
@@ -163,9 +162,9 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteTenantMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> DelteTenantMenuButton([FromBody] IdInput input)
+        public async Task<ActionResult<DataResponseModel>> DeleteTenantMenuButton([FromBody] IdInput input)
         {
-            var result = await _tenantMenuManageService.DelteTenantMenuButton(input.Id);
+            var result = await _tenantMenuManageService.DeleteTenantMenuButton(input.Id);
             return DataResponseModel.SetData(result);
         }
         #endregion

@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace WebApi_Offcial.ActionFilters
 {
     /// <summary>
-    /// Swagger文件上传参数修正过滤
+    /// Swagger文件上传参数修正
     /// </summary>
     public class SwaggerDocUploadFileFilter : IOperationFilter
     {

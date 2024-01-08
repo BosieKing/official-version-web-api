@@ -20,12 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Center\" />
     <Folder Include="FrontDesk\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataSphere\DataSphere.csproj" />
     <ProjectReference Include="..\IDataSphere\IDataSphere.csproj" />
     <ProjectReference Include="..\UtilityToolkit\UtilityToolkit.csproj" />
   </ItemGroup>

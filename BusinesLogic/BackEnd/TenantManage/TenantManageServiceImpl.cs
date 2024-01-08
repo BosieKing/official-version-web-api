@@ -1,23 +1,24 @@
-﻿using BusinesLogic.BackEnd.TenantManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantManage;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.Interfaces.BackEnd;
 using Mapster;
 using Microsoft.AspNetCore.Http;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.TenantManage;
+using Model.Repositotys;
 using Newtonsoft.Json;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
 using System.Text;
 using UtilityToolkit.Helpers;
 
 namespace BusinesLogic.BackEnd.TenantManage
 {
     /// <summary>
-    /// 租户管理实现类
+    /// 后台租户管理业务实现类
     /// </summary>
     public class TenantManageServiceImpl : ITenantManageService
     {
+        #region 构造函数
         private readonly ITenantManageDao _tenantDao;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public TenantManageServiceImpl(ITenantManageDao tenantDao, IHttpContextAccessor httpContextAccessor)
@@ -25,6 +26,7 @@ namespace BusinesLogic.BackEnd.TenantManage
             _tenantDao = tenantDao;
             _httpContextAccessor = httpContextAccessor;
         }
+        #endregion
 
         #region 查询
         /// <summary>
@@ -54,7 +56,7 @@ namespace BusinesLogic.BackEnd.TenantManage
         /// <returns></returns>
         public async Task<List<DropdownDataModel>> GetTenantDirectoryList(long tenantId)
         {
-            return await _tenantDao.GetList<T_TenantDirectory>(p => p.TenantId == tenantId, isIgnoreTenant: true);
+            return await _tenantDao.GetStringList<T_TenantDirectory>(p => p.TenantId == tenantId, isIgnoreTenant: true);
         }
         #endregion
 

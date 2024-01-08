@@ -1,19 +1,18 @@
-﻿using BusinesLogic.BackEnd.MenuManage.Dto;
-using IDataSphere.Interface.BackEnd.MenuManage;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.Interfaces.BackEnd;
 using Mapster;
+using Model.Commons.CoreData;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.MenuManage;
+using Model.Repositotys;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.CoreDataModels;
-using SharedLibrary.Models.DomainModels;
 
 namespace BusinesLogic.BackEnd.MenuManage
 {
     /// <summary>
-    /// 菜单管理服务类
+    /// 后台菜单库管理业务实现类
     /// </summary>
     public class MenuManageServiceImpl : IMenuManageService
     {
-
         #region 构造函数
         private readonly IMenuManageDao _menuManageDao;
         /// <summary>
@@ -46,7 +45,7 @@ namespace BusinesLogic.BackEnd.MenuManage
                                  Component = "/",
                                  Weight = 0,
                                  Type = (int)MenuTreeTypeEnum.Directory,
-                                 Children = d.Where(m => !m.Id.Equals(0)).GroupBy(m => new { m.Id, m.Remark, m.Name, m.Router, m.Component, m.Path, m.IsHidden, m.Icon, m.Weight }).Select(m => new
+                                 Children = d.Where(m => !m.Id.Equals(0)).GroupBy(m => new { m.Id, m.Remark, m.Name, m.Router, m.Component, m.BrowserPath, m.IsHidden, m.Icon, m.Weight }).Select(m => new
                                  {
                                      d.Key.PId,
                                      m.Key.Id,
@@ -54,7 +53,7 @@ namespace BusinesLogic.BackEnd.MenuManage
                                      m.Key.Icon,
                                      m.Key.Router,
                                      m.Key.Weight,
-                                     m.Key.Path,
+                                     m.Key.BrowserPath,
                                      m.Key.IsHidden,
                                      m.Key.Remark,
                                      m.Key.Component,
@@ -62,7 +61,7 @@ namespace BusinesLogic.BackEnd.MenuManage
                                      Children = data.buttonListInfo.Where(b => m.Key.Id == b.PId).Select(r => r.Adapt<MenuTreeModel>())
                                  })
                              }).ToList();
-            return new PageResult(input.PageNo, input.PageSize, data.count, result);
+            return new PaginationResultModel(input.PageNo, input.PageSize, data.count, result);
         }
 
         /// <summary>
@@ -71,7 +70,7 @@ namespace BusinesLogic.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<List<DropdownDataModel>> GetDirectoryList()
         {
-            return await _menuManageDao.GetList<T_Directory>();
+            return await _menuManageDao.GetStringList<T_Directory>();
         }
 
         /// <summary>
@@ -80,7 +79,7 @@ namespace BusinesLogic.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<List<DropdownDataModel>> GetMenuList()
         {
-            return await _menuManageDao.GetList<T_Menu>();
+            return await _menuManageDao.GetStringList<T_Menu>();
         }
         #endregion
 
@@ -93,7 +92,7 @@ namespace BusinesLogic.BackEnd.MenuManage
         public async Task<bool> AddDirectory(AddDirectoryInput input)
         {
             T_Directory data = input.Adapt<T_Directory>();
-            data.StrPath = input.Path;
+            data.BrowserPath = input.BrowserPath;
             return await _menuManageDao.AddAsync<T_Directory>(data);
         }
 
@@ -107,7 +106,7 @@ namespace BusinesLogic.BackEnd.MenuManage
         {
             T_Menu menu = input.Adapt<T_Menu>();
             menu.UniqueNumber = menu.Id;
-            menu.StrPath = input.Path;
+            menu.BrowserPath = input.BrowserPath;
             return await _menuManageDao.AddAsync(menu);
         }
 
@@ -178,9 +177,9 @@ namespace BusinesLogic.BackEnd.MenuManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<bool> DelteMenu(long id)
+        public async Task<bool> DeleteMenu(long id)
         {
-            return await _menuManageDao.DeleteAsync(id);
+            return await _menuManageDao.DeleteAsync<T_Menu>(id);
         }
 
         /// <summary>
@@ -188,11 +187,10 @@ namespace BusinesLogic.BackEnd.MenuManage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<bool> DelteMenuButton(long id)
+        public async Task<bool> DeleteMenuButton(long id)
         {
             return await _menuManageDao.DeleteAsync<T_MenuButton>(id);
         }
         #endregion
-
     }
 }

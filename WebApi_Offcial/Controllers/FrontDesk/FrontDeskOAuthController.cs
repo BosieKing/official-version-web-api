@@ -1,12 +1,12 @@
 ﻿using BusinesLogic.Center.Captcha;
-using BusinesLogic.Center.Captcha.Dto;
 using BusinesLogic.FrontDesk.FrontDeskOAuth;
-using BusinesLogic.FrontDesk.FrontDeskOAuth.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.Commons.Domain;
+using Model.DTOs.Center.Captch;
+using Model.DTOs.FronDesk.FrontDeskOAuth;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
 using WebApi_Offcial.ActionFilters.FrontDesk;
 
 namespace WebApi_Offcial.Controllers.FrontDesk
@@ -21,13 +21,13 @@ namespace WebApi_Offcial.Controllers.FrontDesk
     public class FrontDeskOAuthController : ControllerBase
     {
         #region 参数和构造函数
-        private readonly CaptchaService _captchaService;
+        private readonly ICaptchaService _captchaService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFrontDeskOAuthService _frontDeskOAuthService;
         /// <summary>
         /// 构造函数
         /// </summary>
-        public FrontDeskOAuthController(CaptchaService captchaService, IFrontDeskOAuthService frontDeskOAuthService, IHttpContextAccessor httpContextAccessor)
+        public FrontDeskOAuthController(ICaptchaService captchaService, IFrontDeskOAuthService frontDeskOAuthService, IHttpContextAccessor httpContextAccessor)
         {
             _captchaService = captchaService;
             _httpContextAccessor = httpContextAccessor;

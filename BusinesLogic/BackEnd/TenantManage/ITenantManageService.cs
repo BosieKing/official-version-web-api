@@ -1,12 +1,11 @@
-﻿using BusinesLogic.BackEnd.TenantManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantManage;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
+﻿using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.TenantManage;
 
 namespace BusinesLogic.BackEnd.TenantManage
 {
     /// <summary>
-    /// 租户管理接口
+    /// 后台租户管理业务接口
     /// </summary>
     public interface ITenantManageService
     {

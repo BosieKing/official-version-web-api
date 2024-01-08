@@ -1,15 +1,15 @@
-﻿using IDataSphere.Interface.CenterService;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.DatabaseContexts;
+using IDataSphere.Interfaces.Center;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataSphere.Center
 {
     /// <summary>
-    /// 验证码访问数据库接口
+    /// 验证码业务访问数据实现类
     /// </summary>
-    public class CaptchaDao : BaseDao<T_User>, ICaptchaDao
+    public class CaptchaDao : BaseDao, ICaptchaDao
     {
-        public CaptchaDao(SqlDbContext dMDbContext) : base(dMDbContext)
+        public CaptchaDao(SqlDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -21,7 +21,7 @@ namespace DataSphere.Center
         /// <returns></returns>
         public async Task<string> GetPhone(long userId)
         {
-            var phone = await dMDbContext.UserRep.Where(p => p.Id == userId).Select(p => p.Phone).FirstOrDefaultAsync();
+            var phone = await dbContext.UserRep.Where(p => p.Id == userId).Select(p => p.Phone).FirstOrDefaultAsync();
             return phone;
         }
     }

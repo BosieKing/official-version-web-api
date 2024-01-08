@@ -1,12 +1,12 @@
 ﻿using BusinesLogic.Center.Captcha;
-using BusinesLogic.FrontDesk.FrontDeskOAuth.Dto;
-using IDataSphere.Interface.FronDesk;
+using IDataSphere.Interfaces.FronDesk;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
+using Model.Commons.Domain;
+using Model.DTOs.FronDesk.FrontDeskOAuth;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
@@ -21,13 +21,13 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         #region 参数和构造函数
 
         private readonly IFrontDeskOAuthDao _frontDeskOAuthDao;
-        private readonly CaptchaService _captchaService;
+        private readonly ICaptchaService _captchaService;
         private readonly IStringLocalizer<UserTips> _stringLocalizer;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public FrontDeskOAuthActionFilter(IFrontDeskOAuthDao frontDeskOAuthDao, IStringLocalizer<UserTips> stringLocalizer, CaptchaService captchaService)
+        public FrontDeskOAuthActionFilter(IFrontDeskOAuthDao frontDeskOAuthDao, IStringLocalizer<UserTips> stringLocalizer, ICaptchaService captchaService)
         {
             _frontDeskOAuthDao = frontDeskOAuthDao;
             _stringLocalizer = stringLocalizer;

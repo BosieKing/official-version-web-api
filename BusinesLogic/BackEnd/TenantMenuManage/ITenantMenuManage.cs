@@ -1,11 +1,10 @@
-using BusinesLogic.BackEnd.TenantMenuManage.Dto;
-using IDataSphere.Interface.BackEnd.TenantMenuManage;
-using SharedLibrary.Models.DomainModels;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.TenantMenuManage;
 
 namespace BusinesLogic.BackEnd.TenantMenuManage
 {
     /// <summary>
-    /// 租户菜单管理业务接口
+    /// 后台租户菜单管理业务接口
     /// </summary>
     public interface ITenantMenuManageService
     {
@@ -19,6 +18,6 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         Task<bool> UpdateTenantMenuButton(UpdateTenantMenuButtonInput input);
         Task<bool> DeleteTenantDirectory(long id);
         Task<bool> DeleteTenantMenu(long id);
-        Task<bool> DelteTenantMenuButton(long id);
+        Task<bool> DeleteTenantMenuButton(long id);
     }
 }

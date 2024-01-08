@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Model.Commons.Domain;
 using SharedLibrary.Consts;
-using SharedLibrary.Models.DomainModels;
 using System.Net;
 using UtilityToolkit.Helpers;
 
@@ -28,7 +28,7 @@ namespace WebApi_Offcial.ActionFilters
         /// <param name="context"></param>
         public Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            //return Task.CompletedTask;
+            return Task.CompletedTask;
             bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
             if (isSuperManage)
             {

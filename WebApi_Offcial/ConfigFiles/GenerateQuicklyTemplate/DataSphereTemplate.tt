@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 using IDataSphere.Interface.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>;
-using IDataSphere.Repositoty;
+using Model.PO;
 using Microsoft.EntityFrameworkCore;
 using UtilityToolkit.Utils;
 using SharedLibrary.NormalizeModel;
@@ -18,7 +18,7 @@ namespace Dao.<#=this.data.SwaggerGroupEnumName#>
     {
       
         #region 构造函数
-        public <#=this.data.ClassNamePrefix#>Dao(DMDbContext dMDbContext) : base(dMDbContext)
+        public <#=this.data.ClassNamePrefix#>Dao(DMDbContext dbContext) : base(dbContext)
         {
 
         }
@@ -32,7 +32,7 @@ namespace Dao.<#=this.data.SwaggerGroupEnumName#>
         /// <returns></returns>
         public async Task<PageResult> Get<#= this.data.TableName.Split("_")[1]#>Page(Get<#= this.data.TableName.Split("_")[1]#>PageInput input) 
         {
-            var query = dMDbContext.<#= this.data.TableName.Split("_")[1]#>Rep.AsQueryable();
+            var query = dbContext.<#= this.data.TableName.Split("_")[1]#>Rep.AsQueryable();
             return await base.AdaptPage(query, input.PageSize, input.PageNo);
         }
         #endregion

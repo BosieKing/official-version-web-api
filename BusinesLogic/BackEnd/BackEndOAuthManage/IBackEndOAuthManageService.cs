@@ -1,9 +1,12 @@
-﻿using BusinesLogic.BackEnd.BackEndOAuthManage.Dto;
-using SharedLibrary.Models.CoreDataModels;
-using SharedLibrary.Models.DomainModels;
+﻿using Model.Commons.CoreData;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.BackEndOAuthManage;
 
 namespace BusinesLogic.BackEnd.BackEndOAuthManage
 {
+    /// <summary>
+    /// 后台权限管理业务接口
+    /// </summary>
     public interface IBackEndOAuthManageService
     {
         Task<List<DropdownDataModel>> GetBindTenantList(long userId);

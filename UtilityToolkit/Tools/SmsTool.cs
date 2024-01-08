@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Util.Tools
+namespace UtilityToolkit.Tools
 {
     /// <summary>
     /// 短信
@@ -16,7 +16,7 @@ namespace Util.Tools
         /// <returns></returns>
         public static bool SendSMS(string phoneNumber, string number, string codeType)
         {
-            bool isSuccess = true;
+            var isSuccess = true;
 
             //try
             //{

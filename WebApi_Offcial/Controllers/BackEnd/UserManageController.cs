@@ -1,10 +1,9 @@
 using BusinesLogic.BackEnd.UserManage;
-using BusinesLogic.BackEnd.UserManage.Dto;
-using IDataSphere.Interface.BackEnd.UserManage;
 using Microsoft.AspNetCore.Mvc;
+using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.BackEnd.UserManage;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
-using SharedLibrary.Models.SharedDataModels;
 using WebApi_Offcial.ActionFilters.BackEnd;
 
 namespace WebApi_Offcial.Controllers.BackEnd

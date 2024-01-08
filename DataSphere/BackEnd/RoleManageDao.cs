@@ -1,20 +1,20 @@
-﻿using IDataSphere.Extensions;
-using IDataSphere.Interface.BackEnd.RoleManage;
-using IDataSphere.Repositoty;
+﻿using IDataSphere.DatabaseContexts;
+using IDataSphere.Extensions;
+using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
-using SharedLibrary.Models;
-using SharedLibrary.Models.DomainModels;
+using Model.Commons.Domain;
+using Model.DTOs.BackEnd.RoleManage;
 using UtilityToolkit.Utils;
 
 namespace DataSphere.BackEnd
 {
     /// <summary>
-    /// 角色管理数据层
+    /// 后台角色管理数据访问实现类
     /// </summary>
-    public class RoleManageDao : BaseDao<T_Role>, IRoleManageDao
+    public class RoleManageDao : BaseDao, IRoleManageDao
     {
         #region 构造函数
-        public RoleManageDao(SqlDbContext dMDbContext) : base(dMDbContext)
+        public RoleManageDao(SqlDbContext dbContext) : base(dbContext)
         {
         }
         #endregion
@@ -27,16 +27,16 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<dynamic> GetRoleMenuList(long roleId)
         {
-            var checkMenuList = dMDbContext.RoleMenuRep.Where(p => p.RoleId == roleId).Select(p => p.MenuId);
-            var checkButtonList = dMDbContext.RoleBlockButtonsRep.Where(p => p.RoleId == roleId).Select(p => p.ButtonId);
-            var buttonList = await dMDbContext.TenantMenuButtonRep.Select(p => new
+            var checkMenuList = dbContext.RoleMenuRep.Where(p => p.RoleId == roleId).Select(p => p.MenuId);
+            var checkButtonList = dbContext.RoleBlockButtonsRep.Where(p => p.RoleId == roleId).Select(p => p.ButtonId);
+            var buttonList = await dbContext.TenantMenuButtonRep.Select(p => new
             {
                 p.Id,
                 p.MenuId,
                 p.Name,
                 IsCheck = checkButtonList.Contains(p.Id),
             }).ToListAsync();
-            var menuList = await dMDbContext.TenantMenuRep.Select(p => new DropdownSelectionModel
+            var menuList = await dbContext.TenantMenuRep.Select(p => new DropdownSelectionModel
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -66,12 +66,12 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<PaginationResultModel> GetRolePage(GetRolePageInput input)
         {
-            var query = from data in dMDbContext.RoleRep
+            var query = from data in dbContext.RoleRep
                         .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $"%{input.Name}%"))
                         .Where(!input.Remark.IsNullOrEmpty(), p => EF.Functions.Like(p.Remark, $"%{input.Remark}%"))
-                        join createUser in dMDbContext.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
+                        join createUser in dbContext.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
                         from createUser in createUserResult.DefaultIfEmpty()
-                        join updateUser in dMDbContext.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult
+                        join updateUser in dbContext.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult
                         from updateUser in updateUserResult.DefaultIfEmpty()
                         select new
                         {

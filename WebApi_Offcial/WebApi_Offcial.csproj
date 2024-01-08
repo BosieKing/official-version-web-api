@@ -54,6 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ActionFilters\Center\" />
     <Folder Include="Controllers\FrontDesk\" />
     <Folder Include="OtherFiles\Log\" />
   </ItemGroup>
@@ -61,7 +62,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinesLogic\BusinesLogic.csproj" />
     <ProjectReference Include="..\DataSphere\DataSphere.csproj" />
-    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
+    <ProjectReference Include="..\IDataSphere\IDataSphere.csproj" />
     <ProjectReference Include="..\UtilityToolkit\UtilityToolkit.csproj" />
   </ItemGroup>
 

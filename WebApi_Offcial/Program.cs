@@ -1,12 +1,12 @@
 using Autofac;
-using DataSphere;
+using IDataSphere.DatabaseContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Model.Commons.Domain;
 using Newtonsoft.Json;
-using SharedLibrary.Models.DomainModels;
 using System.Globalization;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
@@ -91,7 +91,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDoc();
 
 // 替换为Log4Net日志
-builder.Logging.AddLog4Net("ConfigFile/Log4net.config");
+builder.Logging.AddLog4Net("ConfigFiles/Log4net.config");
 
 // 添加本地化服务
 builder.Services.AddLocalization();

@@ -1,10 +1,10 @@
 ﻿using BusinesLogic.Center.Captcha;
 using BusinesLogic.FrontDesk.UserInfoManage;
-using BusinesLogic.FrontDesk.UserInfoManage.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Model.Commons.Domain;
+using Model.DTOs.FronDesk.UserInfoManage;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
-using SharedLibrary.Models.DomainModels;
 using UtilityToolkit.Helpers;
 using WebApi_Offcial.ActionFilters.FrontDesk;
 
@@ -22,11 +22,11 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         #region 构造函数
         private readonly IUserInfoManageService _userInfoManageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly CaptchaService _captchaService;
+        private readonly ICaptchaService _captchaService;
         /// <summary>
         /// 构造函数
         /// </summary>
-        public UserInfoManageController(CaptchaService captchaService, IHttpContextAccessor httpContextAccessor, IUserInfoManageService userInfoManageService)
+        public UserInfoManageController(ICaptchaService captchaService, IHttpContextAccessor httpContextAccessor, IUserInfoManageService userInfoManageService)
         {
             _captchaService = captchaService;
             _httpContextAccessor = httpContextAccessor;
@@ -80,7 +80,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             bool data = await _userInfoManageService.UploadAvatar(url, userId);
             return DataResponseModel.SetData(data);
         }
-      
+
         /// <summary>
         /// 通过原密码修改密码
         /// </summary>
