@@ -6,7 +6,7 @@ namespace UtilityToolkit.Utils
     /// <summary>
     /// 枚举帮助类
     /// </summary>
-    public static class EnumUitl
+    public static class EnumUtil
     {
         /// <summary>
         /// 枚举转字典

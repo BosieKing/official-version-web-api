@@ -33,7 +33,6 @@ namespace DataSphere.FronDesk
                 Phone = p.Phone,
                 NickName = p.NickName,
                 Email = p.Email,
-                Code = p.Code,
                 TenantId = p.TenantId,
                 Sex = p.Sex
             }).FirstOrDefaultAsync();
@@ -45,8 +44,9 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<List<DropdownDataResult>> GetTenantBindList(long userId)
         {
-            var userPhones = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
-                                           .Select(p => p.Phone);
+            var userPhones = dbContext.UserRep.IgnoreTenantFilter()
+                                              .Where(p => p.Id == userId)
+                                              .Select(p => p.Phone);
             var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => userPhones.Contains(p.Phone)).Select(p => p.TenantId);
             return await dbContext.TenantRep.Where(p => tenantIdsQuery.Contains(p.Id)).Select(p => new DropdownDataResult { Id = p.Id, Name = p.Name }).ToListAsync();
         }
@@ -74,7 +74,6 @@ namespace DataSphere.FronDesk
             var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == input.Id);
             user.NickName = input.NickName;
             user.Email = input.Email;
-            user.Code = input.Code;
             user.Sex = input.Sex;
             dbContext.Update(user);
             await dbContext.SaveChangesAsync();

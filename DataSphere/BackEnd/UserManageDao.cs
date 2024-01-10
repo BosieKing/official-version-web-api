@@ -38,7 +38,6 @@ namespace DataSphere.BackEnd
                             user.Phone,
                             user.Sex,
                             user.Email,
-                            user.Code,
                             user.IsDisableLogin,
                             user.CreatedTime,
                             user.UpdateTime
@@ -99,7 +98,6 @@ namespace DataSphere.BackEnd
             user.Phone = newUser.Phone;
             user.NickName = newUser.NickName;
             user.Email = newUser.Email;
-            user.Code = newUser.Code;
             user.Sex = newUser.Sex;
             user.IsDisableLogin = newUser.IsDisableLogin;
             dbContext.UserRep.Update(user);
