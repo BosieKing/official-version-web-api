@@ -56,7 +56,7 @@ builder.Services.AddControllers(option =>
                     options.InvalidModelStateResponseFactory = (context) =>
                     {
                         var error = context.ModelState;
-                        return new JsonResult(DataResponseModel.IsFailure("模型验证失败"));
+                        return new JsonResult(ServiceResult.IsFailure("模型验证失败"));
                     };
                 })
                 .AddNewtonsoftJson(p =>
@@ -103,7 +103,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.InvalidModelStateResponseFactory = (context) =>
     {
         var errorMsgs = context.ModelState.Values.SelectMany(p => p.Errors.Select(e => e.ErrorMessage)).ToArray();
-        return new JsonResult(DataResponseModel.IsFailure(String.Join(",", errorMsgs)));
+        return new JsonResult(ServiceResult.IsFailure(String.Join(",", errorMsgs)));
     };
 });
 

@@ -52,7 +52,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         {
             string actionName = context.RouteData.Values["action"].ToString().ToLower();
             Dictionary<string, object> dic = (Dictionary<string, object>)context.ActionArguments;
-            DataResponseModel serviceResult = null;
+            ServiceResult serviceResult = null;
             switch (actionName)
             {
                 case "loginbypassword":
@@ -69,7 +69,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                     serviceResult = await UpdatePasswordVerify((BackEndUpdatePasswordInput)dic["input"]);
                     break;
                 default:
-                    serviceResult = DataResponseModel.Successed();
+                    serviceResult = ServiceResult.Successed();
                     break;
             }
             // 不成功则返回
@@ -89,7 +89,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> LoginByPassWordVerify(BackEndLoginByPasswordInput input)
+        private async Task<ServiceResult> LoginByPassWordVerify(BackEndLoginByPasswordInput input)
         {
             // 验证滑动验证码值
             var result = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
@@ -112,7 +112,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 // 剩余过期时间
                 long expTime = redisClient.Ttl(passwordErrorCountKey);
-                return DataResponseModel.IsFailure(_stringLocalizer["PasswrodMaxErrorWait"].Value.Replace("@", $"{expTime / 60}"));
+                return ServiceResult.IsFailure(_stringLocalizer["PasswrodMaxErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
             // 判断密码是否正确
             bool passWordExist = await _backEndOAuthDao.PassWordInManageExiste(input.Phone, input.Password);
@@ -121,12 +121,12 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 passwordErrorCount++;
                 redisClient.Set(passwordErrorCountKey, passwordErrorCount, pwdExpirationTime);
-                return DataResponseModel.IsFailure(_stringLocalizer["IsNotManage"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
+                return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
             }
             // 走到这里代表密码、验证码完全匹配
             // 删除Key
             redisClient.Del(passwordErrorCountKey);
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
 
@@ -135,13 +135,13 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> LoginByVerifyCodeVerify(BackEndLoginByVerifyCodeInput input)
+        private async Task<ServiceResult> LoginByVerifyCodeVerify(BackEndLoginByVerifyCodeInput input)
         {
             // 判断账号是否注册
             bool accountExist = await _backEndOAuthDao.IsManage(input.Phone);
             if (!accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["IsNotManage"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value);
             }
             // 获取缓存中的滑动验证码值
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
@@ -152,13 +152,13 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             string graphicCaptchaeValue = redisClient.Get(graphicCaptchaKey);
             if (graphicCaptchaeValue.IsNullOrEmpty())
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["GraphicCaptchaExpired"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaExpired"].Value);
             }
             // 无论是否相等，进入验证立马销毁
             redisClient.Del(graphicCaptchaKey);
             if (input.GraphicCaptcha != graphicCaptchaeValue)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["GraphicCaptchaError"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaError"].Value);
             }
             // 验证验证码是否匹配
             var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Login, input.Phone, input.VerifyCode);
@@ -166,7 +166,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return result;
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -174,16 +174,16 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> SwitchTenantVerify(IdInput input)
+        private async Task<ServiceResult> SwitchTenantVerify(IdInput input)
         {
             // 判断用户是否在该平台担任管理员
             long uniqueNumber = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.UNIQUE_NUMBER).Value);
             bool isManage = await _backEndOAuthDao.InTenantIsManage(uniqueNumber, input.Id);
             if (!isManage)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["IsNotManage"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
 
@@ -192,14 +192,14 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdatePasswordVerify(BackEndUpdatePasswordInput input)
+        private async Task<ServiceResult> UpdatePasswordVerify(BackEndUpdatePasswordInput input)
         {
             // 判断账号是否注册
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             bool accountExist = await _backEndOAuthDao.IdExisted<T_User>(userId);
             if (!accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
             string phone = await _backEndOAuthDao.GetPhoneById(userId);
@@ -208,7 +208,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return result;
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
     }

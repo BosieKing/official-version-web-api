@@ -27,18 +27,11 @@ namespace Model.Repositotys
         [MaxLength(200)]
         public string Password { get; set; }
 
-
         /// <summary>
         /// 邮箱
         /// </summary>
         [MaxLength(50)]
         public string Email { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 编号或学号
-        /// </summary>
-        [MaxLength(50)]
-        public string Code { get; set; } = string.Empty;
 
         /// <summary>
         /// 性别

@@ -13,7 +13,7 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<bool> UpdateAvatar(string url, long userId);
         Task<bool> UpdatePassword(string newPassword, long userId);
         Task<bool> UpdateUserInfo(T_User user);
-        Task<List<DropdownDataModel>> GetTenantBindList(long userId);
+        Task<List<DropdownDataResult>> GetTenantBindList(long userId);
         Task<(string Password, string Phone)> GetUserPassword(long userId);
     }
 }

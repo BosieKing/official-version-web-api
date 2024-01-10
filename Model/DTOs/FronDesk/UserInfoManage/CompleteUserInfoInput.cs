@@ -23,12 +23,6 @@ namespace Model.DTOs.FronDesk.UserInfoManage
         public string Email { get; set; }
 
         /// <summary>
-        /// 编号或学号
-        /// </summary>
-        [MaxLength(100, ErrorMessage = "UserCodeTooLong100")]
-        public string Code { get; set; }
-
-        /// <summary>
         /// 性别
         /// </summary>
         [Required(ErrorMessage = "SexRequried")]

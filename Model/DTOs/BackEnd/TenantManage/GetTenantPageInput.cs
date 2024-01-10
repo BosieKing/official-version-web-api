@@ -2,6 +2,9 @@
 
 namespace Model.DTOs.BackEnd.TenantManage
 {
+    /// <summary>
+    /// 查询租户表格数据输入类
+    /// </summary>
     public class GetTenantPageInput : PageInput
     {
         /// <summary>

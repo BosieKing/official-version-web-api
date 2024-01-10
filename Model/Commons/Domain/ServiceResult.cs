@@ -5,7 +5,7 @@ namespace Model.Commons.Domain
     /// <summary>
     /// RESTFul返回格式
     /// </summary>
-    public class DataResponseModel
+    public class ServiceResult
     {
         /// <summary>
         /// 是否成功
@@ -30,13 +30,18 @@ namespace Model.Commons.Domain
         /// <summary>
         /// 构造函数初始化
         /// </summary>
-        private DataResponseModel()
+        private ServiceResult()
         {
             Success = true;
             ResultCode = (int)ServiceResultTypeEnum.Succeed;
         }
 
-        public DataResponseModel(string msg, int resultCode)
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="resultCode"></param>
+        public ServiceResult(string msg, int resultCode)
         {
             Message = msg;
             ResultCode = resultCode;
@@ -46,34 +51,40 @@ namespace Model.Commons.Domain
         /// <summary>
         /// 标记失败
         /// </summary>
-        public static DataResponseModel IsFailure(string msg = null, string data = null)
+        public static ServiceResult IsFailure(string msg = null, string data = null)
         {
-            var serviceResult = new DataResponseModel();
+            ServiceResult serviceResult = new();
             serviceResult.Success = false;
             if (data != null)
+            {
                 serviceResult.Data = data;
+            }
             if (msg != null)
+            {
                 serviceResult.Message = msg;
+            }
             return serviceResult;
         }
 
         /// <summary>
         /// 放置数据
         /// </summary>
-        public static DataResponseModel SetData(object data)
+        public static ServiceResult SetData(object data)
         {
-            var serviceResult = new DataResponseModel();
+            ServiceResult serviceResult = new();
             if (data != null)
+            {
                 serviceResult.Data = data;
+            }
             return serviceResult;
         }
 
         /// <summary>
         /// 标记成功
         /// </summary>
-        public static DataResponseModel Successed()
+        public static ServiceResult Successed()
         {
-            var serviceResult = new DataResponseModel();
+            ServiceResult serviceResult = new();
             return serviceResult;
         }
 

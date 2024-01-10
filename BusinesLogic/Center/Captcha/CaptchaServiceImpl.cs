@@ -32,7 +32,7 @@ namespace BusinesLogic.Center.Captcha
         /// <param name="userId"></param>
         /// <remarks>如果验证码仍在有效期则返回错误提示</remarks>
         /// <returns></returns>
-        public async Task<DataResponseModel> SendPhoneCode(VerificationCodeTypeEnum codeType, string phone = "", long userId = 0)
+        public async Task<ServiceResult> SendPhoneCode(VerificationCodeTypeEnum codeType, string phone = "", long userId = 0)
         {
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
             if (!userId.Equals(0))
@@ -45,13 +45,13 @@ namespace BusinesLogic.Center.Captcha
             // 验证码还没有过期
             if (!code.IsNullOrEmpty())
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["VerifCodeWork"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["VerifCodeWork"].Value);
             }
             string number = SmsTool.GenerateRandomCode();
             bool isSend = SmsTool.SendSMS(phone, number, codeType.GetDescription());
             if (!isSend)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["SendCodeError"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["SendCodeError"].Value);
             }
             // 清除上一条发送的验证码数据
             await redisClient.DelAsync(key);
@@ -59,7 +59,7 @@ namespace BusinesLogic.Center.Captcha
             await redisClient.DelAsync(errorKey);
             // 设置新的验证码
             await redisClient.SetAsync(key, number, ConfigSettingTool.SmsConfigOptions.SmsExpirationTime);
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
 
@@ -115,9 +115,9 @@ namespace BusinesLogic.Center.Captcha
         /// <remarks>匹配则删除验证码key和错误次数key，返回true</remarks>
         /// <remarks>不匹配则缓存错误次数key，返回错误提示</remarks>
         /// <returns></returns>
-        public async Task<DataResponseModel> PhoneCodeVerify(VerificationCodeTypeEnum codeType, string phone, string verifyCode)
+        public async Task<ServiceResult> PhoneCodeVerify(VerificationCodeTypeEnum codeType, string phone, string verifyCode)
         {
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
             // 判断手机验证码是否正确
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
             // 拼接注册验证码
@@ -141,10 +141,10 @@ namespace BusinesLogic.Center.Captcha
                     await redisClient.DelAsync(key);
                     await redisClient.DelAsync(errorCountKey);
                     // 提示验证码
-                    return DataResponseModel.IsFailure(_stringLocalizer["VerifCodeExpired"].Value);
+                    return ServiceResult.IsFailure(_stringLocalizer["VerifCodeExpired"].Value);
                 }
                 await redisClient.SetAsync(errorCountKey, errorCount, expTime);
-                return DataResponseModel.IsFailure(_stringLocalizer["VerifCodeError"].Value.Replace("@", $"{errorMaxCount - errorCount}"));
+                return ServiceResult.IsFailure(_stringLocalizer["VerifCodeError"].Value.Replace("@", $"{errorMaxCount - errorCount}"));
             }
             else
             {
@@ -152,7 +152,7 @@ namespace BusinesLogic.Center.Captcha
                 await redisClient.DelAsync(key);
                 await redisClient.DelAsync(errorCountKey);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
 
@@ -162,9 +162,9 @@ namespace BusinesLogic.Center.Captcha
         /// <param name="guid"></param>
         /// <param name="codeValue"></param>
         /// <returns></returns>
-        public async Task<DataResponseModel> GraphicCaptchaVerify(string guid, string codeValue)
+        public async Task<ServiceResult> GraphicCaptchaVerify(string guid, string codeValue)
         {
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
             // 滑动验证码Key
             string graphicCaptchaKey = CaptchaCacheConst.GRAPHIC_CAPTCHA_KEY + guid;
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
@@ -172,15 +172,15 @@ namespace BusinesLogic.Center.Captcha
             string graphicCaptchaeValue = await redisClient.GetAsync(graphicCaptchaKey);
             if (graphicCaptchaeValue.IsNullOrEmpty())
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["GraphicCaptchaExpired"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaExpired"].Value);
             }
             // 无论是否相等，进入验证立马销毁
             await redisClient.DelAsync(graphicCaptchaKey);
             if (codeValue != graphicCaptchaeValue)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["GraphicCaptchaError"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaError"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
     }

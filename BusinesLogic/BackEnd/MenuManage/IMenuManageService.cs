@@ -11,14 +11,14 @@ namespace BusinesLogic.BackEnd.MenuManage
         Task<bool> AddMenu(AddMenuInput input);
         Task<bool> AddMenuButton(AddMenuButtonInput input);
         Task<bool> DeleteMenu(long id);
-        Task<PaginationResultModel> GetMenuPage(GetMenuPageInput input);
+        Task<PageResult> GetMenuPage(GetMenuPageInput input);
         Task<bool> UpdateMenu(UpdateMeunInput input);
         Task<bool> AddDirectory(AddDirectoryInput input);
-        Task<List<DropdownDataModel>> GetDirectoryList();
+        Task<List<DropdownDataResult>> GetDirectoryList();
         Task<bool> UpdateDirectory(UpdateDirectoryInput input);
         Task<bool> UpdateMenuButton(UpdateMenuButtonInput input);
         Task<bool> DeleteMenuButton(long id);
         Task<bool> DeleteDirectory(long id);
-        Task<List<DropdownDataModel>> GetMenuList();
+        Task<List<DropdownDataResult>> GetMenuList();
     }
 }

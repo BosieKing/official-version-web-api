@@ -27,7 +27,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetPage(GetTenantMenuPageInput input)
+        public async Task<PageResult> GetPage(GetTenantMenuPageInput input)
         {
             var data = await _tenantMenuManageDao.GetTenantMenuPage(input);
             var result = data.menuListInfo.GroupBy(p => new { p.PId, p.PName, p.PIcon, p.PPath })
@@ -58,7 +58,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
                                          Children = data.buttonListInfo.Where(b => m.Key.Id == b.PId).Select(r => r.Adapt<MenuTreeModel>())
                                      })
                                  }).ToList();
-            return new PaginationResultModel(input.PageNo, input.PageSize, data.count, result);
+            return new PageResult(input.PageNo, input.PageSize, data.count, result);
 
         }
 
@@ -66,7 +66,7 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
         /// 获取目录下拉
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetTenantDirectory()
+        public async Task<List<DropdownDataResult>> GetTenantDirectory()
         {
             return await _tenantMenuManageDao.GetStringList<T_TenantDirectory>();
         }

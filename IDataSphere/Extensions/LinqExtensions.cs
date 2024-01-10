@@ -135,28 +135,28 @@ namespace IDataSphere.Extensions
         /// <param name="fieldName">自定义采集字段</param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public static IQueryable<DropdownDataModel> ConvertListSearch<TSource>(this IQueryable<TSource> sources, string fieldName = "")
+        public static IQueryable<DropdownDataResult> ConvertListSearch<TSource>(this IQueryable<TSource> sources, string fieldName = "")
         {
             Type type = typeof(TSource);
             if (fieldName.IsNullOrEmpty() && !type.GetProperties().Any(p => p.Name == "Name"))
             {
                 throw new InvalidOperationException("实体表中没有Name字段，请设置默认数据采集字段名称");
             }
-            Type resultType = typeof(DropdownDataModel);
+            Type resultType = typeof(DropdownDataResult);
             // 参数表达式，构建P
             ParameterExpression p = Expression.Parameter(typeof(TSource), "p");
             // 成员表达式，构建 p.id
             MemberExpression idMemberExpression = Expression.PropertyOrField(p, "Id");
             MemberExpression nameMemberExpression = Expression.PropertyOrField(p, fieldName.IsNullOrEmpty() ? "Name" : fieldName);
             // 赋值表达式，构建 Id => p.id
-            MemberAssignment idMemberAssignment = Expression.Bind(resultType.GetProperty(nameof(DropdownDataModel.Id)), idMemberExpression);
-            MemberAssignment nameMemberAssignment = Expression.Bind(resultType.GetProperty(nameof(DropdownDataModel.Name)), nameMemberExpression);
+            MemberAssignment idMemberAssignment = Expression.Bind(resultType.GetProperty(nameof(DropdownDataResult.Id)), idMemberExpression);
+            MemberAssignment nameMemberAssignment = Expression.Bind(resultType.GetProperty(nameof(DropdownDataResult.Name)), nameMemberExpression);
             // 规范返回模板
-            NewExpression result = Expression.New(typeof(DropdownDataModel));
+            NewExpression result = Expression.New(typeof(DropdownDataResult));
             // 按照指定规范返回模板和赋值表达式填充
             MemberInitExpression memberInitExpression = Expression.MemberInit(result, idMemberAssignment, nameMemberAssignment);
             // 转换为查询表达式
-            var searchQuery = Expression.Lambda<Func<TSource, DropdownDataModel>>(memberInitExpression, p);
+            var searchQuery = Expression.Lambda<Func<TSource, DropdownDataResult>>(memberInitExpression, p);
             return sources.Select(searchQuery);
         }
 

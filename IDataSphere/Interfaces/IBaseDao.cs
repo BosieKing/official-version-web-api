@@ -71,7 +71,7 @@ namespace IDataSphere.Interfaces
         /// <param name="input"></param>
         /// <param name="isIgnoreTenant"></param>
         /// <returns></returns>
-        public Task<PaginationResultModel> GetPage<TEntity, Input>(Input input, bool isIgnoreTenant = false)
+        public Task<PageResult> GetPage<TEntity, Input>(Input input, bool isIgnoreTenant = false)
             where TEntity : EntityBaseDO
             where Input : PageInput;
 
@@ -83,7 +83,7 @@ namespace IDataSphere.Interfaces
         /// <param name="pageSize"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public Task<PaginationResultModel> AdaptPage<TEntity>(IQueryable<TEntity> query, int pageSize, int pageNo);
+        public Task<PageResult> AdaptPage<TEntity>(IQueryable<TEntity> query, int pageSize, int pageNo);
         #endregion
 
         #region 下拉列表
@@ -103,7 +103,7 @@ namespace IDataSphere.Interfaces
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public Task<List<DropdownDataModel>> GetStringList<TEntity>(string fieldName = "") where TEntity : EntityBaseDO;
+        public Task<List<DropdownDataResult>> GetStringList<TEntity>(string fieldName = "") where TEntity : EntityBaseDO;
         /// <summary>
         /// 根据表达式过滤数据获取下拉列表，采集string类型字段
         /// </summary>
@@ -112,7 +112,7 @@ namespace IDataSphere.Interfaces
         /// <param name="fieldName"></param>
         /// <param name="isIgnoreTenant"></param>
         /// <returns></returns>
-        public Task<List<DropdownDataModel>> GetStringList<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "", bool isIgnoreTenant = false)
+        public Task<List<DropdownDataResult>> GetStringList<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "", bool isIgnoreTenant = false)
             where TEntity : EntityBaseDO;
         #endregion
 

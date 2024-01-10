@@ -1,9 +1,9 @@
 ﻿namespace Model.Commons.CoreData
 {
     /// <summary>
-    /// 黑名单token
+    /// 黑名单token序列化模型
     /// </summary>
-    public class BlackTokenModel
+    public class BlackTokenJsonModel
     {
         /// <summary>
         /// token
@@ -20,8 +20,7 @@
         /// </summary>
         /// <param name="token"></param>
         /// <param name="refreshToken"></param>
-        /// <param name="expirationTime"></param>
-        public BlackTokenModel(string token, string expirationTime)
+        public BlackTokenJsonModel(string token, string expirationTime)
         {
             Token = token;
             ExpirationTime = long.Parse(expirationTime);

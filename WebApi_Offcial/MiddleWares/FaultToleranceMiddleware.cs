@@ -58,7 +58,7 @@ namespace WebApi_Offcial.MiddleWares
             }
             context.Response.ContentType = context.Request.Headers["Accept"];
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(DataResponseModel.IsFailure(exception.Message)).ConfigureAwait(false);
+            await context.Response.WriteAsJsonAsync(ServiceResult.IsFailure(exception.Message)).ConfigureAwait(false);
             // 管道短路
             return;
         }

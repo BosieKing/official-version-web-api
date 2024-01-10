@@ -37,7 +37,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         {
             string actionName = context.RouteData.Values["action"].ToString().ToLower();
             Dictionary<string, object> dic = (Dictionary<string, object>)context.ActionArguments;
-            DataResponseModel serviceResult = null;
+            ServiceResult serviceResult = null;
             switch (actionName)
             {
                 case "addtenant":
@@ -47,7 +47,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                     serviceResult = await UpdateTenantVerify((UpdateTenantInput)dic["input"]);
                     break;
                 default:
-                    serviceResult = DataResponseModel.Successed();
+                    serviceResult = ServiceResult.Successed();
                     break;
             }
             // 不成功则返回
@@ -66,15 +66,15 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> AddTenantVerify(AddTenantInput input)
+        private async Task<ServiceResult> AddTenantVerify(AddTenantInput input)
         {
             // 判断租户的唯一编码是否已存在
             bool codeExisted = await _tenantDao.CodeExist(input.Code);
             if (codeExisted)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -82,15 +82,15 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdateTenantVerify(UpdateTenantInput input)
+        private async Task<ServiceResult> UpdateTenantVerify(UpdateTenantInput input)
         {
             // 判断租户的唯一编码是否已存在
             bool codeExisted = await _tenantDao.CodeExist(input.Code, input.Id);
             if (codeExisted)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
     }

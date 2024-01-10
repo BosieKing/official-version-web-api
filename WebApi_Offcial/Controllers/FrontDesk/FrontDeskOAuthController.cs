@@ -43,12 +43,12 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("registered")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> Registered([FromBody] RegisteredInput input)
+        public async Task<ActionResult<ServiceResult>> Registered([FromBody] RegisteredInput input)
         {
             var result = await _frontDeskOAuthService.Register(input);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return DataResponseModel.SetData(true);
+            return ServiceResult.SetData(true);
         }
         #endregion
 
@@ -60,13 +60,13 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("loginByPassWord")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> LoginByPassWord([FromBody] LoginByPassWordInput input)
+        public async Task<ActionResult<ServiceResult>> LoginByPassWord([FromBody] LoginByPassWordInput input)
         {
             // 设置返回头
             var result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return DataResponseModel.SetData(true);
+            return ServiceResult.SetData(true);
         }
 
         /// <summary>
@@ -76,13 +76,13 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("loginByVerifyCode")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> LoginByVerifyCode([FromBody] LoginByVerifyCodeInput input)
+        public async Task<ActionResult<ServiceResult>> LoginByVerifyCode([FromBody] LoginByVerifyCodeInput input)
         {
             // 设置返回头
             var result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return DataResponseModel.SetData(true);
+            return ServiceResult.SetData(true);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("switchTenant")]
-        public async Task<ActionResult<DataResponseModel>> SwitchTenant([FromBody] LoginByVerifyCodeInput input)
+        public async Task<ActionResult<ServiceResult>> SwitchTenant([FromBody] LoginByVerifyCodeInput input)
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
@@ -100,7 +100,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             var result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return DataResponseModel.SetData(true);
+            return ServiceResult.SetData(true);
         }
 
         /// <summary>
@@ -109,13 +109,13 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("loginOut")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> LoginOut()
+        public async Task<ActionResult<ServiceResult>> LoginOut()
         {
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             string refreshToken = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head];
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             var result = await _frontDeskOAuthService.LoginOut(userId, token);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -127,10 +127,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("forgotPassword")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> ForgotPassword([FromBody] ForgotPasswordInput input)
+        public async Task<ActionResult<ServiceResult>> ForgotPassword([FromBody] ForgotPasswordInput input)
         {
             bool result = await _frontDeskOAuthService.ForgotPassword(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -141,10 +141,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpGet("getGraphicCaptcha")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> GetGraphicCaptcha()
+        public async Task<ActionResult<ServiceResult>> GetGraphicCaptcha()
         {
             dynamic data = await _captchaService.GetGraphicCaptcha();
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -154,10 +154,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("sendRegisterVerifyCode")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> SendRegisterVerifyCode([FromBody] SendPhoneCodeInput input)
+        public async Task<ActionResult<ServiceResult>> SendRegisterVerifyCode([FromBody] SendPhoneCodeInput input)
         {
             var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Register, phone: input.Phone);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -167,10 +167,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("sendForgetPwdVerifyCode")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> SendForgetPwdVerifyCode([FromBody] SendPhoneCodeInput input)
+        public async Task<ActionResult<ServiceResult>> SendForgetPwdVerifyCode([FromBody] SendPhoneCodeInput input)
         {
             var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.ForgetPwd, phone: input.Phone);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -180,10 +180,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("sendLoginVerifyCode")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> SendLoginVerifyCode([FromBody] SendPhoneCodeInput input)
+        public async Task<ActionResult<ServiceResult>> SendLoginVerifyCode([FromBody] SendPhoneCodeInput input)
         {
             var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: input.Phone);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 

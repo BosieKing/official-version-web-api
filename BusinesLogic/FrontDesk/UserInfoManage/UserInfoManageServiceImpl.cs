@@ -28,8 +28,9 @@ namespace BusinesLogic.FrontDesk.UserInfoManage
         /// 根据用户id查询用户信息
         /// </summary>
         /// <returns></returns>
-        public async Task<dynamic> GetUserInfo(long userId)
+        public async Task<dynamic> GetUserInfo()
         {
+            long userId = _userInfoDao.UserId();
             var userInfo = await _userInfoDao.GetUserInfoById(userId);
             var bindTenantList = await _userInfoDao.GetTenantBindList(userId);
             return new
@@ -45,12 +46,11 @@ namespace BusinesLogic.FrontDesk.UserInfoManage
         /// 完善个人信息
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateUserInfo(CompleteUserInfoInput input, long userId)
+        public async Task<bool> UpdateUserInfo(CompleteUserInfoInput input)
         {
             T_User user = input.Adapt<T_User>();
-            user.Id = userId;
+            user.Id = _userInfoDao.UserId();
             return await _userInfoDao.UpdateUserInfo(user);
         }
 
@@ -59,9 +59,9 @@ namespace BusinesLogic.FrontDesk.UserInfoManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<bool> UploadAvatar(string url, long userId)
+        public async Task<bool> UploadAvatar(string url)
         {
-            return await _userInfoDao.UpdateAvatar(url, userId);
+            return await _userInfoDao.UpdateAvatar(url, _userInfoDao.UserId());
         }
 
         /// <summary>
@@ -70,14 +70,14 @@ namespace BusinesLogic.FrontDesk.UserInfoManage
         /// <param name="input"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<bool> UpdatePassword(string password, long userId, string token)
+        public async Task<bool> UpdatePassword(string password, string token)
         {
+            long userId = _userInfoDao.UserId();
             await RedisMulititionHelper.LoginOut(userId.ToString(), token);
             return await _userInfoDao.UpdatePassword(password, userId);
         }
         #endregion
 
-        #region 删除
-        #endregion
+    
     }
 }

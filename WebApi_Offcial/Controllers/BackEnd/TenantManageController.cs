@@ -43,10 +43,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <returns></returns>
         [HttpGet("getTenantPage")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> GetTenantPage([FromQuery] GetTenantPageInput input)
+        public async Task<ActionResult<ServiceResult>> GetTenantPage([FromQuery] GetTenantPageInput input)
         {
             var data = await _tenantManagerService.GetTenantPage(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -56,10 +56,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <returns></returns>
         [HttpGet("getTenantMenuList")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> GetTenantMenuList([FromQuery] IdInput input)
+        public async Task<ActionResult<ServiceResult>> GetTenantMenuList([FromQuery] IdInput input)
         {
             var data = await _tenantManagerService.GetTenantMenuList(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <returns></returns>
         [HttpGet("getTenantDirectoryList")]
         [AllowAnonymous]
-        public async Task<ActionResult<DataResponseModel>> GetTenantDirectoryList([FromQuery] IdInput input)
+        public async Task<ActionResult<ServiceResult>> GetTenantDirectoryList([FromQuery] IdInput input)
         {
             var data = await _tenantManagerService.GetTenantDirectoryList(input.Id);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 
@@ -83,10 +83,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addTenant")]
-        public async Task<ActionResult<DataResponseModel>> AddTenant([FromBody] AddTenantInput input)
+        public async Task<ActionResult<ServiceResult>> AddTenant([FromBody] AddTenantInput input)
         {
             var data = await _tenantManagerService.AddTenant(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -95,10 +95,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("pushTenantMenu")]
-        public async Task<ActionResult<DataResponseModel>> PushTenantMenu([FromBody] PushTenantMenuInput input)
+        public async Task<ActionResult<ServiceResult>> PushTenantMenu([FromBody] PushTenantMenuInput input)
         {
             var data = await _tenantManagerService.PushTenantMenu(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 
@@ -109,10 +109,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateTenant")]
-        public async Task<ActionResult<DataResponseModel>> UpdateTenantAsync([FromBody] UpdateTenantInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateTenantAsync([FromBody] UpdateTenantInput input)
         {
             var data = await _tenantManagerService.UpdateTenant(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -121,10 +121,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("uptateInviteCode")]
-        public async Task<ActionResult<DataResponseModel>> UptateInviteCodeAsync([FromBody] IdInput input)
+        public async Task<ActionResult<ServiceResult>> UptateInviteCodeAsync([FromBody] IdInput input)
         {
             var data = await _tenantManagerService.UptateInviteCode(input.Id);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 

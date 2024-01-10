@@ -37,10 +37,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpGet("getPage")]
-        public async Task<ActionResult<DataResponseModel>> GetPage([FromQuery] GetTenantMenuPageInput input)
+        public async Task<ActionResult<ServiceResult>> GetPage([FromQuery] GetTenantMenuPageInput input)
         {
             var data = await _tenantMenuManageService.GetPage(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -48,10 +48,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// </summary>
         /// <returns></returns>
         [HttpGet("getTenantDirectory")]
-        public async Task<ActionResult<DataResponseModel>> GetTenantDirectory()
+        public async Task<ActionResult<ServiceResult>> GetTenantDirectory()
         {
             var data = await _tenantMenuManageService.GetTenantDirectory();
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 
@@ -62,10 +62,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addTenantDirectory")]
-        public async Task<ActionResult<DataResponseModel>> AddTenantDirectory([FromBody] AddTenantDirectoryInput input)
+        public async Task<ActionResult<ServiceResult>> AddTenantDirectory([FromBody] AddTenantDirectoryInput input)
         {
             var result = await _tenantMenuManageService.AddTenantDirectory(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -74,10 +74,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addTenantMenu")]
-        public async Task<ActionResult<DataResponseModel>> AddTenantMenu([FromBody] AddTenantMenuInput input)
+        public async Task<ActionResult<ServiceResult>> AddTenantMenu([FromBody] AddTenantMenuInput input)
         {
             var result = await _tenantMenuManageService.AddTenantMenu(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -86,10 +86,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addTenantMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> AddTenantMenuButton([FromBody] AddTenantMenuButtonInput input)
+        public async Task<ActionResult<ServiceResult>> AddTenantMenuButton([FromBody] AddTenantMenuButtonInput input)
         {
             var result = await _tenantMenuManageService.AddTenantMenuButton(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -100,10 +100,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateTenantDirectory")]
-        public async Task<ActionResult<DataResponseModel>> UpdateTenantDirectory([FromBody] UpdateTenantDirectoryInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateTenantDirectory([FromBody] UpdateTenantDirectoryInput input)
         {
             var result = await _tenantMenuManageService.UpdateTenantDirectory(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -112,10 +112,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateTenantMenu")]
-        public async Task<ActionResult<DataResponseModel>> UpdateTenantMenu([FromBody] UpdateTenantMenuInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateTenantMenu([FromBody] UpdateTenantMenuInput input)
         {
             var result = await _tenantMenuManageService.UpdateTenantMenu(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -124,10 +124,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateTenantMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> UpdateTenantMenuButton([FromBody] UpdateTenantMenuButtonInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateTenantMenuButton([FromBody] UpdateTenantMenuButtonInput input)
         {
             var result = await _tenantMenuManageService.UpdateTenantMenuButton(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -138,10 +138,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteTenantDirectory")]
-        public async Task<ActionResult<DataResponseModel>> DeleteTenantDirectory([FromBody] IdInput input)
+        public async Task<ActionResult<ServiceResult>> DeleteTenantDirectory([FromBody] IdInput input)
         {
             var result = await _tenantMenuManageService.DeleteTenantDirectory(input.Id);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -150,10 +150,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteTenantMenu")]
-        public async Task<ActionResult<DataResponseModel>> DeleteTenantMenu([FromBody] IdInput input)
+        public async Task<ActionResult<ServiceResult>> DeleteTenantMenu([FromBody] IdInput input)
         {
             var result = await _tenantMenuManageService.DeleteTenantMenu(input.Id);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -162,10 +162,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteTenantMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> DeleteTenantMenuButton([FromBody] IdInput input)
+        public async Task<ActionResult<ServiceResult>> DeleteTenantMenuButton([FromBody] IdInput input)
         {
             var result = await _tenantMenuManageService.DeleteTenantMenuButton(input.Id);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
     }

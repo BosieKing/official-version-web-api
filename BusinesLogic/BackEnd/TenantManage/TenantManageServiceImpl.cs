@@ -34,7 +34,7 @@ namespace BusinesLogic.BackEnd.TenantManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetTenantPage(GetTenantPageInput input)
+        public async Task<PageResult> GetTenantPage(GetTenantPageInput input)
         {
             return await _tenantDao.GetTenantPage(input);
         }
@@ -44,7 +44,7 @@ namespace BusinesLogic.BackEnd.TenantManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<List<DropdownSelectionModel>> GetTenantMenuList(IdInput input)
+        public async Task<List<DropdownSelectionResult>> GetTenantMenuList(IdInput input)
         {
             return await _tenantDao.GetTenantMenuList(input.Id);
         }
@@ -54,7 +54,7 @@ namespace BusinesLogic.BackEnd.TenantManage
         /// </summary>
         /// <param name="tenantId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetTenantDirectoryList(long tenantId)
+        public async Task<List<DropdownDataResult>> GetTenantDirectoryList(long tenantId)
         {
             return await _tenantDao.GetStringList<T_TenantDirectory>(p => p.TenantId == tenantId, isIgnoreTenant: true);
         }

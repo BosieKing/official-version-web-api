@@ -37,7 +37,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         {
             string actionName = context.RouteData.Values["action"].ToString().ToLower();
             Dictionary<string, object> dic = (Dictionary<string, object>)context.ActionArguments;
-            DataResponseModel serviceResult = null;
+            ServiceResult serviceResult = null;
             switch (actionName)
             {
                 case "addtenantdirectory":
@@ -68,7 +68,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                     serviceResult = await DeleteTenantMenuButtonVerify((IdInput)dic["input"]);
                     break;
                 default:
-                    serviceResult = DataResponseModel.Successed();
+                    serviceResult = ServiceResult.Successed();
                     break;
             }
             // 不成功则返回
@@ -88,14 +88,14 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> AddTenantDirectoryVerify(AddTenantDirectoryInput input)
+        private async Task<ServiceResult> AddTenantDirectoryVerify(AddTenantDirectoryInput input)
         {
             bool result = await _tenantMenuManageDao.DataExisted<T_TenantDirectory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath);
             if (result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -103,19 +103,19 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> AddTenantMenuVerify(AddTenantMenuInput input)
+        private async Task<ServiceResult> AddTenantMenuVerify(AddTenantMenuInput input)
         {
             bool existed = await _tenantMenuManageDao.IdExisted<T_TenantDirectory>(input.DirectoryId);
             if (!existed)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
             bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router);
             if (result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -123,19 +123,19 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> AddTenantMenuButtonVerify(AddTenantMenuButtonInput input)
+        private async Task<ServiceResult> AddTenantMenuButtonVerify(AddTenantMenuButtonInput input)
         {
             bool existed = await _tenantMenuManageDao.IdExisted<T_TenantMenu>(input.MenuId);
             if (!existed)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["MenuNotExist"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["MenuNotExist"].Value);
             }
             bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName);
             if (result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -143,14 +143,14 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdateTenantDirectoryVerify(UpdateTenantDirectoryInput input)
+        private async Task<ServiceResult> UpdateTenantDirectoryVerify(UpdateTenantDirectoryInput input)
         {
             bool result = await _tenantMenuManageDao.DataExisted<T_TenantDirectory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Id != input.Id);
             if (result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -158,19 +158,19 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdateTenantMeunVerify(UpdateTenantMenuInput input)
+        private async Task<ServiceResult> UpdateTenantMeunVerify(UpdateTenantMenuInput input)
         {
             bool existed = await _tenantMenuManageDao.IdExisted<T_TenantDirectory>(input.DirectoryId);
             if (!existed)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
             bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router && p.Id != input.Id);
             if (result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -178,19 +178,19 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdateTenantMenuButtonVerify(UpdateTenantMenuButtonInput input)
+        private async Task<ServiceResult> UpdateTenantMenuButtonVerify(UpdateTenantMenuButtonInput input)
         {
             bool existed = await _tenantMenuManageDao.IdExisted<T_TenantMenu>(input.MenuId);
             if (!existed)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["MenuNotExist"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["MenuNotExist"].Value);
             }
             bool result = await _tenantMenuManageDao.DataExisted<T_TenantMenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName && p.Id != input.Id);
             if (result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -198,19 +198,19 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> DeleteTenantDirectoryVerify(IdInput input)
+        private async Task<ServiceResult> DeleteTenantDirectoryVerify(IdInput input)
         {
             bool unbound = await _tenantMenuManageDao.DataExisted<T_TenantMenu>(p => p.DirectoryId == input.Id);
             if (unbound)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DirectoryNotUnbound"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotUnbound"].Value);
             }
             bool result = await _tenantMenuManageDao.IdExisted<T_TenantDirectory>(input.Id);
             if (!result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataNotExist"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -218,19 +218,19 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> DeleteTenantMenuVerify(IdInput input)
+        private async Task<ServiceResult> DeleteTenantMenuVerify(IdInput input)
         {
             bool unboundByRole = await _tenantMenuManageDao.DataExisted<T_RoleMenu>(p => p.MenuId == input.Id);
             if (unboundByRole)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["MenuNotUnboundByRole"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["MenuNotUnboundByRole"].Value);
             }
             bool result = await _tenantMenuManageDao.IdExisted<T_TenantMenu>(input.Id);
             if (!result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataNotExist"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -238,14 +238,14 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> DeleteTenantMenuButtonVerify(IdInput input)
+        private async Task<ServiceResult> DeleteTenantMenuButtonVerify(IdInput input)
         {
             bool result = await _tenantMenuManageDao.IdExisted<T_TenantMenuButton>(input.Id);
             if (!result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["DataNotExist"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
     }

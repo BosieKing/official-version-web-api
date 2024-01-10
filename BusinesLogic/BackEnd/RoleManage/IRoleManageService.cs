@@ -11,7 +11,7 @@ namespace BusinesLogic.BackEnd.RoleManage
     {
         Task<bool> AddRole(AddRoleInput input);
         Task<bool> UpdateRole(UpdateRoleInput input);
-        Task<PaginationResultModel> GetRolePage(GetRolePageInput input);
+        Task<PageResult> GetRolePage(GetRolePageInput input);
         Task<bool> AddRoleMenu(AddRoleMenuInput input, string tenantId);
         Task<bool> DeleteRole(long id);
         Task<dynamic> GetRoleMenuList(IdInput input);

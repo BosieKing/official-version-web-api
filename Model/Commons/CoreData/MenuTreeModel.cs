@@ -2,6 +2,9 @@
 
 namespace Model.Commons.CoreData
 {
+    /// <summary>
+    /// 菜单树序列化模型
+    /// </summary>
     public class MenuTreeModel
     {
         /// <summary>
@@ -35,13 +38,9 @@ namespace Model.Commons.CoreData
         public long Id { get; set; } = 0;
 
         /// <summary>
-        /// 父id
-        /// </summary>
-        public long PId { get; set; } = 0;
-
-        /// <summary>
         /// 类型
         /// </summary>
+        /// <see cref="SharedLibrary.Enums.MenuTreeTypeEnum"/>
         public int Type { get; set; }
 
         /// <summary>
@@ -59,12 +58,26 @@ namespace Model.Commons.CoreData
         /// </summary>
         public bool IsHidden { get; set; } = false;
 
+        /// <summary>
+        /// 父id
+        /// </summary>
+        public long PId { get; set; } = 0;
+
+        /// <summary>
+        /// 父节点名称
+        /// </summary>
         [IgnoreDataMember]
         public string PName { get; set; } = string.Empty;
 
+        /// <summary>
+        /// 父节点Icon
+        /// </summary>
         [IgnoreDataMember]
         public string PIcon { get; set; } = string.Empty;
 
+        /// <summary>
+        /// 父节点路径
+        /// </summary>
         [IgnoreDataMember]
         public string PPath { get; set; } = string.Empty;
     }

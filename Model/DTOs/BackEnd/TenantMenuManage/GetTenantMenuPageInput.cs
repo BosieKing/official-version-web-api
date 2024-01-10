@@ -2,6 +2,9 @@ using Model.Commons.SharedData;
 using System.ComponentModel.DataAnnotations;
 namespace Model.DTOs.BackEnd.TenantMenuManage
 {
+    /// <summary>
+    /// 查询租户表格数据输入类
+    /// </summary>
     public class GetTenantMenuPageInput : PageInput
     {
         /// <summary>

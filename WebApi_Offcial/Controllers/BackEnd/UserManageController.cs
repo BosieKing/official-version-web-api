@@ -37,10 +37,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpGet("getUserPage")]
-        public async Task<ActionResult<DataResponseModel>> GetUserPage([FromQuery] GetUserPageInput input)
+        public async Task<ActionResult<ServiceResult>> GetUserPage([FromQuery] GetUserPageInput input)
         {
             var data = await _userManageService.GetUserPage(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -49,10 +49,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpGet("getUserRoleList")]
-        public async Task<ActionResult<DataResponseModel>> GetUserRoleList([FromQuery] IdInput input)
+        public async Task<ActionResult<ServiceResult>> GetUserRoleList([FromQuery] IdInput input)
         {
             var data = await _userManageService.GetUserRoleList(input.Id);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 
@@ -63,10 +63,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addUser")]
-        public async Task<ActionResult<DataResponseModel>> AddUser([FromBody] AddUserInput input)
+        public async Task<ActionResult<ServiceResult>> AddUser([FromBody] AddUserInput input)
         {
             var data = await _userManageService.AddUser(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -75,10 +75,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addUserRole")]
-        public async Task<ActionResult<DataResponseModel>> AddUserRole(AddUserRoleInput input)
+        public async Task<ActionResult<ServiceResult>> AddUserRole(AddUserRoleInput input)
         {
             var data = await _userManageService.AddUserRole(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 
@@ -89,10 +89,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateUser")]
-        public async Task<ActionResult<DataResponseModel>> UpdateUser([FromBody] UpdateUserInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateUser([FromBody] UpdateUserInput input)
         {
             var data = await _userManageService.UpdateUser(input);
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -101,10 +101,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("resetPassword")]
-        public async Task<ActionResult<DataResponseModel>> ResetPassword([FromBody] ResetPasswordInput input)
+        public async Task<ActionResult<ServiceResult>> ResetPassword([FromBody] ResetPasswordInput input)
         {
             var result = await _userManageService.ResetPassword(input);
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
 
@@ -115,10 +115,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateIsDisableLogin")]
-        public async Task<ActionResult<DataResponseModel>> UpdateIsDisableLogin([FromBody] UpdateIsDisableLoginInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateIsDisableLogin([FromBody] UpdateIsDisableLoginInput input)
         {
             var result = await _userManageService.UpdateIsDisableLogin(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -126,9 +126,9 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// </summary>
         /// <returns></returns>
         [HttpPost("RemoveGroup")]
-        public async Task<ActionResult<DataResponseModel>> RemoveGroup()
+        public async Task<ActionResult<ServiceResult>> RemoveGroup()
         {
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
     }

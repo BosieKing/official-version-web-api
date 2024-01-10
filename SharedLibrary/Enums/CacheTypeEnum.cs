@@ -3,7 +3,7 @@
 namespace SharedLibrary.Enums
 {
     /// <summary>
-    /// 缓存类型
+    /// Redis缓存类型枚举
     /// </summary>
     public enum CacheTypeEnum
     {

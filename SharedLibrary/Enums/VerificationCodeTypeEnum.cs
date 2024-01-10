@@ -3,7 +3,7 @@
 namespace SharedLibrary.Enums
 {
     /// <summary>
-    /// 验证码类型
+    /// 验证码类型枚举
     /// </summary>
     public enum VerificationCodeTypeEnum
     {

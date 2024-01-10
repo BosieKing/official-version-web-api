@@ -3,7 +3,7 @@
 namespace SharedLibrary.Enums
 {
     /// <summary>
-    /// 返回类型枚举
+    /// 请求返回Code枚举
     /// </summary>
     public enum ServiceResultTypeEnum
     {

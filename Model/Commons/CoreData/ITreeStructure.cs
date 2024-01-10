@@ -3,7 +3,7 @@
 namespace Model.Commons.CoreData
 {
     /// <summary>
-    /// 构建树帮助类
+    /// 构建树接口，继承此接口实现构建树
     /// </summary>
     public interface ITreeStructure
     {
@@ -68,9 +68,11 @@ namespace Model.Commons.CoreData
         public List<T> Build(List<T> nodes)
         {
             if (nodes.Count == 0)
+            {
                 return new List<T>();
+            }
             // 循环每一条数据找到他的子结构
-            var result = nodes.Where(p => p.GetPid() == _rootParentId).ToList();
+            List<T> result = nodes.Where(p => p.GetPid() == _rootParentId).ToList();
             result.ForEach(p => BuildChildNodes(nodes, p, new List<T>()));
             return result;
         }
@@ -86,12 +88,16 @@ namespace Model.Commons.CoreData
         {
             var nodeSubList = new List<T>();
             if (_depth - 1 == 0 || !nowdeep.Equals(0) && nowdeep.Equals(_depth - 1))
+            {
                 return;
+            }
             nowdeep++;
             totalNodes.ForEach(u =>
             {
                 if (u.GetPid().Equals(node.GetId()))
+                {
                     nodeSubList.Add(u);
+                }
             });
             nodeSubList.ForEach(u => BuildChildNodes(totalNodes, u, new List<T>(), nowdeep));
             childNodeList.AddRange(nodeSubList);

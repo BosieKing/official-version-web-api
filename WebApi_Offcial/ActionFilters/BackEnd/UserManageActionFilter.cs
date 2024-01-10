@@ -36,7 +36,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         {
             string actionName = context.RouteData.Values["action"].ToString().ToLower();
             Dictionary<string, object> dic = (Dictionary<string, object>)context.ActionArguments;
-            DataResponseModel serviceResult = null;
+            ServiceResult serviceResult = null;
             switch (actionName)
             {
                 case "adduser":
@@ -49,7 +49,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                     serviceResult = await UpdateUserVerify((UpdateUserInput)dic["input"]);
                     break;
                 default:
-                    serviceResult = DataResponseModel.Successed();
+                    serviceResult = ServiceResult.Successed();
                     break;
             }
             // 不成功则返回
@@ -67,52 +67,52 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// 新增用户
         /// </summary>
         /// <returns></returns>
-        private async Task<DataResponseModel> AddUserVerify(AddUserInput input)
+        private async Task<ServiceResult> AddUserVerify(AddUserInput input)
         {
             // 判断账号是否注册
             bool accountExist = await _userManageDao.DataExisted<T_User>(p => p.Phone == input.Phone);
             if (accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["PhoneExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["PhoneExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
         /// 用户角色绑定
         /// </summary>
         /// <returns></returns>
-        private async Task<DataResponseModel> AddUserRoleVerify(AddUserRoleInput input)
+        private async Task<ServiceResult> AddUserRoleVerify(AddUserRoleInput input)
         {
             bool accountExist = await _userManageDao.IdExisted<T_User>(input.UserId);
             if (!accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             if (input.RoleIds.Count() > 0)
             {
                 bool roidsExist = await _userManageDao.DataExisted<T_Role>(p => input.RoleIds.Contains(p.Id));
                 if (!roidsExist)
                 {
-                    return DataResponseModel.IsFailure(_stringLocalizer["RoleNotExist"].Value);
+                    return ServiceResult.IsFailure(_stringLocalizer["RoleNotExist"].Value);
                 }
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
         /// 更新用户
         /// </summary>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdateUserVerify(UpdateUserInput input)
+        private async Task<ServiceResult> UpdateUserVerify(UpdateUserInput input)
         {
             // 判断账号是否注册
             bool accountExist = await _userManageDao.DataExisted<T_User>(p => p.Phone == input.Phone && p.Id != input.Id);
             if (accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["PhoneExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["PhoneExisted"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         #endregion

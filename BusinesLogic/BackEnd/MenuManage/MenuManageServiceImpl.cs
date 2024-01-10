@@ -30,7 +30,7 @@ namespace BusinesLogic.BackEnd.MenuManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetMenuPage(GetMenuPageInput input)
+        public async Task<PageResult> GetMenuPage(GetMenuPageInput input)
         {
             var data = await _menuManageDao.GetMenuPage(input);
             var result = data.menuListInfo.GroupBy(p => new { p.PId, p.PName, p.PIcon, p.PPath })
@@ -61,14 +61,14 @@ namespace BusinesLogic.BackEnd.MenuManage
                                      Children = data.buttonListInfo.Where(b => m.Key.Id == b.PId).Select(r => r.Adapt<MenuTreeModel>())
                                  })
                              }).ToList();
-            return new PaginationResultModel(input.PageNo, input.PageSize, data.count, result);
+            return new PageResult(input.PageNo, input.PageSize, data.count, result);
         }
 
         /// <summary>
         /// 查询目录下拉
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetDirectoryList()
+        public async Task<List<DropdownDataResult>> GetDirectoryList()
         {
             return await _menuManageDao.GetStringList<T_Directory>();
         }
@@ -77,7 +77,7 @@ namespace BusinesLogic.BackEnd.MenuManage
         /// 查询菜单下拉
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetMenuList()
+        public async Task<List<DropdownDataResult>> GetMenuList()
         {
             return await _menuManageDao.GetStringList<T_Menu>();
         }

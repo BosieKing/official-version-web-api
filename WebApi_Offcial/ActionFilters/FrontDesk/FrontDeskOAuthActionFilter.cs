@@ -47,7 +47,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         {
             string actionName = context.RouteData.Values["action"].ToString().ToLower();
             Dictionary<string, object> dic = (Dictionary<string, object>)context.ActionArguments;
-            DataResponseModel serviceResult = null;
+            ServiceResult serviceResult = null;
             switch (actionName)
             {
                 case "registered":
@@ -64,7 +64,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                     serviceResult = await ForgotPasswordVerify((ForgotPasswordInput)dic["input"]);
                     break;
                 default:
-                    serviceResult = DataResponseModel.Successed();
+                    serviceResult = ServiceResult.Successed();
                     break;
             }
             // 不成功则返回
@@ -86,7 +86,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> LoginByPassWordVerify(LoginByPassWordInput input)
+        private async Task<ServiceResult> LoginByPassWordVerify(LoginByPassWordInput input)
         {
             // 验证滑动验证码值
             var result = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
@@ -98,7 +98,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool accountExist = await _frontDeskOAuthDao.PhoneExiste(input.Phone);
             if (!accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             // 密码出错有效期 
             int pwdExpirationTime = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorCountExpirationTime * 60;
@@ -115,7 +115,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 // 剩余过期时间
                 long expTime = redisClient.Ttl(passwordErrorCountKey);
-                return DataResponseModel.IsFailure(_stringLocalizer["PasswrodErrorWait"].Value.Replace("@", $"{expTime / 60}"));
+                return ServiceResult.IsFailure(_stringLocalizer["PasswrodErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
 
             // 判断密码是否正确
@@ -125,12 +125,12 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 passwordErrorCount++;
                 redisClient.Set(passwordErrorCountKey, passwordErrorCount, pwdExpirationTime);
-                return DataResponseModel.IsFailure(_stringLocalizer["PasswrodError"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
+                return ServiceResult.IsFailure(_stringLocalizer["PasswrodError"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
             }
             // 走到这里代表密码、验证码完全匹配
             // 删除Key
             redisClient.Del(passwordErrorCountKey);
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> LoginByVerifyCodeVerify(LoginByVerifyCodeInput input)
+        private async Task<ServiceResult> LoginByVerifyCodeVerify(LoginByVerifyCodeInput input)
         {
             // 获取缓存中的滑动验证码值
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
@@ -152,7 +152,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool accountExist = await _frontDeskOAuthDao.PhoneExiste(input.Phone);
             if (!accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
             var phoneCodeResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Login, input.Phone, input.VerifyCode);
@@ -160,7 +160,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 return phoneCodeResult;
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -168,19 +168,19 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> RegisteredVerify(RegisteredInput input)
+        private async Task<ServiceResult> RegisteredVerify(RegisteredInput input)
         {
             // 验证邀请码是否正确
             var tenandInfo = await _frontDeskOAuthDao.GetIdByInviteCode(input.InviteCode);
             if (tenandInfo.Id.Equals(0))
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["InviteCodeError"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["InviteCodeError"].Value);
             }
             // 判断账号在该平台下是否已被注册
             bool hasRegiste = await _frontDeskOAuthDao.PhoneExiste(input.Phone, tenandInfo.Id);
             if (hasRegiste)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["UserExisted"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["UserExisted"].Value);
             }
             // 验证验证码是否匹配
             var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Register, input.Phone, input.VerifyCode);
@@ -188,7 +188,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 return result;
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -196,13 +196,13 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> ForgotPasswordVerify(ForgotPasswordInput input)
+        private async Task<ServiceResult> ForgotPasswordVerify(ForgotPasswordInput input)
         {
             // 判断账号是否注册
             bool accountExist = await _frontDeskOAuthDao.PhoneExiste(input.Phone);
             if (!accountExist)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
             var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.ForgetPwd, input.Phone, input.VerifyCode);
@@ -210,7 +210,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 return result;
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
 

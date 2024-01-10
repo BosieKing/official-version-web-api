@@ -43,7 +43,7 @@ namespace Model.Repositotys
         /// <summary>
         /// 菜单类型
         /// </summary>
-        /// <see cref="Resource.Enums.MenuWeightTypeEnum"/>
+        /// <see cref="SharedLibrary.Enums.MenuWeightTypeEnum"/>
         public int Weight { get; set; }
 
         /// <summary>

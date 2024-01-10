@@ -6,15 +6,15 @@
     public class CaptchaCacheConst
     {
         /// <summary>
-        /// 用户验证码Key。
+        /// 用户验证码Key
         /// </summary>
-        /// <remarks>Key：验证码类型+常量+电话号码 Value：验证码</remarks>
+        /// <remarks>Key：验证码类型 + 常量 + 电话号码 Value：验证码</remarks>
         public const string VERIF_CODE_KEY = "_Verif_Code_Key_";
 
         /// <summary>
-        /// 用户验证码输入错误次数缓存Key。
+        /// 用户验证码输入错误次数缓存Key
         /// </summary>
-        /// <remarks>Key：验证码类型+常量+电话号码 Value：出错次数</remarks>
+        /// <remarks>Key：验证码类型 + 常量 + 电话号码 Value：出错次数</remarks>
         public const string VERIF_CODE_ERROR_KEY = "_Verif_Code_Error_Key_";
 
         /// <summary>

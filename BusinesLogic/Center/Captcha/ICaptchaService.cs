@@ -9,8 +9,8 @@ namespace BusinesLogic.Center.Captcha
     public interface ICaptchaService
     {
         Task<dynamic> GetGraphicCaptcha();
-        Task<DataResponseModel> GraphicCaptchaVerify(string guid, string codeValue);
-        Task<DataResponseModel> PhoneCodeVerify(VerificationCodeTypeEnum codeType, string phone, string verifyCode);
-        Task<DataResponseModel> SendPhoneCode(VerificationCodeTypeEnum codeType, string phone = "", long userId = 0);
+        Task<ServiceResult> GraphicCaptchaVerify(string guid, string codeValue);
+        Task<ServiceResult> PhoneCodeVerify(VerificationCodeTypeEnum codeType, string phone, string verifyCode);
+        Task<ServiceResult> SendPhoneCode(VerificationCodeTypeEnum codeType, string phone = "", long userId = 0);
     }
 }

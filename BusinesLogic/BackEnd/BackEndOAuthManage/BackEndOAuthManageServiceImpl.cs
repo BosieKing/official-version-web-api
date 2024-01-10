@@ -87,7 +87,7 @@ namespace BusinesLogic.BackEnd.BackEndOAuthManage
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetBindTenantList(long userId)
+        public async Task<List<DropdownDataResult>> GetBindTenantList(long userId)
         {
             return await _backEndOAuthDao.GetBindTenantList(userId);
         }
@@ -97,7 +97,7 @@ namespace BusinesLogic.BackEnd.BackEndOAuthManage
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetSuperManageBindTenantList(long userId)
+        public async Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId)
         {
             return await _backEndOAuthDao.GetSuperManageBindTenantList(userId);
         }
@@ -186,7 +186,7 @@ namespace BusinesLogic.BackEnd.BackEndOAuthManage
         /// <returns></returns>
         public async Task<bool> UpdateUserInfo(UpdateUserInfoInput input, long userId)
         {
-            return await _backEndOAuthDao.UpdateUserInfo(input.RealName, input.Email, userId);
+            return await _backEndOAuthDao.UpdateUserInfo(input.NickName, input.Email, userId);
         }
 
         /// <summary>

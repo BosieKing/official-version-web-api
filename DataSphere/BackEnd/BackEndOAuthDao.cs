@@ -321,13 +321,13 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetBindTenantList(long userId)
+        public async Task<List<DropdownDataResult>> GetBindTenantList(long userId)
         {
             var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
                                            .Select(p => p.Phone).Take(1);
             var userIds = dbContext.UserRep.IgnoreTenantFilter().Where(p => tenantIdsQuery.Contains(p.Phone)).Select(p => p.Id);
             var hasRoleTenantIdIds = dbContext.UserRoleRep.IgnoreTenantFilter().Where(p => userIds.Contains(p.UserId)).Select(p => p.TenantId);
-            return await dbContext.TenantRep.Where(p => hasRoleTenantIdIds.Contains(p.Id)).Select(p => new DropdownDataModel { Id = p.Id, Name = p.Name }).ToListAsync();
+            return await dbContext.TenantRep.Where(p => hasRoleTenantIdIds.Contains(p.Id)).Select(p => new DropdownDataResult { Id = p.Id, Name = p.Name }).ToListAsync();
 
         }
 
@@ -337,12 +337,12 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetSuperManageBindTenantList(long userId)
+        public async Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId)
         {
             var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
                                            .Select(p => p.Phone).Take(1);
             var tenantIdIds = dbContext.UserRep.IgnoreTenantFilter().Where(p => tenantIdsQuery.Contains(p.Phone)).Select(p => p.TenantId);
-            return await dbContext.TenantRep.Where(p => tenantIdIds.Contains(p.Id)).Select(p => new DropdownDataModel { Id = p.Id, Name = p.Name }).ToListAsync();
+            return await dbContext.TenantRep.Where(p => tenantIdIds.Contains(p.Id)).Select(p => new DropdownDataResult { Id = p.Id, Name = p.Name }).ToListAsync();
 
         }
         #endregion

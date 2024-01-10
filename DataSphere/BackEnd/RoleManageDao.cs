@@ -36,7 +36,7 @@ namespace DataSphere.BackEnd
                 p.Name,
                 IsCheck = checkButtonList.Contains(p.Id),
             }).ToListAsync();
-            var menuList = await dbContext.TenantMenuRep.Select(p => new DropdownSelectionModel
+            var menuList = await dbContext.TenantMenuRep.Select(p => new DropdownSelectionResult
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -48,7 +48,7 @@ namespace DataSphere.BackEnd
                 p.Id,
                 p.Name,
                 p.IsCheck,
-                ButtonList = buttonList.Where(b => p.Id == b.MenuId).Select(b => new DropdownSelectionModel
+                ButtonList = buttonList.Where(b => p.Id == b.MenuId).Select(b => new DropdownSelectionResult
                 {
                     Id = b.Id,
                     Name = b.Name,
@@ -64,7 +64,7 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetRolePage(GetRolePageInput input)
+        public async Task<PageResult> GetRolePage(GetRolePageInput input)
         {
             var query = from data in dbContext.RoleRep
                         .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $"%{input.Name}%"))

@@ -10,6 +10,6 @@ namespace IDataSphere.Interfaces.BackEnd
     public interface IRoleManageDao : IBaseDao
     {
         Task<dynamic> GetRoleMenuList(long roleId);
-        Task<PaginationResultModel> GetRolePage(GetRolePageInput input);
+        Task<PageResult> GetRolePage(GetRolePageInput input);
     }
 }

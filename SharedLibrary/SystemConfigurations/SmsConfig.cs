@@ -1,7 +1,7 @@
 ﻿namespace SharedLibrary.SystemConfigurations
 {
     /// <summary>
-    /// 腾讯云短信配置类
+    /// 腾讯云短信配置
     /// </summary>
     public class SmsConfig
     {

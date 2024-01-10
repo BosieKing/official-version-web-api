@@ -35,7 +35,7 @@ namespace BusinesLogic.BackEnd.RoleManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetRolePage(GetRolePageInput input)
+        public async Task<PageResult> GetRolePage(GetRolePageInput input)
         {
             return await _roleManageDao.GetRolePage(input);
         }

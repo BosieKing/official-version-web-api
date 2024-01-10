@@ -10,10 +10,10 @@ namespace BusinesLogic.BackEnd.UserManage
     {
         Task<bool> UpdateUser(UpdateUserInput input);
         Task<bool> UpdateIsDisableLogin(UpdateIsDisableLoginInput input);
-        Task<PaginationResultModel> GetUserPage(GetUserPageInput input);
+        Task<PageResult> GetUserPage(GetUserPageInput input);
         Task<bool> AddUser(AddUserInput input);
         Task<bool> ResetPassword(ResetPasswordInput input);
-        Task<List<DropdownSelectionModel>> GetUserRoleList(long id);
+        Task<List<DropdownSelectionResult>> GetUserRoleList(long id);
         Task<bool> AddUserRole(AddUserRoleInput input);
     }
 }

@@ -8,11 +8,11 @@ namespace Model.DTOs.BackEnd.BackEndOAuthManage
     public class UpdateUserInfoInput
     {
         /// <summary>
-        /// 真实姓名
+        /// 昵称
         /// </summary>
-        [Required(ErrorMessage = "RealNameRequired")]
-        [MaxLength(50, ErrorMessage = "RealNameTooLong50")]
-        public string RealName { get; set; }
+        [Required(ErrorMessage = "NickNameRequired")]
+        [MaxLength(50, ErrorMessage = "NickNameTooLong50")]
+        public string NickName { get; set; }
 
         /// <summary>
         /// 邮箱

@@ -34,12 +34,12 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         {
             string actionName = context.RouteData.Values["action"].ToString().ToLower();
             Dictionary<string, object> dic = (Dictionary<string, object>)context.ActionArguments;
-            DataResponseModel serviceResult = null;
+            ServiceResult serviceResult = null;
 
             switch (actionName)
             {
                 default:
-                    serviceResult = DataResponseModel.Successed();
+                    serviceResult = ServiceResult.Successed();
                     break;
             }
             // 不成功则返回
@@ -54,10 +54,10 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
 
 
         #region 验证方法     
-        private async Task<DataResponseModel> AddVerify()
+        private async Task<ServiceResult> AddVerify()
         {
 
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
     }

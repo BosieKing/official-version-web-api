@@ -37,10 +37,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpGet("getMenuPage")]
-        public async Task<ActionResult<DataResponseModel>> GetMenuPage([FromQuery] GetMenuPageInput input)
+        public async Task<ActionResult<ServiceResult>> GetMenuPage([FromQuery] GetMenuPageInput input)
         {
             var data = await _menuManageService.GetMenuPage(input);
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -48,10 +48,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// </summary>
         /// <returns></returns>
         [HttpGet("getDirectoryList")]
-        public async Task<ActionResult<DataResponseModel>> GetDirectoryList()
+        public async Task<ActionResult<ServiceResult>> GetDirectoryList()
         {
             var data = await _menuManageService.GetDirectoryList();
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// </summary>
         /// <returns></returns>
         [HttpGet("getMenuList")]
-        public async Task<ActionResult<DataResponseModel>> GetMenuList()
+        public async Task<ActionResult<ServiceResult>> GetMenuList()
         {
             var data = await _menuManageService.GetMenuList();
-            return DataResponseModel.SetData(data);
+            return ServiceResult.SetData(data);
         }
         #endregion
 
@@ -73,10 +73,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addDirectory")]
-        public async Task<ActionResult<DataResponseModel>> AddDirectory([FromBody] AddDirectoryInput input)
+        public async Task<ActionResult<ServiceResult>> AddDirectory([FromBody] AddDirectoryInput input)
         {
             var result = await _menuManageService.AddDirectory(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -85,10 +85,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addMenu")]
-        public async Task<ActionResult<DataResponseModel>> AddMenu([FromBody] AddMenuInput input)
+        public async Task<ActionResult<ServiceResult>> AddMenu([FromBody] AddMenuInput input)
         {
             var result = await _menuManageService.AddMenu(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -97,10 +97,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> AddMenuButton([FromBody] AddMenuButtonInput input)
+        public async Task<ActionResult<ServiceResult>> AddMenuButton([FromBody] AddMenuButtonInput input)
         {
             var result = await _menuManageService.AddMenuButton(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -111,10 +111,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateDirectory")]
-        public async Task<ActionResult<DataResponseModel>> UpdateDirectory([FromBody] UpdateDirectoryInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateDirectory([FromBody] UpdateDirectoryInput input)
         {
             var result = await _menuManageService.UpdateDirectory(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -123,10 +123,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateMenu")]
-        public async Task<ActionResult<DataResponseModel>> UpdateMenu([FromBody] UpdateMeunInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateMenu([FromBody] UpdateMeunInput input)
         {
             var result = await _menuManageService.UpdateMenu(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -135,10 +135,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updateMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> UpdateMenuButton([FromBody] UpdateMenuButtonInput input)
+        public async Task<ActionResult<ServiceResult>> UpdateMenuButton([FromBody] UpdateMenuButtonInput input)
         {
             var result = await _menuManageService.UpdateMenuButton(input);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -149,10 +149,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteDirectory")]
-        public async Task<ActionResult<DataResponseModel>> DeleteDirectory([FromBody] IdInput input)
+        public async Task<ActionResult<ServiceResult>> DeleteDirectory([FromBody] IdInput input)
         {
             var result = await _menuManageService.DeleteDirectory(input.Id);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -161,10 +161,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteMenu")]
-        public async Task<ActionResult<DataResponseModel>> DeleteMenu([FromBody] IdInput input)
+        public async Task<ActionResult<ServiceResult>> DeleteMenu([FromBody] IdInput input)
         {
             var result = await _menuManageService.DeleteMenu(input.Id);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -173,10 +173,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("deleteMenuButton")]
-        public async Task<ActionResult<DataResponseModel>> DeleteMenuButton([FromBody] IdInput input)
+        public async Task<ActionResult<ServiceResult>> DeleteMenuButton([FromBody] IdInput input)
         {
             var result = await _menuManageService.DeleteMenuButton(input.Id);
-            return DataResponseModel.SetData(result);
+            return ServiceResult.SetData(result);
         }
         #endregion
 

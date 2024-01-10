@@ -98,7 +98,7 @@ namespace DataSphere
         /// <param name="input"></param>
         /// <param name="isIgnoreTenant"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetPage<TEntity, Input>(Input input, bool isIgnoreTenant = false) where TEntity : EntityBaseDO where Input : PageInput
+        public async Task<PageResult> GetPage<TEntity, Input>(Input input, bool isIgnoreTenant = false) where TEntity : EntityBaseDO where Input : PageInput
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
             IQueryable<TEntity> query = rep.AddSearchCriteria(input);
@@ -106,13 +106,13 @@ namespace DataSphere
             {
                 int count = await query.IgnoreTenantFilter().CountAsync();
                 List<TEntity> data = await query.IgnoreTenantFilter().Select(p => p).Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize).ToListAsync();
-                return new PaginationResultModel(input.PageNo, input.PageSize, count, data);
+                return new PageResult(input.PageNo, input.PageSize, count, data);
             }
             else
             {
                 int count = await query.CountAsync();
                 List<TEntity> data = await query.Select(p => p).Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize).ToListAsync();
-                return new PaginationResultModel(input.PageNo, input.PageSize, count, data);
+                return new PageResult(input.PageNo, input.PageSize, count, data);
             }
         }
 
@@ -124,11 +124,11 @@ namespace DataSphere
         /// <param name="pageSize"></param>
         /// <param name="pageNo"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> AdaptPage<TEntity>(IQueryable<TEntity> query, int pageSize, int pageNo)
+        public async Task<PageResult> AdaptPage<TEntity>(IQueryable<TEntity> query, int pageSize, int pageNo)
         {
             int count = await query.CountAsync();
             List<TEntity> data = await query.Select(p => p).Skip((pageNo - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PaginationResultModel(pageNo, pageSize, count, data);
+            return new PageResult(pageNo, pageSize, count, data);
         }
         #endregion
 
@@ -169,10 +169,10 @@ namespace DataSphere
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetStringList<TEntity>(string fieldName = "") where TEntity : EntityBaseDO
+        public async Task<List<DropdownDataResult>> GetStringList<TEntity>(string fieldName = "") where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            List<DropdownDataModel> list = await rep.ConvertListSearch(fieldName).ToListAsync();
+            List<DropdownDataResult> list = await rep.ConvertListSearch(fieldName).ToListAsync();
             return list;
         }
         /// <summary>
@@ -183,17 +183,17 @@ namespace DataSphere
         /// <param name="fieldName"></param>
         /// <param name="isIgnoreTenant"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetStringList<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "", bool isIgnoreTenant = false) where TEntity : EntityBaseDO
+        public async Task<List<DropdownDataResult>> GetStringList<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "", bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
             if (isIgnoreTenant)
             {
-                List<DropdownDataModel> list = await rep.IgnoreTenantFilter().Where(expression).ConvertListSearch(fieldName).ToListAsync();
+                List<DropdownDataResult> list = await rep.IgnoreTenantFilter().Where(expression).ConvertListSearch(fieldName).ToListAsync();
                 return list;
             }
             else
             {
-                List<DropdownDataModel> list = await rep.Where(expression).ConvertListSearch(fieldName).ToListAsync();
+                List<DropdownDataResult> list = await rep.Where(expression).ConvertListSearch(fieldName).ToListAsync();
                 return list;
             }
         }

@@ -48,7 +48,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         {
             string actionName = context.RouteData.Values["action"].ToString().ToLower();
             Dictionary<string, object> dic = (Dictionary<string, object>)context.ActionArguments;
-            DataResponseModel serviceResult = null;
+            ServiceResult serviceResult = null;
             switch (actionName)
             {
                 case "completeuserinfo":
@@ -61,7 +61,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                     serviceResult = await UpdatePasswordByCodeVerify((UpdatePasswordByCodeInput)dic["input"]);
                     break;
                 default:
-                    serviceResult = DataResponseModel.Successed();
+                    serviceResult = ServiceResult.Successed();
                     break;
             }
             // 不成功则返回
@@ -82,16 +82,16 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> CompleteUserInfoVerify(CompleteUserInfoInput input)
+        private async Task<ServiceResult> CompleteUserInfoVerify(CompleteUserInfoInput input)
         {
             // 根据id找到用户信息
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             var result = await _userInfoDao.IdExisted<T_User>(userId);
             if (!result)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -99,15 +99,15 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdatePasswordVerify(UpdatePasswordInput input)
+        private async Task<ServiceResult> UpdatePasswordVerify(UpdatePasswordInput input)
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             var result = await _userInfoDao.GetUserPassword(userId);
             if (result.Password != input.OldPassword)
             {
-                return DataResponseModel.IsFailure(_stringLocalizer["OldPasswordError"].Value);
+                return ServiceResult.IsFailure(_stringLocalizer["OldPasswordError"].Value);
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private async Task<DataResponseModel> UpdatePasswordByCodeVerify(UpdatePasswordByCodeInput input)
+        private async Task<ServiceResult> UpdatePasswordByCodeVerify(UpdatePasswordByCodeInput input)
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             var userInfo = await _userInfoDao.GetUserPassword(userId); ;
@@ -125,7 +125,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 return result;
             }
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
     }

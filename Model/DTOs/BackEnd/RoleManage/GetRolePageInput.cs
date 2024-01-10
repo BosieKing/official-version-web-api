@@ -2,6 +2,9 @@
 
 namespace Model.DTOs.BackEnd.RoleManage
 {
+    /// <summary>
+    /// 查询角色表格数据输入类
+    /// </summary>
     public class GetRolePageInput : PageInput
     {
         /// <summary>

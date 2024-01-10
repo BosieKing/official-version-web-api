@@ -1,10 +1,9 @@
 ﻿namespace Model.Commons.Domain
 {
     /// <summary>
-    /// 分页模型
+    /// 分页结果返回模型
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class PaginationResultModel
+    public class PageResult
     {
         /// <summary>
         /// 当前页码
@@ -36,7 +35,7 @@
         /// <param name="pageSize"></param>
         /// <param name="count"></param>
         /// <param name="rows"></param>
-        public PaginationResultModel(int pageNo, int pageSize, int count, object rows)
+        public PageResult(int pageNo, int pageSize, int count, object rows)
         {
             PageNo = pageNo;
             PageSize = pageSize;

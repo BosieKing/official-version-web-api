@@ -12,9 +12,9 @@ namespace BusinesLogic.BackEnd.TenantManage
         Task<bool> AddTenant(AddTenantInput input);
         Task<bool> UpdateTenant(UpdateTenantInput input);
         Task<bool> UptateInviteCode(long tenantId);
-        Task<PaginationResultModel> GetTenantPage(GetTenantPageInput input);
-        Task<List<DropdownSelectionModel>> GetTenantMenuList(IdInput input);
-        Task<List<DropdownDataModel>> GetTenantDirectoryList(long tenantId);
+        Task<PageResult> GetTenantPage(GetTenantPageInput input);
+        Task<List<DropdownSelectionResult>> GetTenantMenuList(IdInput input);
+        Task<List<DropdownDataResult>> GetTenantDirectoryList(long tenantId);
         Task<bool> PushTenantMenu(PushTenantMenuInput input);
     }
 }

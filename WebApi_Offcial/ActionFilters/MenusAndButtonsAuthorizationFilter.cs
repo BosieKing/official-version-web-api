@@ -42,7 +42,7 @@ namespace WebApi_Offcial.ActionFilters
             if (!RedisMulititionHelper.HasRole(roleIds.Split(","), controllerName, tenantId))
             {
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                var result = DataResponseModel.IsFailure("无权访问");
+                var result = ServiceResult.IsFailure("无权访问");
                 // 管道短路
                 context.Result = new JsonResult(result);
                 return Task.CompletedTask;

@@ -1,6 +1,9 @@
 ﻿namespace Model.Commons.Domain
 {
-    public class DropdownSelectionModel : DropdownDataModel
+    /// <summary>
+    /// 选中下拉列表规范返回类
+    /// </summary>
+    public class DropdownSelectionResult : DropdownDataResult
     {
         /// <summary>
         /// 是否选中

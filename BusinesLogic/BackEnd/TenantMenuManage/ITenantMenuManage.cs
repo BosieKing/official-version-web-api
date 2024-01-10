@@ -8,8 +8,8 @@ namespace BusinesLogic.BackEnd.TenantMenuManage
     /// </summary>
     public interface ITenantMenuManageService
     {
-        Task<PaginationResultModel> GetPage(GetTenantMenuPageInput input);
-        Task<List<DropdownDataModel>> GetTenantDirectory();
+        Task<PageResult> GetPage(GetTenantMenuPageInput input);
+        Task<List<DropdownDataResult>> GetTenantDirectory();
         Task<bool> AddTenantDirectory(AddTenantDirectoryInput input);
         Task<bool> AddTenantMenu(AddTenantMenuInput input);
         Task<bool> AddTenantMenuButton(AddTenantMenuButtonInput input);

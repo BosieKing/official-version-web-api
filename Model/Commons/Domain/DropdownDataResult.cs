@@ -3,7 +3,7 @@
     /// <summary>
     /// 下拉列表规范返回类
     /// </summary>
-    public class DropdownDataModel
+    public class DropdownDataResult
     {
         /// <summary>
         /// Id

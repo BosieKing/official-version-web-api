@@ -26,7 +26,7 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetUserPage(GetUserPageInput input)
+        public async Task<PageResult> GetUserPage(GetUserPageInput input)
         {
             var query = from user in dbContext.UserRep
                         .Where(!input.NickName.IsNullOrEmpty(), p => EF.Functions.Like(p.NickName, $"%{input.NickName}%"))
@@ -52,10 +52,10 @@ namespace DataSphere.BackEnd
         /// <param name="userId"></param>
         /// <param name="mentorId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownSelectionModel>> GetUserRoleList(long userId)
+        public async Task<List<DropdownSelectionResult>> GetUserRoleList(long userId)
         {
             var ids = await dbContext.UserRoleRep.Where(p => p.UserId == userId).Select(p => p.RoleId).ToListAsync();
-            var list = await dbContext.RoleRep.Select(p => new DropdownSelectionModel
+            var list = await dbContext.RoleRep.Select(p => new DropdownSelectionResult
             {
 
                 Id = p.Id,

@@ -1,5 +1,8 @@
 ﻿namespace Model.Commons.CoreData
 {
+    /// <summary>
+    /// Token携带信息模型
+    /// </summary>
     public class TokenInfoModel
     {
         /// <summary>

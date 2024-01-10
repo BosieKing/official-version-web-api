@@ -44,12 +44,12 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="tenandId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownSelectionModel>> GetTenantMenuList(long tenandId)
+        public async Task<List<DropdownSelectionResult>> GetTenantMenuList(long tenandId)
         {
             var checkList = await dbContext.TenantMenuRep.IgnoreTenantFilter().Where(t => t.TenantId == tenandId)
                                              .Select(p => p.UniqueNumber).ToListAsync();
             var list = await dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization)
-                                       .Select(p => new DropdownSelectionModel
+                                       .Select(p => new DropdownSelectionResult
                                        {
                                            IsCheck = checkList.Contains(p.UniqueNumber),
                                            Id = p.Id,
@@ -63,7 +63,7 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetTenantPage(GetTenantPageInput input)
+        public async Task<PageResult> GetTenantPage(GetTenantPageInput input)
         {
             var query = from data in dbContext.TenantRep
                         .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $"%{input.Name}%"))

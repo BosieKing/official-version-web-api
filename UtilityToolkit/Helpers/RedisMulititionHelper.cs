@@ -75,11 +75,11 @@ namespace UtilityToolkit.Helpers
         #endregion
 
         #region 基础数据
-
-
         /// <summary>
         /// 是否有权访问此接口
         /// </summary>
+        /// <param name="roleIds"></param>
+        /// <param name="routerName"></param>
         /// <param name="tenantId"></param>
         /// <returns></returns>
         public static bool HasRole(string[] roleIds, string routerName, long tenantId)
@@ -88,80 +88,82 @@ namespace UtilityToolkit.Helpers
             {
                 return false;
             }
-            var client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.BaseData).redisClient;
-            var key = BasicDataCacheConst.ROLE_TABLE + tenantId.ToString();
-            var values = client.HMGet(key, roleIds).Where(p => p != null);
+            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.BaseData).redisClient;
+            string key = BasicDataCacheConst.ROLE_TABLE + tenantId.ToString();
+            IEnumerable<string> values = client.HMGet(key, roleIds).Where(p => p != null);
             if (values.Count() == 0)
             {
                 return false;
             }
-            var routers = values.Select(p => p.ToObject<List<DropdownDataModel>>()).SelectMany(p => p);
+            IEnumerable<DropdownDataResult> routers = values.Select(p => p.ToObject<List<DropdownDataResult>>()).SelectMany(p => p);
             return routers.Count() > 0 && routers.Any(p => p.Name == routerName);
         }
         #endregion
 
         #region 用户信息
         /// <summary>
-        /// 是否是超管
+        /// 请求人是否是超管
         /// </summary>
         /// <param name="tenantId"></param>
         /// <returns></returns>
         public static bool IsSuperManage(string tenantId)
         {
-            var client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
+            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
             bool result = client.Exists(UserCacheConst.SUPER_MANAGE_KEY + tenantId);
             return result;
         }
 
         /// <summary>
-        /// 是否是超管
+        /// 请求人是否是超管
         /// </summary>
         /// <param name="tenantId"></param>
         /// <returns></returns>
         public static bool IsSuperManage(string[] tenantIds)
         {
-            var client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
-            var keys = tenantIds.Select(p => UserCacheConst.SUPER_MANAGE_KEY + p).ToArray();
+            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
+            string[] keys = tenantIds.Select(p => UserCacheConst.SUPER_MANAGE_KEY + p).ToArray();
             long result = client.Exists(keys);
             return result >= 1;
         }
 
         /// <summary>
-        /// 是否被拉黑
+        /// 判断Token是否被拉黑
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
         public static async Task<bool> IsWork(string userId, string token)
         {
-            var client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
-            var value = await client.HGetAsync(UserCacheConst.USER_BLACK_TOKEN_TABLE, userId);
+            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
+            string value = await client.HGetAsync(UserCacheConst.USER_BLACK_TOKEN_TABLE, userId);
             if (!value.IsNullOrEmpty())
             {
-                var list = value.ToObject<List<BlackTokenModel>>();
+                List<BlackTokenJsonModel> list = value.ToObject<List<BlackTokenJsonModel>>();
                 return list.Any(p => p.Token == token && p.ExpirationTime <= DateTime.Now.Ticks);
             }
             return false;
         }
 
         /// <summary>
-        /// 退出登录
+        /// 退出登录，拉黑Token
         /// </summary>
         /// <param name="userId"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
         public static async Task<bool> LoginOut(string userId, string token)
         {
-            var client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
+            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
             var claims = TokenTool.GetClaims(token);
-            var data = new BlackTokenModel(token, claims.FirstOrDefault(p => p.Type == JwtRegisteredClaimNames.Exp).Value);
-            List<BlackTokenModel> list = new List<BlackTokenModel>();
+            BlackTokenJsonModel data = new BlackTokenJsonModel(token, claims.FirstOrDefault(p => p.Type == JwtRegisteredClaimNames.Exp).Value);
+            List<BlackTokenJsonModel> newList = new List<BlackTokenJsonModel>();
             if (await client.HExistsAsync(UserCacheConst.USER_BLACK_TOKEN_TABLE, userId.ToString()))
             {
-                var value = await client.HGetAsync(UserCacheConst.USER_BLACK_TOKEN_TABLE, userId);
-                var oldList = value.ToObject<List<BlackTokenModel>>();
-                list.AddRange(oldList.Where(p => p.ExpirationTime <= DateTime.Now.Ticks));
-                list.Add(data);
+                string value = await client.HGetAsync(UserCacheConst.USER_BLACK_TOKEN_TABLE, userId);
+                List<BlackTokenJsonModel> oldList = value.ToObject<List<BlackTokenJsonModel>>();
+                newList.AddRange(oldList.Where(p => p.ExpirationTime <= DateTime.Now.Ticks));
+                newList.Add(data);
             }
-            return await client.HSetAsync(UserCacheConst.USER_BLACK_TOKEN_TABLE, userId.ToString(), list.ToJson());
+            return await client.HSetAsync(UserCacheConst.USER_BLACK_TOKEN_TABLE, userId.ToString(), newList.ToJson());
         }
         #endregion
 

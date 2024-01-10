@@ -2,6 +2,9 @@
 
 namespace Model.DTOs.BackEnd.MenuManage
 {
+    /// <summary>
+    /// 查询菜单表格数据输入类
+    /// </summary>
     public class GetMenuPageInput : PageInput
     {
         /// <summary>
@@ -27,7 +30,7 @@ namespace Model.DTOs.BackEnd.MenuManage
         /// <summary>
         /// 菜单权重
         /// </summary>
-        /// <see cref="Resource.Enums.MenuWeightTypeEnum"/>      
+        /// <see cref="SharedLibrary.Enums.MenuWeightTypeEnum"/>      
         public int Weight { get; set; } = 0;
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace BusinesLogic.BackEnd.UserManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PaginationResultModel> GetUserPage(GetUserPageInput input)
+        public async Task<PageResult> GetUserPage(GetUserPageInput input)
         {
             return await _userManageDao.GetUserPage(input);
         }
@@ -38,7 +38,7 @@ namespace BusinesLogic.BackEnd.UserManage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<List<DropdownSelectionModel>> GetUserRoleList(long id)
+        public async Task<List<DropdownSelectionResult>> GetUserRoleList(long id)
         {
             return await _userManageDao.GetUserRoleList(id);
         }

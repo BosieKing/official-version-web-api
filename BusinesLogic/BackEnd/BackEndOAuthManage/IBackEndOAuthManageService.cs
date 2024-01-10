@@ -9,10 +9,10 @@ namespace BusinesLogic.BackEnd.BackEndOAuthManage
     /// </summary>
     public interface IBackEndOAuthManageService
     {
-        Task<List<DropdownDataModel>> GetBindTenantList(long userId);
+        Task<List<DropdownDataResult>> GetBindTenantList(long userId);
         Task<string[]> GetButtonArray(string rolds);
         Task<List<MenuTreeModel>> GetMenuTree(string rolds);
-        Task<List<DropdownDataModel>> GetSuperManageBindTenantList(long userId);
+        Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId);
         Task<string[]> GetSuperManageButtonArray();
         Task<List<MenuTreeModel>> GetSuperManageMenuTree();
         Task<dynamic> GetUserInfo(long userId);

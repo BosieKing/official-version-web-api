@@ -43,12 +43,12 @@ namespace DataSphere.FronDesk
         /// </summary>
         /// <param name="uniqueNumber"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataModel>> GetTenantBindList(long userId)
+        public async Task<List<DropdownDataResult>> GetTenantBindList(long userId)
         {
             var userPhones = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
                                            .Select(p => p.Phone);
             var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => userPhones.Contains(p.Phone)).Select(p => p.TenantId);
-            return await dbContext.TenantRep.Where(p => tenantIdsQuery.Contains(p.Id)).Select(p => new DropdownDataModel { Id = p.Id, Name = p.Name }).ToListAsync();
+            return await dbContext.TenantRep.Where(p => tenantIdsQuery.Contains(p.Id)).Select(p => new DropdownDataResult { Id = p.Id, Name = p.Name }).ToListAsync();
         }
 
         /// <summary>

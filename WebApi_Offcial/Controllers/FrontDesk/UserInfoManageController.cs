@@ -40,11 +40,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// </summary>
         /// <returns></returns>
         [HttpGet("getUserInfo")]
-        public async Task<ActionResult<DataResponseModel>> GetUserInfo()
-        {
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var data = await _userInfoManageService.GetUserInfo(userId);
-            return DataResponseModel.SetData(data);
+        public async Task<ActionResult<ServiceResult>> GetUserInfo()
+        {           
+            var result = await _userInfoManageService.GetUserInfo();
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -58,11 +57,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("completeUserInfo")]
-        public async Task<ActionResult<DataResponseModel>> CompleteUserInfo([FromBody] CompleteUserInfoInput input)
+        public async Task<ActionResult<ServiceResult>> CompleteUserInfo([FromBody] CompleteUserInfoInput input)
         {
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            bool data = await _userInfoManageService.UpdateUserInfo(input, userId);
-            return DataResponseModel.SetData(data);
+            bool result = await _userInfoManageService.UpdateUserInfo(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -73,12 +71,11 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [RequestFormLimits(MultipartBodyLengthLimit = 268435456)]
         [RequestSizeLimit(268435456)]
         [HttpPost("uploadAvatar")]
-        public async Task<ActionResult<DataResponseModel>> UploadAvatar([FromForm] IFormFile formFile)
+        public async Task<ActionResult<ServiceResult>> UploadAvatar([FromForm] IFormFile formFile)
         {
             string url = "测试头像地址";
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            bool data = await _userInfoManageService.UploadAvatar(url, userId);
-            return DataResponseModel.SetData(data);
+            bool result = await _userInfoManageService.UploadAvatar(url);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -87,12 +84,11 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updatePassword")]
-        public async Task<ActionResult<DataResponseModel>> UpdatePassword([FromBody] UpdatePasswordInput input)
-        {
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
+        public async Task<ActionResult<ServiceResult>> UpdatePassword([FromBody] UpdatePasswordInput input)
+        {           
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
-            bool data = await _userInfoManageService.UpdatePassword(input.NewPassword, userId, token);
-            return DataResponseModel.SetData(data);
+            bool result = await _userInfoManageService.UpdatePassword(input.NewPassword, token);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -101,38 +97,29 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("updatePasswordByCode")]
-        public async Task<ActionResult<DataResponseModel>> UpdatePasswordByCode([FromBody] UpdatePasswordByCodeInput input)
+        public async Task<ActionResult<ServiceResult>> UpdatePasswordByCode([FromBody] UpdatePasswordByCodeInput input)
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
-            bool data = await _userInfoManageService.UpdatePassword(input.NewPassword, userId, token);
-            return DataResponseModel.SetData(data);
+            bool result = await _userInfoManageService.UpdatePassword(input.NewPassword, token);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
         #region 删除
-        /// <summary>
-        /// 注销账号
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("cancel")]
-        public async Task<ActionResult<DataResponseModel>> Cancel()
-        {
-            return DataResponseModel.Successed();
-        }
 
         /// <summary>
         /// 退出登录
         /// </summary>
         /// <returns></returns>
         [HttpPost("loginOut")]
-        public async Task<ActionResult<DataResponseModel>> LoginOut()
+        public async Task<ActionResult<ServiceResult>> LoginOut()
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             string token = Request.Headers[ClaimsUserConst.HTTP_Token_Head].ToString();
             string referenceToken = Request.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head].ToString();
             var result = await RedisMulititionHelper.LoginOut(userId.ToString(), token);
-            return DataResponseModel.Successed();
+            return ServiceResult.Successed();
         }
         #endregion
 
@@ -142,11 +129,11 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// </summary>
         /// <returns></returns>
         [HttpPost("updatePwdSendPhoneCode")]
-        public async Task<ActionResult<DataResponseModel>> UpdatePwdSendPhoneCode()
+        public async Task<ActionResult<ServiceResult>> UpdatePwdSendPhoneCode()
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.UpdatePwd, userId: userId);
-            return DataResponseModel.SetData(data);
+            var result = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.UpdatePwd, userId: userId);
+            return ServiceResult.SetData(result);
         }
         #endregion
     }

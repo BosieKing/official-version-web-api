@@ -45,7 +45,7 @@ namespace Model.DTOs.BackEnd.MenuManage
         /// <summary>
         /// 菜单权重枚举
         /// </summary>
-        /// <see cref="Resource.Enums.MenuWeightTypeEnum"/>
+        /// <see cref="SharedLibrary.Enums.MenuWeightTypeEnum"/>
         [Required(ErrorMessage = "TypeRequired")]
         public int Weight { get; set; }
 
