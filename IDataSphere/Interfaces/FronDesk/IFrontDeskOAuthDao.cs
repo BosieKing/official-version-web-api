@@ -31,22 +31,6 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<TokenInfoModel> GetUserInfoByPhone(string phone);
 
         /// <summary>
-        /// 无视租户，判断电话号码与密码是否匹配
-        /// </summary>
-        /// <param name="phone"></param>
-        /// <param name="passWord"></param>
-        /// <returns></returns>
-        Task<bool> PassWordExiste(string phone, string password);
-
-        /// <summary>
-        /// 判断电话号码是否存在
-        /// </summary>
-        /// <param name="Phone"></param>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        Task<bool> PhoneExiste(string Phone, long tenantId = 0);
-
-        /// <summary>
         /// 更新最新一次登录的平台密码
         /// </summary>
         /// <param name="phone"></param>

@@ -81,10 +81,10 @@ namespace Service.BackEnd.TenantMenuManage
         /// <returns></returns>
         public async Task<bool> AddTenantMenu(AddTenantMenuInput input)
         {
-            var data = input.Adapt<T_TenantMenu>();
-            data.BrowserPath = input.BrowserPath;
-            data.Weight = (int)MenuWeightTypeEnum.Customization;
-            return await _tenantMenuManageDao.AddAsync(data);
+            T_TenantMenu tenantMenu = input.Adapt<T_TenantMenu>();
+            tenantMenu.BrowserPath = input.BrowserPath;
+            tenantMenu.Weight = (int)MenuWeightTypeEnum.Customization;
+            return await _tenantMenuManageDao.AddAsync(tenantMenu);
         }
 
         /// <summary>
@@ -94,9 +94,9 @@ namespace Service.BackEnd.TenantMenuManage
         /// <returns></returns>
         public async Task<bool> AddTenantDirectory(AddTenantDirectoryInput input)
         {
-            var data = input.Adapt<T_TenantDirectory>();
-            data.BrowserPath = input.BrowserPath;
-            return await _tenantMenuManageDao.AddAsync(data);
+            T_TenantDirectory dir = input.Adapt<T_TenantDirectory>();
+            dir.BrowserPath = input.BrowserPath;
+            return await _tenantMenuManageDao.AddAsync(dir);
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace Service.BackEnd.TenantMenuManage
         /// <returns></returns>
         public async Task<bool> AddTenantMenuButton(AddTenantMenuButtonInput input)
         {
-            var data = input.Adapt<T_TenantMenuButton>();
-            return await _tenantMenuManageDao.AddAsync(data);
+            T_TenantMenuButton button = input.Adapt<T_TenantMenuButton>();
+            return await _tenantMenuManageDao.AddAsync(button);
         }
         #endregion
 
@@ -132,9 +132,9 @@ namespace Service.BackEnd.TenantMenuManage
         /// <returns></returns>
         public async Task<bool> UpdateTenantDirectory(UpdateTenantDirectoryInput input)
         {
-            var data = input.Adapt<T_TenantDirectory>();
-            data.Id = input.Id;
-            return await _tenantMenuManageDao.UpdateAsync(data);
+            T_TenantDirectory dir = input.Adapt<T_TenantDirectory>();
+            dir.Id = input.Id;
+            return await _tenantMenuManageDao.UpdateAsync(dir);
         }
 
         /// <summary>
@@ -144,9 +144,9 @@ namespace Service.BackEnd.TenantMenuManage
         /// <returns></returns>
         public async Task<bool> UpdateTenantMenuButton(UpdateTenantMenuButtonInput input)
         {
-            var data = input.Adapt<T_TenantMenuButton>();
-            data.Id = input.Id;
-            return await _tenantMenuManageDao.UpdateAsync(data);
+            T_TenantMenuButton button = input.Adapt<T_TenantMenuButton>();
+            button.Id = input.Id;
+            return await _tenantMenuManageDao.UpdateAsync(button);
         }
 
         #endregion
@@ -155,31 +155,32 @@ namespace Service.BackEnd.TenantMenuManage
         /// <summary>
         /// 删除菜单
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="menuId"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteTenantMenu(long id)
+        public async Task<bool> DeleteTenantMenu(long menuId)
         {
-            return await _tenantMenuManageDao.DeleteAsync<T_TenantMenu>(id);
+            await _tenantMenuManageDao.BatchDeleteAsync<T_TenantMenuButton>(p => p.MenuId == menuId);
+            return await _tenantMenuManageDao.DeleteAsync<T_TenantMenu>(menuId);
         }
 
         /// <summary>
         /// 删除目录
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="directoryId"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteTenantDirectory(long id)
+        public async Task<bool> DeleteTenantDirectory(long directoryId)
         {
-            return await _tenantMenuManageDao.DeleteAsync<T_TenantDirectory>(id);
+            return await _tenantMenuManageDao.DeleteAsync<T_TenantDirectory>(directoryId);
         }
 
         /// <summary>
         /// 删除按钮
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="buttonId"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteTenantMenuButton(long id)
+        public async Task<bool> DeleteTenantMenuButton(long buttonId)
         {
-            return await _tenantMenuManageDao.DeleteAsync<T_TenantMenuButton>(id);
+            return await _tenantMenuManageDao.DeleteAsync<T_TenantMenuButton>(buttonId);
         }
         #endregion
     }

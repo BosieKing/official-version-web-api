@@ -36,11 +36,6 @@
         public const string IS_SUPERMANAGE = "IsSuperManage";
 
         /// <summary>
-        /// 唯一标识符
-        /// </summary>
-        public const string UNIQUE_NUMBER = "UniqueNumber";
-
-        /// <summary>
         /// 在http请求中，token存放的位置
         /// </summary>
         public const string HTTP_Token_Head = "Authorization";

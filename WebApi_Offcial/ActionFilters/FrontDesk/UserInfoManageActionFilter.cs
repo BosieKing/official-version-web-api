@@ -86,7 +86,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         {
             // 根据id找到用户信息
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var result = await _userInfoDao.IdExisted<T_User>(userId);
+            bool result = await _userInfoDao.IdExisted<T_User>(userId);
             if (!result)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
@@ -102,8 +102,8 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> UpdatePasswordVerify(UpdatePasswordInput input)
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var result = await _userInfoDao.GetUserPassword(userId);
-            if (result.Password != input.OldPassword)
+            bool result = await _userInfoDao.DataExisted<T_User>(p => p.Id == userId && p.Password == input.OldPassword);
+            if (!result)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["OldPasswordError"].Value);
             }
@@ -118,9 +118,9 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> UpdatePasswordByCodeVerify(UpdatePasswordByCodeInput input)
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var userInfo = await _userInfoDao.GetUserPassword(userId); ;
+            string phone = await _userInfoDao.GetFirstStringTypeField<T_User>(p => p.Id == userId, nameof(T_User.Phone)); ;
             // 验证验证码是否匹配
-            var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.UpdatePwd, userInfo.Phone, input.VerifyCode);
+            var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.UpdatePwd, phone, input.VerifyCode);
             if (!result.Success)
             {
                 return result;

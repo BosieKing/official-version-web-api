@@ -24,11 +24,5 @@
         /// 租户Code
         /// </summary>
         public string SchemeName { get; set; }
-
-        /// <summary>
-        /// 唯一标识
-        /// </summary>
-        public string UniqueNumber { get; set; }
-
     }
 }

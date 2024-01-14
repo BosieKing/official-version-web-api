@@ -19,14 +19,12 @@ namespace WebApi_Offcial.Controllers.BackEnd
     {
         #region 构造函数
         private readonly ITenantMenuManageService _tenantMenuManageService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         /// <summary>
         /// 构造函数
         /// </summary>
-        public TenantMenuManageController(ITenantMenuManageService tenantMenuManageService, IHttpContextAccessor httpContextAccessor)
+        public TenantMenuManageController(ITenantMenuManageService tenantMenuManageService)
         {
             _tenantMenuManageService = tenantMenuManageService;
-            _httpContextAccessor = httpContextAccessor;
         }
         #endregion
 

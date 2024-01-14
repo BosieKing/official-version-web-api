@@ -4,6 +4,7 @@ using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.CoreData;
 using Model.Commons.Domain;
+using Model.Repositotys;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Utils;
@@ -35,8 +36,8 @@ namespace DataSphere.BackEnd
                                         .Where(!phone.IsNullOrEmpty() && userId.Equals(0), p => p.Phone == phone)
                                         .Where(!userId.Equals(0) && phone.IsNullOrEmpty(), p => p.Id == userId)
                                         .Select(p => p.TenantId)
-                                       .Join(dbContext.TenantRep, u => u, t => t.Id, (u, t) => t.IsSuperManage)
-                                       .AnyAsync(p => p == true);
+                                        .Join(dbContext.TenantRep, u => u, t => t.Id, (u, t) => t.IsSuperManage)
+                                        .AnyAsync(p => p == true);
             return isSuperManage;
         }
 
@@ -67,7 +68,7 @@ namespace DataSphere.BackEnd
         public async Task<bool> IsManage(string phone)
         {
             var userIds = await dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone).Select(p => new { p.Id, p.TenantId }).ToListAsync();
-            var keys = userIds.Select(p => p.TenantId.ToString()).ToArray();
+            string[] keys = userIds.Select(p => p.TenantId.ToString()).ToArray();
             if (RedisMulititionHelper.IsSuperManage(keys))
             {
                 return true;
@@ -82,10 +83,9 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="phone"></param>
         /// <returns></returns>
-        public async Task<bool> InTenantIsManage(long uniqueNumber, long tenantId)
+        public async Task<bool> InTenantIsManage(long userId, long tenantId)
         {
-            var userIds = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.UniqueNumber == uniqueNumber).Select(p => p.Id);
-            var result = await dbContext.UserRoleRep.IgnoreTenantFilter().AnyAsync(p => userIds.Contains(p.UserId) && p.TenantId == tenantId);
+            bool result = await dbContext.UserRoleRep.IgnoreTenantFilter().AnyAsync(p => userId == p.UserId && p.TenantId == tenantId);
             return result;
         }
         #endregion
@@ -133,32 +133,27 @@ namespace DataSphere.BackEnd
                                          {
                                              UserId = p.u.Id,
                                              p.u.TenantId,
-                                             p.u.UniqueNumber,
                                              p.u.LoginTime,
                                              RoleId = ur == null ? 0 : ur.RoleId
                                          })
                                          .Where(p => p.RoleId != 0)
                                          .OrderByDescending(p => p.LoginTime)
-                                         .GroupBy(p => new { p.UserId, p.TenantId, p.UniqueNumber }).Select(p => new
+                                         .GroupBy(p => new { p.UserId, p.TenantId }).Select(p => new
                                          {
                                              p.Key.UserId,
-                                             p.Key.UniqueNumber,
                                              p.Key.TenantId,
                                              RoleId = p.Select(p => p.RoleId)
                                          }).Take(1);
-            // 配置了角色的id
-            // var userroleIdsQuery = dbContext.UserRoleRep.Where(p => userIdsQuery.Contains(p.UserId)).Select(p => new { UserId = p.UserId , RoleId = p.RoleId }).ToList();
+            // 配置了角色的id          
             var result = await userIdsQuery
                                            .Join(dbContext.TenantRep, p => p.TenantId, t => t.Id, (p, t) => new TokenInfoModel
                                            {
                                                UserId = p.UserId.ToString(),
-                                               UniqueNumber = p.UniqueNumber.ToString(),
                                                RoleId = string.Join(",", p.RoleId),
                                                TenantId = p.TenantId.ToString(),
                                                SchemeName = t.Code
                                            }).FirstOrDefaultAsync();
             return result;
-
         }
 
         /// <summary>
@@ -183,21 +178,18 @@ namespace DataSphere.BackEnd
                                          .Select(p => new
                                          {
                                              UserId = p.Id,
-                                             p.UniqueNumber,
                                              p.TenantId,
                                          }).Take(1);
             var result = await userIdsQuery
                                            .Join(dbContext.TenantRep, p => p.TenantId, t => t.Id, (p, t) => new TokenInfoModel
                                            {
                                                UserId = p.UserId.ToString(),
-                                               UniqueNumber = p.UniqueNumber.ToString(),
                                                RoleId = "",
                                                TenantId = p.TenantId.ToString(),
                                                SchemeName = t.Code
                                            }).FirstOrDefaultAsync();
 
             return result;
-
         }
 
 
@@ -285,7 +277,6 @@ namespace DataSphere.BackEnd
                                            IsHidden = false
                                        }));
             return await list.ToListAsync();
-
         }
 
         /// <summary>
@@ -295,7 +286,6 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<string[]> GetButtonArray(long[] roleIds)
         {
-
             var menuIdsQuery = dbContext.RoleMenuRep.Where(p => roleIds.Contains(p.RoleId)).GroupBy(p => p.MenuId).Select(p => p.Key);
             var list = await dbContext.TenantMenuButtonRep.Where(p => menuIdsQuery.Contains(p.MenuId))
                                           .GroupJoin(dbContext.TenantMenuRep, tm => tm.MenuId, m => m.Id, (tm, m) => new { tm, m })
@@ -321,14 +311,12 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetBindTenantList(long userId)
+        public async Task<List<DropdownDataResult>> GetBindTenantList()
         {
-            var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
-                                           .Select(p => p.Phone).Take(1);
-            var userIds = dbContext.UserRep.IgnoreTenantFilter().Where(p => tenantIdsQuery.Contains(p.Phone)).Select(p => p.Id);
-            var hasRoleTenantIdIds = dbContext.UserRoleRep.IgnoreTenantFilter().Where(p => userIds.Contains(p.UserId)).Select(p => p.TenantId);
-            return await dbContext.TenantRep.Where(p => hasRoleTenantIdIds.Contains(p.Id)).Select(p => new DropdownDataResult { Id = p.Id, Name = p.Name }).ToListAsync();
-
+            List<DropdownDataResult> list = new List<DropdownDataResult>();
+            string code = await dbContext.TenantRep.Where(p => p.Id == dbContext.TenantId).Select(p => p.Code).FirstOrDefaultAsync();
+            list.Add(new DropdownDataResult() { Id = dbContext.TenantId, Name = code });
+            return list;
         }
 
 
@@ -358,9 +346,9 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdateAvatar(string url, long userId)
         {
-            var data = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
-            data.AvatarUrl = url;
-            dbContext.UserRep.Update(data);
+            T_User user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            user.AvatarUrl = url;
+            dbContext.UserRep.Update(user);
             await dbContext.SaveChangesAsync();
             return true;
         }
@@ -374,10 +362,10 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdateUserInfo(string realName, string email, long userId)
         {
-            var data = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
-            data.NickName = realName;
-            data.Email = email;
-            dbContext.UserRep.Update(data);
+            T_User user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            user.NickName = realName;
+            user.Email = email;
+            dbContext.UserRep.Update(user);
             await dbContext.SaveChangesAsync();
             return true;
         }
@@ -390,9 +378,9 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdatePassword(string newPassword, long userId)
         {
-            var data = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
-            data.Password = newPassword;
-            dbContext.UserRep.Update(data);
+            T_User user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            user.Password = newPassword;
+            dbContext.UserRep.Update(user);
             await dbContext.SaveChangesAsync();
             return true;
         }

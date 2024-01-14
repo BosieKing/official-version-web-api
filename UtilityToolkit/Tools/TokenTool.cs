@@ -39,7 +39,6 @@ namespace UtilityToolkit.Tools
 
             // 自定义携带内容
             claimList.Add(new Claim(ClaimsUserConst.USER_ID, tokenResult.UserId));
-            claimList.Add(new Claim(ClaimsUserConst.UNIQUE_NUMBER, tokenResult.UniqueNumber));
             claimList.Add(new Claim(ClaimsUserConst.TENANT_ID, tokenResult.TenantId));
             claimList.Add(new Claim(ClaimsUserConst.ROLE_ID, tokenResult.RoleId));
             claimList.Add(new Claim(ClaimsUserConst.SCHEME_NAME, tokenResult.SchemeName));

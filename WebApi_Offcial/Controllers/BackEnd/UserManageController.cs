@@ -19,14 +19,13 @@ namespace WebApi_Offcial.Controllers.BackEnd
     {
         #region 构造函数
         private readonly IUserManageService _userManageService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+    
         /// <summary>
         /// 构造函数
         /// </summary>
-        public UserManageController(IUserManageService userManageService, IHttpContextAccessor httpContextAccessor)
+        public UserManageController(IUserManageService userManageService)
         {
             _userManageService = userManageService;
-            _httpContextAccessor = httpContextAccessor;
         }
         #endregion
 

@@ -40,7 +40,8 @@ namespace Service.BackEnd.UserManage
         /// <returns></returns>
         public async Task<List<DropdownSelectionResult>> GetUserRoleList(long id)
         {
-            return await _userManageDao.GetUserRoleList(id);
+            List<long> ids = await _userManageDao.Getlds<T_UserRole>(p => p.UserId == id, nameof(T_UserRole.RoleId));
+            return await _userManageDao.GetCheckList<T_Role>(p => p.IsDeleted == false, ids, nameof(T_Role.Id));
         }
         #endregion
 
@@ -52,8 +53,8 @@ namespace Service.BackEnd.UserManage
         /// <returns></returns>
         public async Task<bool> AddUser(AddUserInput input)
         {
-            var data = input.Adapt<T_User>();
-            return await _userManageDao.AddAsync(data);
+            T_User user = input.Adapt<T_User>();
+            return await _userManageDao.AddAsync(user);
         }
 
         /// <summary>
@@ -66,12 +67,11 @@ namespace Service.BackEnd.UserManage
             await _userManageDao.BatchDeleteAsync<T_UserRole>(p => p.UserId == input.UserId);
             if (input.RoleIds.Count() > 0)
             {
-                var list = input.RoleIds.Select(p => new T_UserRole { UserId = input.UserId, RoleId = p });
+                IEnumerable<T_UserRole> list = input.RoleIds.Select(p => new T_UserRole { UserId = input.UserId, RoleId = p });
                 await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HSetAsync(UserCacheConst.MAKE_IN_TABLE, input.UserId.ToString(), input.UserId.ToString());
                 return await _userManageDao.BatchAddAsync(list.ToList());
             }
-            else
-                return true;
+            return true;
         }
         #endregion
 
@@ -83,9 +83,9 @@ namespace Service.BackEnd.UserManage
         /// <returns></returns>
         public async Task<bool> UpdateUser(UpdateUserInput input)
         {
-            var data = input.Adapt<T_User>();
-            data.Id = input.Id;
-            return await _userManageDao.UpdateUser(data);
+            T_User user = input.Adapt<T_User>();
+            user.Id = input.Id;
+            return await _userManageDao.UpdateUser(user);
         }
 
         /// <summary>
@@ -97,9 +97,7 @@ namespace Service.BackEnd.UserManage
         {
             return await _userManageDao.ResetPassword(input.UserId, input.Password);
         }
-        #endregion
 
-        #region 删除
         /// <summary>
         /// 更新是否允许登录
         /// </summary>
@@ -110,5 +108,6 @@ namespace Service.BackEnd.UserManage
             return await _userManageDao.UpdateIsDisableLogin(input.UserId, input.IsDisableLogin);
         }
         #endregion
+            
     }
 }

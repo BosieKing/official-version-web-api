@@ -17,9 +17,9 @@ namespace IDataSphere.Interfaces.BackEnd
         Task<TokenInfoModel> GetUserInfoByPhone(string phone = "", long userId = 0, long tenantId = 0);
         Task<bool> IsManage(string phone);
         Task<bool> PassWordInManageExiste(string phone, string password);
-        Task<List<DropdownDataResult>> GetBindTenantList(long userId);
         Task<TokenInfoModel> GetSuperManageUserInfoByPhone(string phone = "", long userId = 0, long tenantId = 0);
         Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId);
+        Task<List<DropdownDataResult>> GetBindTenantList();
         Task<bool> IsSuperManage(string phone = "", long userId = 0);
         Task<bool> InTenantIsManage(long uniqueNumber, long tenantId);
         Task<bool> UpdateAvatar(string url, long userId);

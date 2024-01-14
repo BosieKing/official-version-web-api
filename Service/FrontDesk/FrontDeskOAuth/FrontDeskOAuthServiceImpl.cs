@@ -41,14 +41,8 @@ namespace Service.FrontDesk.FrontDeskOAuth
         /// <returns></returns>
         public async Task<(string Token, string RefreshToken)> Register(RegisteredInput input)
         {
-            var user = input.Adapt<T_User>();
-            var existedUser = await _frontDeskOAuthDao.GetUserInfoByPhone(input.Phone);
-            if (existedUser != null && !existedUser.UniqueNumber.Equals(0))
-                user.UniqueNumber = long.Parse(existedUser.UniqueNumber);
-            else
-                user.UniqueNumber = YitIdHelper.NextId();
-            user.CreatedTime = DateTime.Now;
-            var tenantInfo = await _frontDeskOAuthDao.GetIdByInviteCode(input.InviteCode);
+            T_User user = input.Adapt<T_User>();
+            (long Id, string Code) tenantInfo = await _frontDeskOAuthDao.GetIdByInviteCode(input.InviteCode);
             user.TenantId = tenantInfo.Id;
             await _frontDeskOAuthDao.AddUser(user);
             var tokenResult = new TokenInfoModel
@@ -56,11 +50,11 @@ namespace Service.FrontDesk.FrontDeskOAuth
                 UserId = user.Id.ToString(),
                 TenantId = user.TenantId.ToString(),
                 RoleId = "",
-                SchemeName = tenantInfo.Code,
-                UniqueNumber = user.UniqueNumber.ToString()
+                SchemeName = tenantInfo.Code,                
             };
-            var token = TokenTool.CreateToken(tokenResult, RedisMulititionHelper.IsSuperManage(tokenResult.TenantId));
-            var refreshToken = TokenTool.CreateRefreshToken(tokenResult, false);
+            bool isSuperManage = RedisMulititionHelper.IsSuperManage(tokenResult.TenantId);
+            string token = TokenTool.CreateToken(tokenResult, isSuperManage);
+            string refreshToken = TokenTool.CreateRefreshToken(tokenResult, false);
             return new ValueTuple<string, string>(token, refreshToken);
         }
         #endregion
@@ -73,12 +67,12 @@ namespace Service.FrontDesk.FrontDeskOAuth
         /// <returns></returns>
         public async Task<(string Token, string RefreshToken)> LoginByPassWord(string phone, bool isRemember)
         {
-            var user = await _frontDeskOAuthDao.GetUserInfoByPhone(phone);
-            var token = TokenTool.CreateToken(user, RedisMulititionHelper.IsSuperManage(user.TenantId));
-            var refreshToken = TokenTool.CreateRefreshToken(user, isRemember);
+            TokenInfoModel user = await _frontDeskOAuthDao.GetUserInfoByPhone(phone);
+            string token = TokenTool.CreateToken(user, RedisMulititionHelper.IsSuperManage(user.TenantId));
+            string refreshToken = TokenTool.CreateRefreshToken(user, isRemember);
             // 缓存数据
-            var key = UserCacheConst.USER_INFO_TABLE + user.TenantId;
-            var value = user.ToJson();
+            string key = UserCacheConst.USER_INFO_TABLE + user.TenantId;
+            string value = user.ToJson();
             await _frontDeskOAuthDao.UpdateLastLoginTime(long.Parse(user.UserId));
             await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HMSetAsync(key, user.UserId.ToString(), value);
             await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, user.UserId.ToString());

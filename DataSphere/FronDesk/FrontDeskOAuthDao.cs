@@ -33,7 +33,6 @@ namespace DataSphere.FronDesk
                                           UserId = u.Id.ToString(),
                                           TenantId = u.TenantId.ToString(),
                                           SchemeName = t.Code.ToString(),
-                                          UniqueNumber = u.UniqueNumber.ToString(),
                                           RoleId = string.Join(",", dbContext.UserRoleRep.Where(p => p.UserId == u.Id).Select(p => p.RoleId))
                                       }).FirstOrDefaultAsync();
         }
@@ -46,36 +45,12 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<(long Id, string Code)> GetIdByInviteCode(string inviteCode)
         {
-            var id = await dbContext.TenantRep.IgnoreTenantFilter()
+            return await dbContext.TenantRep.IgnoreTenantFilter()
                                        .Where(p => p.InviteCode == inviteCode)
                                        .Select(p => new ValueTuple<long, string>(p.Id, p.Name))
                                        .FirstOrDefaultAsync();
-            return id;
         }
 
-        /// <summary>
-        /// 查询电话号码是否存在
-        /// </summary>
-        /// <param name="Phone"></param>
-        /// <returns>true已注册，false未注册</returns>
-        public async Task<bool> PhoneExiste(string phone, long tenantId = 0)
-        {
-            return await dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone)
-                                   .Where(!tenantId.Equals(0), p => p.TenantId == tenantId)
-                                   .AnyAsync();
-        }
-
-        /// <summary>
-        /// 判断电话号码和密码是否匹配（无租户限制）
-        /// </summary>
-        /// <param name="phone"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public async Task<bool> PassWordExiste(string phone, string password)
-        {
-            return await dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Phone == phone && p.Password == password)
-                                   .AnyAsync();
-        }
         #endregion
 
         #region 新增
@@ -114,7 +89,7 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdateLastLoginTime(long userId)
         {
-            var user = await dbContext.UserRep.IgnoreTenantFilter().FirstOrDefaultAsync(p => p.Id == userId);
+            T_User user = await dbContext.UserRep.IgnoreTenantFilter().AsTracking().FirstOrDefaultAsync(p => p.Id == userId);
             user.LoginTime = DateTime.Now;
             dbContext.Update(user);
             await dbContext.SaveChangesAsync();

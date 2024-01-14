@@ -18,6 +18,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
     [ServiceFilter(typeof(TenantManageActionFilter))]
     public class TenantManageController : BaseController
     {
+        #region 构造函数
         /// <summary>
         /// 租户管理业务服务接口
         /// </summary>
@@ -30,9 +31,6 @@ namespace WebApi_Offcial.Controllers.BackEnd
         {
             _tenantManagerService = tenantManagerService;
         }
-
-
-        #region 构造函数
         #endregion
 
         #region 查询

@@ -51,7 +51,7 @@ namespace IDataSphere.Interfaces
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<bool> DataExisted<TEntity>(Expression<Func<TEntity, bool>> expression)
+        public Task<bool> DataExisted<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false)
             where TEntity : EntityBaseDO;
 
         /// <summary>
@@ -104,6 +104,7 @@ namespace IDataSphere.Interfaces
         /// <param name="fieldName"></param>
         /// <returns></returns>
         public Task<List<DropdownDataResult>> GetStringList<TEntity>(string fieldName = "") where TEntity : EntityBaseDO;
+
         /// <summary>
         /// 根据表达式过滤数据获取下拉列表，采集string类型字段
         /// </summary>
@@ -114,26 +115,47 @@ namespace IDataSphere.Interfaces
         /// <returns></returns>
         public Task<List<DropdownDataResult>> GetStringList<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "", bool isIgnoreTenant = false)
             where TEntity : EntityBaseDO;
+
+        /// <summary>
+        /// 获取下拉选中列表
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="expression"></param>
+        /// <param name="checkIds"></param>
+        /// <param name="checkFieldName"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        public Task<List<DropdownSelectionResult>> GetCheckList<TEntity>(Expression<Func<TEntity, bool>> expression, IEnumerable<long> checkIds, string checkFieldName, string fieldName = "") 
+            where TEntity : EntityBaseDO;
         #endregion
 
-        #region 获取集合
+            #region 获取集合
+            /// <summary>
+            /// 查询指定long类型字段集合
+            /// </summary>
+            /// <typeparam name="TEntity"></typeparam>
+            /// <param name="expression"></param>
+            /// <param name="fieldName">自定义采集id名称</param>
+            /// <returns></returns>
+        public Task<List<long>> GetLongFields<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "")
+            where TEntity : EntityBaseDO;
+
         /// <summary>
-        /// 查询指定long类型字段集合
+        /// 获取id集合
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="expression"></param>
         /// <param name="fieldName">自定义采集id名称</param>
         /// <returns></returns>
-        public Task<List<long>> GetLongFields<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "")
-            where TEntity : EntityBaseDO;
+        public Task<List<long>> Getlds<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "") where TEntity : EntityBaseDO;
         #endregion
 
-        #region 查询单条数据
-        /// <summary>
-        /// 通过主键查询单条数据
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+            #region 查询单条数据
+            /// <summary>
+            /// 通过主键查询单条数据
+            /// </summary>
+            /// <param name="id"></param>
+            /// <returns></returns>
         public Task<TEntity> GetDataById<TEntity>(long id) where TEntity : EntityBaseDO;
 
         /// <summary>

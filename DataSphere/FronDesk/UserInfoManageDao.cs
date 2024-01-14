@@ -25,7 +25,7 @@ namespace DataSphere.FronDesk
         /// <param name="userId"></param>
         /// <param name="fieldName">需要查询的列名</param>
         /// <returns></returns>
-        public async Task<T_User> GetUserInfoById(long userId)
+        public async Task<dynamic> GetUserInfoById(long userId)
         {
             return await dbContext.UserRep.Where(p => p.Id == userId).Select(p => new T_User
             {
@@ -36,31 +36,8 @@ namespace DataSphere.FronDesk
                 TenantId = p.TenantId,
                 Sex = p.Sex
             }).FirstOrDefaultAsync();
-        }
-        /// <summary>
-        /// 查询用户已绑定的租户平台下拉
-        /// </summary>
-        /// <param name="uniqueNumber"></param>
-        /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetTenantBindList(long userId)
-        {
-            var userPhones = dbContext.UserRep.IgnoreTenantFilter()
-                                              .Where(p => p.Id == userId)
-                                              .Select(p => p.Phone);
-            var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => userPhones.Contains(p.Phone)).Select(p => p.TenantId);
-            return await dbContext.TenantRep.Where(p => tenantIdsQuery.Contains(p.Id)).Select(p => new DropdownDataResult { Id = p.Id, Name = p.Name }).ToListAsync();
-        }
+        }  
 
-        /// <summary>
-        /// 根据id查询用户电话号码和密码
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<(string Password, string Phone)> GetUserPassword(long userId)
-        {
-            return await dbContext.UserRep.Where(p => p.Id == userId).Select(p => new ValueTuple<string, string>(p.Password, p.Phone))
-                                   .FirstOrDefaultAsync();
-        }
         #endregion            
 
         #region 更新
@@ -71,7 +48,7 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdateUserInfo(T_User input)
         {
-            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == input.Id);
+            T_User user = await dbContext.UserRep.AsTracking().FirstOrDefaultAsync(p => p.Id == input.Id);
             user.NickName = input.NickName;
             user.Email = input.Email;
             user.Sex = input.Sex;
@@ -87,9 +64,9 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdateAvatar(string url, long userId)
         {
-            var data = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
-            data.AvatarUrl = url;
-            dbContext.UserRep.Update(data);
+            T_User user = await dbContext.UserRep.AsTracking().FirstOrDefaultAsync(p => p.Id == userId);
+            user.AvatarUrl = url;
+            dbContext.UserRep.Update(user);
             await dbContext.SaveChangesAsync();
             return true;
         }
@@ -101,9 +78,9 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<bool> UpdatePassword(string newPassword, long userId)
         {
-            var data = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
-            data.Password = newPassword;
-            dbContext.UserRep.Update(data);
+            T_User user = await dbContext.UserRep.AsTracking().FirstOrDefaultAsync(p => p.Id == userId);
+            user.Password = newPassword;
+            dbContext.UserRep.Update(user);
             await dbContext.SaveChangesAsync();
             return true;
         }

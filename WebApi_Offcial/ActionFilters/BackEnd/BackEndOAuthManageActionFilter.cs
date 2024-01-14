@@ -175,9 +175,9 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> SwitchTenantVerify(IdInput input)
         {
             // 判断用户是否在该平台担任管理员
-            long uniqueNumber = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.UNIQUE_NUMBER).Value);
+            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             // 判断是否在选择的平台下担任管理员
-            bool isManage = await _backEndOAuthDao.InTenantIsManage(uniqueNumber, input.Id);
+            bool isManage = await _backEndOAuthDao.InTenantIsManage(userId, input.Id);
             if (!isManage)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value);

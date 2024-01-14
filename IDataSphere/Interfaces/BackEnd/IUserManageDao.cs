@@ -11,7 +11,6 @@ namespace IDataSphere.Interfaces.BackEnd
     public interface IUserManageDao : IBaseDao
     {
         Task<PageResult> GetUserPage(GetUserPageInput input);
-        Task<List<DropdownSelectionResult>> GetUserRoleList(long userId);
         Task<bool> ResetPassword(long userId, string pwd);
         Task<bool> UpdateIsDisableLogin(long userId, bool isDisableLogin);
         Task<bool> UpdateUser(T_User newUser);

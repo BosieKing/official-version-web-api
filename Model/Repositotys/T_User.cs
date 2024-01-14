@@ -48,12 +48,7 @@ namespace Model.Repositotys
         /// 登录时间
         /// </summary>
         public DateTime LoginTime { get; set; }
-
-        /// <summary>
-        /// 唯一编号
-        /// </summary>
-        public long UniqueNumber { get; set; }
-
+        
         /// <summary>
         /// 是否禁止登录
         /// </summary>

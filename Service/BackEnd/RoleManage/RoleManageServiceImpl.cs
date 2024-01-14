@@ -59,8 +59,8 @@ namespace Service.BackEnd.RoleManage
         /// <returns></returns>
         public async Task<bool> AddRole(AddRoleInput input)
         {
-            var data = input.Adapt<T_Role>();
-            return await _roleManageDao.AddAsync(data);
+            T_Role role = input.Adapt<T_Role>();
+            return await _roleManageDao.AddAsync(role);
         }
 
         /// <summary>
@@ -70,13 +70,16 @@ namespace Service.BackEnd.RoleManage
         /// <returns></returns>
         public async Task<bool> AddRoleMenu(AddRoleMenuInput input, string tenantId)
         {
-            var routerList = await _roleManageDao.GetStringList<T_TenantMenu>(p => input.MenuIds.Contains(p.Id), $"{nameof(T_TenantMenu.Router)}");
-            var list = input.MenuIds.Select(p => new T_RoleMenu { RoleId = input.RoleId, MenuId = p }).ToList();
+            List<DropdownDataResult> routers = await _roleManageDao.GetStringList<T_TenantMenu>(p => input.MenuIds.Contains(p.Id), $"{nameof(T_TenantMenu.Router)}");
+            List<T_RoleMenu> list = input.MenuIds.Select(p => new T_RoleMenu { RoleId = input.RoleId, MenuId = p }).ToList();
             await _roleManageDao.BatchDeleteAsync<T_RoleMenu>(p => p.RoleId == input.RoleId);
             await _roleManageDao.BatchAddAsync(list);
-            var key = BasicDataCacheConst.ROLE_TABLE + tenantId;
-            routerList.ForEach(p => { p.Name = p.Name.ToLower(); });
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData).HMSetAsync(key, input.RoleId.ToString(), routerList.ToJson());
+            string key = BasicDataCacheConst.ROLE_TABLE + tenantId;
+            routers.ForEach(p => 
+            { 
+                p.Name = p.Name.ToLower(); 
+            });
+            await RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData).HMSetAsync(key, input.RoleId.ToString(), routers.ToJson());
             return true;
         }
         #endregion
@@ -89,9 +92,9 @@ namespace Service.BackEnd.RoleManage
         /// <returns></returns>
         public async Task<bool> UpdateRole(UpdateRoleInput input)
         {
-            var data = input.Adapt<T_Role>();
-            data.Id = input.Id;
-            return await _roleManageDao.UpdateAsync(data);
+            T_Role role = input.Adapt<T_Role>();
+            role.Id = input.Id;
+            return await _roleManageDao.UpdateAsync(role);
         }
         #endregion
 
@@ -102,8 +105,7 @@ namespace Service.BackEnd.RoleManage
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<bool> DeleteRole(long id)
-        {
-            // todo：删除角色的时候。同时删除配置的菜单,待测试，完成
+        {            
             await _roleManageDao.BatchDeleteAsync<T_RoleMenu>(p => p.RoleId == id);
             return await _roleManageDao.DeleteAsync<T_Role>(id);
         }

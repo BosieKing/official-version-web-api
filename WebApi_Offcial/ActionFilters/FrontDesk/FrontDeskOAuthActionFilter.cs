@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.DTOs.FronDesk.FrontDeskOAuth;
+using Model.Repositotys;
 using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
@@ -95,7 +96,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return captchaResult;
             }
             // 判断账号是否注册
-            bool accountExist = await _frontDeskOAuthDao.PhoneExiste(input.Phone);
+            bool accountExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
@@ -118,10 +119,10 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return ServiceResult.IsFailure(_stringLocalizer["PasswrodErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
             // 判断密码是否匹配
-            bool passWordExist = await _frontDeskOAuthDao.PassWordExiste(input.Phone, input.Password);
+            bool passWordExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone && p.Password == input.Password, true);
             // 密码不匹配
             if (!passWordExist)
-            {                
+            {
                 passwordErrorCount++;
                 redisClient.Set(passwordErrorCountKey, passwordErrorCount, pwdExpirationTime);
                 return ServiceResult.IsFailure(_stringLocalizer["PasswrodError"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
@@ -147,7 +148,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return captchaResult;
             }
             // 判断账号是否注册
-            bool accountExist = await _frontDeskOAuthDao.PhoneExiste(input.Phone);
+            bool accountExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
@@ -175,7 +176,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return ServiceResult.IsFailure(_stringLocalizer["InviteCodeError"].Value);
             }
             // 判断账号在该平台下是否已被注册
-            bool hasRegiste = await _frontDeskOAuthDao.PhoneExiste(input.Phone, tenandInfo.Id);
+            bool hasRegiste = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone && p.TenantId == tenandInfo.Id, true);
             if (hasRegiste)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserExisted"].Value);
@@ -197,7 +198,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> ForgotPasswordVerify(ForgotPasswordInput input)
         {
             // 判断账号是否注册
-            bool accountExist = await _frontDeskOAuthDao.PhoneExiste(input.Phone);
+            bool accountExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);

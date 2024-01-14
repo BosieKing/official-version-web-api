@@ -38,7 +38,7 @@ namespace Service.BackEnd.BackEndOAuthManage
         /// <returns></returns>
         public async Task<List<MenuTreeModel>> GetMenuTree(string rolds)
         {
-            var ids = rolds.Split(",").Select(p => long.Parse(p)).ToArray();
+            long[] ids = rolds.Split(",").Select(p => long.Parse(p)).ToArray();
             return await _backEndOAuthDao.GetMenuTree(ids);
         }
 
@@ -89,7 +89,7 @@ namespace Service.BackEnd.BackEndOAuthManage
         /// <returns></returns>
         public async Task<List<DropdownDataResult>> GetBindTenantList(long userId)
         {
-            return await _backEndOAuthDao.GetBindTenantList(userId);
+            return await _backEndOAuthDao.GetBindTenantList();
         }
 
         /// <summary>

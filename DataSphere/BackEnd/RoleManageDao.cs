@@ -27,8 +27,8 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<dynamic> GetRoleMenuList(long roleId)
         {
-            var checkMenuList = dbContext.RoleMenuRep.Where(p => p.RoleId == roleId).Select(p => p.MenuId);
-            var checkButtonList = dbContext.RoleBlockButtonsRep.Where(p => p.RoleId == roleId).Select(p => p.ButtonId);
+            IQueryable<long> checkMenuList = dbContext.RoleMenuRep.Where(p => p.RoleId == roleId).Select(p => p.MenuId);
+            IQueryable<long> checkButtonList = dbContext.RoleBlockButtonsRep.Where(p => p.RoleId == roleId).Select(p => p.ButtonId);
             var buttonList = await dbContext.TenantMenuButtonRep.Select(p => new
             {
                 p.Id,
@@ -56,8 +56,6 @@ namespace DataSphere.BackEnd
                 }).ToList()
             });
         }
-
-
 
         /// <summary>
         /// 分页查询

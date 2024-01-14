@@ -8,7 +8,7 @@ namespace Model.DTOs.FronDesk.FrontDeskOAuth
     public class RegisteredInput
     {
         /// <summary>
-        /// 单位邀请码
+        /// 租户邀请码
         /// </summary>
         [Required(ErrorMessage = "InviteCodeRequired")]
         public string InviteCode { get; set; } = string.Empty;

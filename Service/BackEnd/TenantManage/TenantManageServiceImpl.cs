@@ -70,14 +70,16 @@ namespace Service.BackEnd.TenantManage
         {
             long i = 1;
             // 转成数组输出，每次输出不同的数组
-            foreach (var b in Guid.NewGuid().ToByteArray())
+            foreach (byte b in Guid.NewGuid().ToByteArray())
+            {
                 i *= b + 1;
-            var data = string.Format("{0:x}", i - DateTime.Now.Ticks + tenantId);
-            var random = new Random();
-            var result = new StringBuilder();
+            }
+            string data = string.Format("{0:x}", i - DateTime.Now.Ticks + tenantId);
+            Random random = new();
+            StringBuilder result = new();
             foreach (var item in data)
             {
-                var number = random.Next(0, 2);
+                int number = random.Next(0, 2);
                 if (number == 0)
                 {
                     result.Append(item.ToString().ToLower());
@@ -101,8 +103,8 @@ namespace Service.BackEnd.TenantManage
         /// <returns></returns>
         public async Task<bool> UptateInviteCode(long tenantId)
         {
-            var result = await CreateInviteCode(tenantId);
-            return await _tenantDao.UptateInviteCode(tenantId, result.ToString());
+            string code = await CreateInviteCode(tenantId);
+            return await _tenantDao.UptateInviteCode(tenantId, code.ToString());
         }
 
         /// <summary>
@@ -112,10 +114,10 @@ namespace Service.BackEnd.TenantManage
         /// <returns></returns>
         public async Task<bool> AddTenant(AddTenantInput input)
         {
-            var tenant = input.Adapt<T_Tenant>();
+            T_Tenant tenant = input.Adapt<T_Tenant>();
             tenant.InviteCode = await CreateInviteCode(tenant.Id);
             // 新增租户
-            await _tenantDao.AddTenant(tenant);
+            await _tenantDao.AddAsync(tenant);
             // 新增租户对应菜单
             return await _tenantDao.AddTenantMenu(tenant.Id);
         }

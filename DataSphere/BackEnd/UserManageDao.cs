@@ -43,26 +43,7 @@ namespace DataSphere.BackEnd
                             user.UpdateTime
                         };
             return await base.AdaptPage(query, input.PageSize, input.PageNo);
-        }
-
-        /// <summary>
-        /// 查询角色集合
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="mentorId"></param>
-        /// <returns></returns>
-        public async Task<List<DropdownSelectionResult>> GetUserRoleList(long userId)
-        {
-            var ids = await dbContext.UserRoleRep.Where(p => p.UserId == userId).Select(p => p.RoleId).ToListAsync();
-            var list = await dbContext.RoleRep.Select(p => new DropdownSelectionResult
-            {
-
-                Id = p.Id,
-                Name = p.Name,
-                IsCheck = ids.Contains(p.Id)
-            }).ToListAsync();
-            return list;
-        }
+        }       
         #endregion
          
         #region 新增
@@ -78,7 +59,7 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> ResetPassword(long userId, string pwd)
         {
-            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            T_User user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
             user.Password = pwd;
             dbContext.UserRep.Update(user);
             await dbContext.SaveChangesAsync();
@@ -94,7 +75,7 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdateUser(T_User newUser)
         {
-            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == newUser.Id);
+            T_User user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == newUser.Id);
             user.Phone = newUser.Phone;
             user.NickName = newUser.NickName;
             user.Email = newUser.Email;
@@ -112,7 +93,7 @@ namespace DataSphere.BackEnd
         /// <returns></returns>
         public async Task<bool> UpdateIsDisableLogin(long userId, bool isDisableLogin)
         {
-            var user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
+            T_User user = await dbContext.UserRep.FirstOrDefaultAsync(p => p.Id == userId);
             user.IsDisableLogin = isDisableLogin;
             dbContext.UserRep.Update(user);
             await dbContext.SaveChangesAsync();

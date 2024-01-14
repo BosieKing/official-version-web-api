@@ -16,8 +16,8 @@ namespace Service.BackEnd.TenantMenuManage
         Task<bool> UpdateTenantDirectory(UpdateTenantDirectoryInput input);
         Task<bool> UpdateTenantMenu(UpdateTenantMenuInput input);
         Task<bool> UpdateTenantMenuButton(UpdateTenantMenuButtonInput input);
-        Task<bool> DeleteTenantDirectory(long id);
-        Task<bool> DeleteTenantMenu(long id);
-        Task<bool> DeleteTenantMenuButton(long id);
+        Task<bool> DeleteTenantDirectory(long directoryId);
+        Task<bool> DeleteTenantMenu(long menuId);
+        Task<bool> DeleteTenantMenuButton(long buttonId);
     }
 }

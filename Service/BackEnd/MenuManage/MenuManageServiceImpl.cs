@@ -91,9 +91,9 @@ namespace Service.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<bool> AddDirectory(AddDirectoryInput input)
         {
-            var data = input.Adapt<T_Directory>();
-            data.BrowserPath = input.BrowserPath;
-            return await _menuManageDao.AddAsync(data);
+            T_Directory dir = input.Adapt<T_Directory>();
+            dir.BrowserPath = input.BrowserPath;
+            return await _menuManageDao.AddAsync(dir);
         }
 
 
@@ -104,7 +104,7 @@ namespace Service.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<bool> AddMenu(AddMenuInput input)
         {
-            var menu = input.Adapt<T_Menu>();
+            T_Menu menu = input.Adapt<T_Menu>();
             menu.UniqueNumber = menu.Id;
             menu.BrowserPath = input.BrowserPath;
             return await _menuManageDao.AddAsync(menu);
@@ -117,7 +117,7 @@ namespace Service.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<bool> AddMenuButton(AddMenuButtonInput input)
         {
-            var button = input.Adapt<T_MenuButton>();
+            T_MenuButton button = input.Adapt<T_MenuButton>();
             return await _menuManageDao.AddAsync(button);
         }
         #endregion
@@ -130,9 +130,9 @@ namespace Service.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<bool> UpdateDirectory(UpdateDirectoryInput input)
         {
-            var data = input.Adapt<T_Directory>();
-            data.Id = input.Id;
-            return await _menuManageDao.UpdateAsync(data);
+            T_Directory dir = input.Adapt<T_Directory>();
+            dir.Id = input.Id;
+            return await _menuManageDao.UpdateAsync(dir);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Service.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<bool> UpdateMenu(UpdateMeunInput input)
         {
-            var menu = input.Adapt<T_Menu>();
+            T_Menu menu = input.Adapt<T_Menu>();
             menu.Id = input.Id;
             menu.UniqueNumber = menu.Id;
             return await _menuManageDao.UpdateAsync(menu);
@@ -155,15 +155,15 @@ namespace Service.BackEnd.MenuManage
         /// <returns></returns>
         public async Task<bool> UpdateMenuButton(UpdateMenuButtonInput input)
         {
-            var data = input.Adapt<T_MenuButton>();
-            data.Id = input.Id;
-            return await _menuManageDao.UpdateAsync(data);
+            T_MenuButton button = input.Adapt<T_MenuButton>();
+            button.Id = input.Id;
+            return await _menuManageDao.UpdateAsync(button);
         }
         #endregion
 
         #region 删除
         /// <summary>
-        /// 删除按钮
+        /// 删除目录
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

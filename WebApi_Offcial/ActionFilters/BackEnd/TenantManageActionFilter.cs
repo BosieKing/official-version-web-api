@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.TenantManage;
+using Model.Repositotys;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.ActionFilters.BackEnd
@@ -15,12 +16,10 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
     {
         #region 构造函数及参数
         private readonly ITenantManageDao _tenantDao;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IStringLocalizer<UserTips> _stringLocalizer;
-        public TenantManageActionFilter(ITenantManageDao tenantDao, IHttpContextAccessor httpContextAccessor, IStringLocalizer<UserTips> stringLocalizer)
+        public TenantManageActionFilter(ITenantManageDao tenantDao,IStringLocalizer<UserTips> stringLocalizer)
         {
             _tenantDao = tenantDao;
-            _httpContextAccessor = httpContextAccessor;
             _stringLocalizer = stringLocalizer;
         }
         #endregion
@@ -68,7 +67,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> AddTenantVerify(AddTenantInput input)
         {
             // 判断租户的唯一编码是否已存在
-            bool codeExisted = await _tenantDao.CodeExist(input.Code);
+            bool codeExisted = await _tenantDao.DataExisted<T_Tenant>(p => p.InviteCode == input.Code);
             if (codeExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);
@@ -84,7 +83,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> UpdateTenantVerify(UpdateTenantInput input)
         {
             // 判断租户的唯一编码是否已存在
-            bool codeExisted = await _tenantDao.CodeExist(input.Code, input.Id);
+            bool codeExisted = await _tenantDao.DataExisted<T_Tenant>(p => p.InviteCode == input.Code && p.Id != input.Id);
             if (codeExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);

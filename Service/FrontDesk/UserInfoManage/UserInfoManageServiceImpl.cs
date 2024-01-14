@@ -1,5 +1,6 @@
 ﻿using IDataSphere.Interfaces.FronDesk;
 using Mapster;
+using Model.Commons.Domain;
 using Model.DTOs.FronDesk.UserInfoManage;
 using Model.Repositotys;
 using UtilityToolkit.Helpers;
@@ -31,13 +32,7 @@ namespace Service.FrontDesk.UserInfoManage
         public async Task<dynamic> GetUserInfo()
         {
             long userId = _userInfoDao.UserId();
-            var userInfo = await _userInfoDao.GetUserInfoById(userId);
-            var bindTenantList = await _userInfoDao.GetTenantBindList(userId);
-            return new
-            {
-                userInfo,
-                bindTenantList
-            };
+            return await _userInfoDao.GetUserInfoById(userId);
         }
         #endregion
 
@@ -49,7 +44,7 @@ namespace Service.FrontDesk.UserInfoManage
         /// <returns></returns>
         public async Task<bool> UpdateUserInfo(CompleteUserInfoInput input)
         {
-            var user = input.Adapt<T_User>();
+            T_User user = input.Adapt<T_User>();
             user.Id = _userInfoDao.UserId();
             return await _userInfoDao.UpdateUserInfo(user);
         }
@@ -72,7 +67,7 @@ namespace Service.FrontDesk.UserInfoManage
         /// <returns></returns>
         public async Task<bool> UpdatePassword(string password, string token)
         {
-            var userId = _userInfoDao.UserId();
+            long userId = _userInfoDao.UserId();
             await RedisMulititionHelper.LoginOut(userId.ToString(), token);
             return await _userInfoDao.UpdatePassword(password, userId);
         }

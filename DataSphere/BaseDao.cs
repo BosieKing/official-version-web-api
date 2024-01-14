@@ -71,10 +71,18 @@ namespace DataSphere
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<bool> DataExisted<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO
+        public async Task<bool> DataExisted<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            return await rep.AnyAsync(expression);
+            if (isIgnoreTenant)
+            {
+                return await rep.IgnoreQueryFilters().Where(p => p.IsDeleted == false).AnyAsync(expression);
+            }
+            else
+            {
+                return await rep.AnyAsync(expression);
+            }
+            
         }
 
         /// <summary>
@@ -175,6 +183,7 @@ namespace DataSphere
             List<DropdownDataResult> list = await rep.ConvertListSearch(fieldName).ToListAsync();
             return list;
         }
+
         /// <summary>
         /// 根据表达式过滤数据获取下拉列表，采集string类型字段
         /// </summary>
@@ -196,6 +205,21 @@ namespace DataSphere
                 List<DropdownDataResult> list = await rep.Where(expression).ConvertListSearch(fieldName).ToListAsync();
                 return list;
             }
+        }
+
+        /// <summary>
+        /// 获取下拉选中列表
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="expression"></param>
+        /// <param name="fieldName"></param>
+        /// <param name="isIgnoreTenant"></param>
+        /// <returns></returns>
+        public async Task<List<DropdownSelectionResult>> GetCheckList<TEntity>(Expression<Func<TEntity, bool>> expression, IEnumerable<long> checkIds, string checkFieldName, string fieldName = "" ) where TEntity : EntityBaseDO
+        {
+            DbSet<TEntity> rep = dbContext.Set<TEntity>();
+            
+            return new List<DropdownSelectionResult>();
         }
         #endregion
 
@@ -222,6 +246,18 @@ namespace DataSphere
             // 转换为查询表达式
             var searchQuery = Expression.Lambda<Func<TEntity, long>>(memberExpression, p);
             return await rep.Where(expression).Select(searchQuery).ToListAsync();
+        }
+
+        /// <summary>
+        /// 获取id集合
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="expression"></param>
+        /// <param name="fieldName">自定义采集id名称</param>
+        /// <returns></returns>
+        public async Task<List<long>> Getlds<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "") where TEntity : EntityBaseDO
+        {
+            return await GetLongFields(expression, fieldName);
         }
         #endregion
 
