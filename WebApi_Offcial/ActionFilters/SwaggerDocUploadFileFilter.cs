@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace WebApi_Offcial.ActionFilters
 {
     /// <summary>
-    /// Swagger文件上传参数修正
+    /// Swagger界面文件上传参数修正
     /// </summary>
     public class SwaggerDocUploadFileFilter : IOperationFilter
     {
@@ -12,7 +12,6 @@ namespace WebApi_Offcial.ActionFilters
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="context"></param>
-        /// <exception cref="NotImplementedException"></exception>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             // 获取参数为IFormFile的方法

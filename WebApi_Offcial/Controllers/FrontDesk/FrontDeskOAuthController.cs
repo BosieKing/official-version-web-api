@@ -1,10 +1,10 @@
-﻿using BusinesLogic.Center.Captcha;
-using BusinesLogic.FrontDesk.FrontDeskOAuth;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.DTOs.Center.Captch;
 using Model.DTOs.FronDesk.FrontDeskOAuth;
+using Service.Center.Captcha;
+using Service.FrontDesk.FrontDeskOAuth;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using WebApi_Offcial.ActionFilters.FrontDesk;
@@ -27,7 +27,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <summary>
         /// 构造函数
         /// </summary>
-        public FrontDeskOAuthController(ICaptchaService captchaService, IFrontDeskOAuthService frontDeskOAuthService, IHttpContextAccessor httpContextAccessor)
+        public FrontDeskOAuthController(
+            ICaptchaService captchaService,
+            IFrontDeskOAuthService frontDeskOAuthService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _captchaService = captchaService;
             _httpContextAccessor = httpContextAccessor;
@@ -45,10 +48,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> Registered([FromBody] RegisteredInput input)
         {
-            var result = await _frontDeskOAuthService.Register(input);
+            (string Token, string RefreshToken) result = await _frontDeskOAuthService.Register(input);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return ServiceResult.SetData(true);
+            return ServiceResult.Successed();
         }
         #endregion
 
@@ -63,10 +66,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         public async Task<ActionResult<ServiceResult>> LoginByPassWord([FromBody] LoginByPassWordInput input)
         {
             // 设置返回头
-            var result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
+            (string Token, string RefreshToken) result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return ServiceResult.SetData(true);
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -79,10 +82,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         public async Task<ActionResult<ServiceResult>> LoginByVerifyCode([FromBody] LoginByVerifyCodeInput input)
         {
             // 设置返回头
-            var result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
+            (string Token, string RefreshToken) result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return ServiceResult.SetData(true);
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -97,10 +100,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             await _frontDeskOAuthService.LoginOut(userId, token);
             // 设置返回头
-            var result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
+            (string Token, string RefreshToken) result = await _frontDeskOAuthService.LoginByPassWord(input.Phone, input.IsRemember);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return ServiceResult.SetData(true);
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -114,7 +117,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             string refreshToken = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head];
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var result = await _frontDeskOAuthService.LoginOut(userId, token);
+            bool result = await _frontDeskOAuthService.LoginOut(userId, token);
             return ServiceResult.SetData(result);
         }
         #endregion
@@ -156,8 +159,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> SendRegisterVerifyCode([FromBody] SendPhoneCodeInput input)
         {
-            var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Register, phone: input.Phone);
-            return ServiceResult.SetData(data);
+            return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Register, phone: input.Phone);
         }
 
         /// <summary>
@@ -169,8 +171,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> SendForgetPwdVerifyCode([FromBody] SendPhoneCodeInput input)
         {
-            var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.ForgetPwd, phone: input.Phone);
-            return ServiceResult.SetData(data);
+            return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.ForgetPwd, phone: input.Phone);
         }
 
         /// <summary>
@@ -182,8 +183,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> SendLoginVerifyCode([FromBody] SendPhoneCodeInput input)
         {
-            var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: input.Phone);
-            return ServiceResult.SetData(data);
+            return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: input.Phone);            
         }
         #endregion
 

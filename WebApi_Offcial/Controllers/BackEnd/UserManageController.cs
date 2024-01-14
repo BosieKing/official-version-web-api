@@ -1,8 +1,8 @@
-using BusinesLogic.BackEnd.UserManage;
 using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.UserManage;
+using Service.BackEnd.UserManage;
 using SharedLibrary.Enums;
 using WebApi_Offcial.ActionFilters.BackEnd;
 
@@ -39,8 +39,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getUserPage")]
         public async Task<ActionResult<ServiceResult>> GetUserPage([FromQuery] GetUserPageInput input)
         {
-            var data = await _userManageService.GetUserPage(input);
-            return ServiceResult.SetData(data);
+            PageResult result = await _userManageService.GetUserPage(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getUserRoleList")]
         public async Task<ActionResult<ServiceResult>> GetUserRoleList([FromQuery] IdInput input)
         {
-            var data = await _userManageService.GetUserRoleList(input.Id);
-            return ServiceResult.SetData(data);
+            List<DropdownSelectionResult> result = await _userManageService.GetUserRoleList(input.Id);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -65,8 +65,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("addUser")]
         public async Task<ActionResult<ServiceResult>> AddUser([FromBody] AddUserInput input)
         {
-            var data = await _userManageService.AddUser(input);
-            return ServiceResult.SetData(data);
+            bool result = await _userManageService.AddUser(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -77,8 +77,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("addUserRole")]
         public async Task<ActionResult<ServiceResult>> AddUserRole(AddUserRoleInput input)
         {
-            var data = await _userManageService.AddUserRole(input);
-            return ServiceResult.SetData(data);
+            var result = await _userManageService.AddUserRole(input);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -91,7 +91,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("updateUser")]
         public async Task<ActionResult<ServiceResult>> UpdateUser([FromBody] UpdateUserInput input)
         {
-            var data = await _userManageService.UpdateUser(input);
+            bool result = await _userManageService.UpdateUser(input);
             return ServiceResult.Successed();
         }
 
@@ -117,7 +117,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("updateIsDisableLogin")]
         public async Task<ActionResult<ServiceResult>> UpdateIsDisableLogin([FromBody] UpdateIsDisableLoginInput input)
         {
-            var result = await _userManageService.UpdateIsDisableLogin(input);
+            bool result = await _userManageService.UpdateIsDisableLogin(input);
             return ServiceResult.SetData(result);
         }
 

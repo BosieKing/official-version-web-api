@@ -9,8 +9,12 @@ namespace WebApi_Offcial.MiddleWares
     /// </summary>
     public class FaultToleranceMiddleware
     {
+        /// <summary>
+        /// 请求委托
+        /// </summary>
         private readonly RequestDelegate _next;
         private static readonly ILog log = LogManager.GetLogger("ErrorLog");
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -19,6 +23,7 @@ namespace WebApi_Offcial.MiddleWares
         {
             _next = next;
         }
+
         /// <summary>
         /// 中间件方法
         /// </summary>
@@ -45,7 +50,7 @@ namespace WebApi_Offcial.MiddleWares
         }
 
         /// <summary>
-        /// 友好返回错误信息
+        /// 返回错误信息友好化
         /// </summary>
         /// <param name="exception"></param>
         /// <param name="context"></param>

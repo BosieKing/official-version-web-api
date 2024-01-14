@@ -145,7 +145,7 @@ namespace IDataSphere.DatabaseContexts
         private ModelBuilder EntityInjection(ModelBuilder modelBuilder)
         {
             Assembly assembly = Assembly.Load("Model");
-            var types = assembly.GetTypes().Where(p => p.IsClass && !p.IsInterface && !p.IsSealed && p.Namespace.EndsWith("Repositoty") && p.Name != nameof(EntityBaseDO) && p.Name != nameof(EntityTenantDO))
+            List<Type> types = assembly.GetTypes().Where(p => p.IsClass && !p.IsInterface && !p.IsSealed && p.Namespace.EndsWith("Repositoty") && p.Name != nameof(EntityBaseDO) && p.Name != nameof(EntityTenantDO))
                                                   .Where(p => p.BaseType.Name == nameof(EntityBaseDO) || p.BaseType.Name == nameof(EntityTenantDO))
                                                   .ToList();
             types.ForEach(item =>

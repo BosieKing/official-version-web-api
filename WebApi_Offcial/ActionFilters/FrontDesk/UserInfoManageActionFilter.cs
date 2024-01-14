@@ -1,11 +1,11 @@
-﻿using BusinesLogic.Center.Captcha;
-using IDataSphere.Interfaces.FronDesk;
+﻿using IDataSphere.Interfaces.FronDesk;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.DTOs.FronDesk.UserInfoManage;
 using Model.Repositotys;
+using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;

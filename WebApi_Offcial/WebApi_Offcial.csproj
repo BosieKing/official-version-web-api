@@ -60,9 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BusinesLogic\BusinesLogic.csproj" />
     <ProjectReference Include="..\DataSphere\DataSphere.csproj" />
     <ProjectReference Include="..\IDataSphere\IDataSphere.csproj" />
+    <ProjectReference Include="..\Service\Service.csproj" />
     <ProjectReference Include="..\UtilityToolkit\UtilityToolkit.csproj" />
   </ItemGroup>
 

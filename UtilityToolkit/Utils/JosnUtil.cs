@@ -6,7 +6,7 @@ namespace UtilityToolkit.Utils
     public static class JosnUtil
     {
         /// <summary>
-        /// 对象转字符串
+        /// Object转字符串
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>

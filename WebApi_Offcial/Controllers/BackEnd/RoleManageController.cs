@@ -1,10 +1,11 @@
-﻿using BusinesLogic.BackEnd.RoleManage;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.RoleManage;
+using Service.BackEnd.RoleManage;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
+using WebApi_Offcial.ActionFilters.BackEnd;
 
 namespace WebApi_Offcial.Controllers.BackEnd
 {
@@ -13,6 +14,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
     /// </summary>
     [ApiController]
     [Route("RoleManage")]
+    [ServiceFilter(typeof(RoleManageActionFilter))]
     [ApiDescription(SwaggerGroupEnum.BackEnd)]
     public class RoleManageController : BaseController
     {
@@ -39,8 +41,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getRolePage")]
         public async Task<ActionResult<ServiceResult>> GetRolePage([FromQuery] GetRolePageInput input)
         {
-            var data = await _roleManageService.GetRolePage(input);
-            return ServiceResult.SetData(data);
+            PageResult result = await _roleManageService.GetRolePage(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -51,8 +53,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getRoleMenu")]
         public async Task<ActionResult<ServiceResult>> GetRoleMenuList([FromQuery] IdInput input)
         {
-            var data = await _roleManageService.GetRoleMenuList(input);
-            return ServiceResult.SetData(data);
+            dynamic result = await _roleManageService.GetRoleMenuList(input);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -65,8 +67,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("addRole")]
         public async Task<ActionResult<ServiceResult>> AddRole([FromBody] AddRoleInput input)
         {
-            var data = await _roleManageService.AddRole(input);
-            return ServiceResult.SetData(data);
+            var result = await _roleManageService.AddRole(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -75,11 +77,11 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost("addRoleMenu")]
-        public async Task<ActionResult<ServiceResult>> addRoleMenu([FromBody] AddRoleMenuInput input)
+        public async Task<ActionResult<ServiceResult>> AddRoleMenu([FromBody] AddRoleMenuInput input)
         {
             string tenantId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value;
-            var data = await _roleManageService.AddRoleMenu(input, tenantId);
-            return ServiceResult.SetData(data);
+            bool result = await _roleManageService.AddRoleMenu(input, tenantId);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -92,8 +94,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("updateRole")]
         public async Task<ActionResult<ServiceResult>> UpdateRole([FromBody] UpdateRoleInput input)
         {
-            var data = await _roleManageService.UpdateRole(input);
-            return ServiceResult.SetData(data);
+            bool result = await _roleManageService.UpdateRole(input);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -106,8 +108,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("deleteRole")]
         public async Task<ActionResult<ServiceResult>> DeleteRole([FromBody] IdInput input)
         {
-            var data = await _roleManageService.DeleteRole(input.Id);
-            return ServiceResult.SetData(data);
+            bool result = await _roleManageService.DeleteRole(input.Id);
+            return ServiceResult.SetData(result);
         }
         #endregion
     }

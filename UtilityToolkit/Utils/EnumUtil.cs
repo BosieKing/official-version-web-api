@@ -39,7 +39,7 @@ namespace UtilityToolkit.Utils
         /// </summary>
         /// <param name="enumType"></param>
         /// <returns>枚举属性名称集合</returns>
-        public static string[] GetKeyList(this Type enumType)
+        public static string[] GetKeyArray(this Type enumType)
         {
             return Enum.GetNames(enumType);
         }
@@ -81,8 +81,7 @@ namespace UtilityToolkit.Utils
         /// <returns></returns>
         public static string GetDescription(this Enum value)
         {
-            return value.GetType().GetMember(value.ToString()).FirstOrDefault()?.GetCustomAttribute<DescriptionAttribute>()
-                ?.Description;
+            return value.GetType().GetMember(value.ToString()).FirstOrDefault()?.GetCustomAttribute<DescriptionAttribute>()?.Description;
         }
     }
 }

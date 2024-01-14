@@ -1,8 +1,8 @@
-﻿using BusinesLogic.Center.Captcha;
-using BusinesLogic.FrontDesk.UserInfoManage;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.DTOs.FronDesk.UserInfoManage;
+using Service.Center.Captcha;
+using Service.FrontDesk.UserInfoManage;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
@@ -23,10 +23,14 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         private readonly IUserInfoManageService _userInfoManageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICaptchaService _captchaService;
+
         /// <summary>
         /// 构造函数
         /// </summary>
-        public UserInfoManageController(ICaptchaService captchaService, IHttpContextAccessor httpContextAccessor, IUserInfoManageService userInfoManageService)
+        public UserInfoManageController(
+            ICaptchaService captchaService,
+            IHttpContextAccessor httpContextAccessor,
+            IUserInfoManageService userInfoManageService)
         {
             _captchaService = captchaService;
             _httpContextAccessor = httpContextAccessor;
@@ -42,7 +46,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [HttpGet("getUserInfo")]
         public async Task<ActionResult<ServiceResult>> GetUserInfo()
         {           
-            var result = await _userInfoManageService.GetUserInfo();
+            dynamic result = await _userInfoManageService.GetUserInfo();
             return ServiceResult.SetData(result);
         }
         #endregion
@@ -98,8 +102,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("updatePasswordByCode")]
         public async Task<ActionResult<ServiceResult>> UpdatePasswordByCode([FromBody] UpdatePasswordByCodeInput input)
-        {
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
+        {          
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             bool result = await _userInfoManageService.UpdatePassword(input.NewPassword, token);
             return ServiceResult.SetData(result);
@@ -107,7 +110,6 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         #endregion
 
         #region 删除
-
         /// <summary>
         /// 退出登录
         /// </summary>
@@ -118,7 +120,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             string token = Request.Headers[ClaimsUserConst.HTTP_Token_Head].ToString();
             string referenceToken = Request.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head].ToString();
-            var result = await RedisMulititionHelper.LoginOut(userId.ToString(), token);
+            bool result = await RedisMulititionHelper.LoginOut(userId.ToString(), token);
             return ServiceResult.Successed();
         }
         #endregion

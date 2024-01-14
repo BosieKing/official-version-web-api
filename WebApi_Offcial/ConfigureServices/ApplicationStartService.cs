@@ -1,7 +1,7 @@
 ﻿namespace WebApi_Offcial.ConfigureServices
 {
     /// <summary>
-    /// 启动和关闭事件
+    /// 应用启动和关闭事件
     /// </summary>
     public class ApplicationStartService : IHostedService
     {

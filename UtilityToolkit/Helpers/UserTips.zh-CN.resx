@@ -252,6 +252,9 @@
   <data name="RoleNotExist" xml:space="preserve">
     <value>角色不存在</value>
   </data>
+  <data name="RoleNotUnboundByUser" xml:space="preserve">
+    <value>角色已绑定用户，请解除绑定后再次重试</value>
+  </data>
   <data name="RouterRequired" xml:space="preserve">
     <value>路由地址不能为空</value>
   </data>

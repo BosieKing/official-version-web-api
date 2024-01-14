@@ -90,8 +90,8 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> AddDirectoryVerify(AddDirectoryInput input)
         {
-            bool result = await _menuDao.DataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath);
-            if (result)
+            bool dataExisted = await _menuDao.DataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath);
+            if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
@@ -125,13 +125,13 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> AddMenuButtonVerify(AddMenuButtonInput input)
         {
-            bool existed = await _menuDao.IdExisted<T_Menu>(input.MenuId);
-            if (!existed)
+            bool idExisted = await _menuDao.IdExisted<T_Menu>(input.MenuId);
+            if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["MenuNotExist"].Value);
             }
-            bool result = await _menuDao.DataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName);
-            if (result)
+            bool dataExisted = await _menuDao.DataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName);
+            if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
@@ -145,8 +145,8 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> UpdateDirectoryVerify(UpdateDirectoryInput input)
         {
-            bool result = await _menuDao.DataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Id != input.Id);
-            if (result)
+            bool nameExisted = await _menuDao.DataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Id != input.Id);
+            if (nameExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
@@ -160,13 +160,13 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> UpdateMeunVerify(UpdateMeunInput input)
         {
-            bool existed = await _menuDao.IdExisted<T_Directory>(input.DirectoryId);
-            if (!existed)
+            bool idExisted = await _menuDao.IdExisted<T_Directory>(input.DirectoryId);
+            if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
-            bool result = await _menuDao.DataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router && p.Id != input.Id);
-            if (result)
+            bool dataExisted = await _menuDao.DataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router && p.Id != input.Id);
+            if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
@@ -180,13 +180,13 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> UpdateMenuButtonVerify(UpdateMenuButtonInput input)
         {
-            bool existed = await _menuDao.IdExisted<T_Menu>(input.MenuId);
-            if (!existed)
+            bool idExisted = await _menuDao.IdExisted<T_Menu>(input.MenuId);
+            if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["MenuNotExist"].Value);
             }
-            bool result = await _menuDao.DataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName && p.Id != input.Id);
-            if (result)
+            bool dataExisted = await _menuDao.DataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName && p.Id != input.Id);
+            if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
             }
@@ -200,13 +200,14 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> DeleteDirectoryVerify(IdInput input)
         {
+            // 验证目录是否已经和菜单解除绑定
             bool unbound = await _menuDao.DataExisted<T_Menu>(p => p.DirectoryId == input.Id);
             if (unbound)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotUnbound"].Value);
             }
-            bool result = await _menuDao.IdExisted<T_Directory>(input.Id);
-            if (!result)
+            bool idExisted = await _menuDao.IdExisted<T_Directory>(input.Id);
+            if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }
@@ -220,8 +221,8 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> DeleteMenuVerify(IdInput input)
         {
-            bool result = await _menuDao.IdExisted<T_Menu>(input.Id);
-            if (!result)
+            bool idExisted = await _menuDao.IdExisted<T_Menu>(input.Id);
+            if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }
@@ -235,8 +236,8 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> DeleteMenuButtonVerify(IdInput input)
         {
-            bool result = await _menuDao.IdExisted<T_MenuButton>(input.Id);
-            if (!result)
+            bool idExisted = await _menuDao.IdExisted<T_MenuButton>(input.Id);
+            if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }

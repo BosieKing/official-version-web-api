@@ -21,9 +21,9 @@ namespace WebApi_Offcial.ConfigureServices
             return services.AddSwaggerGen(options =>
             {
                 // 创造文档
-                string[] groupList = typeof(SwaggerGroupEnum).GetKeyList();
-                var groupDic = typeof(SwaggerGroupEnum).TryParseDic();
-                foreach (var p in groupList)
+                string[] groupArray = typeof(SwaggerGroupEnum).GetKeyArray();
+                Dictionary<string, string> groupDic = typeof(SwaggerGroupEnum).TryParseDic();
+                foreach (string p in groupArray)
                 {
                     // 声明swagger文档版本内容
                     options.SwaggerDoc(p, new OpenApiInfo
@@ -42,7 +42,6 @@ namespace WebApi_Offcial.ConfigureServices
                         }
                     });
                 }
-
                 // 声明一个认证方式
                 options.AddSecurityDefinition("JwtBearer", new OpenApiSecurityScheme
                 {
@@ -58,26 +57,23 @@ namespace WebApi_Offcial.ConfigureServices
 
                 });
                 // 声明一个组合，指定这个组合与上方认证方式搭配                
-                var scheme = new OpenApiSecurityScheme()
+                OpenApiSecurityScheme scheme = new()
                 {
                     Reference = new OpenApiReference() { Type = ReferenceType.SecurityScheme, Id = "JwtBearer" }
                 };
-
                 // 注册请求的时候必须使用该验证方式
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement { [scheme] = new string[0] });
-
                 // 分组下拉回调
                 options.DocInclusionPredicate((docName, apiDescription) =>
                 {
+                    // 没有包含任何Http请求方法不在文档展示
                     if (apiDescription.HttpMethod == null)
-                    {
-                        // 没有包含任何Http请求方法不在文档展示
+                    {                        
                         return false;
                     }
-                    // 是对应分组的方法返回
+                    // 对应分组的方法返回
                     return apiDescription.GroupName == docName;
                 });
-
                 // 按请求类型排序
                 options.OrderActionsBy(p => p.HttpMethod);
                 // 加载写的注释
@@ -91,13 +87,14 @@ namespace WebApi_Offcial.ConfigureServices
         /// <summary>
         /// 配置UI
         /// </summary>
+        /// <param name="app"></param>
         /// <returns></returns>
         public static IApplicationBuilder UseSwaggerUIOption(this IApplicationBuilder app)
         {
             return app.UseSwaggerUI(options =>
             {
-                var groupList = typeof(SwaggerGroupEnum).GetKeyList();
-                foreach (var p in groupList)
+                string[] groupArray = typeof(SwaggerGroupEnum).GetKeyArray();
+                foreach (string p in groupArray)
                 {
                     // 默认不展开
                     options.DocExpansion(DocExpansion.None);

@@ -4,8 +4,9 @@ using WebApi_Offcial.ActionFilters;
 namespace WebApi_Offcial.Controllers
 {
     /// <summary>
-    /// 自定义所有控制器的父类
+    /// 权限验证控制器
     /// </summary>
+    /// <remarks>Controller继承此类实现菜单权限验证</remarks>
     [TypeFilter(typeof(MenusAndButtonsAuthorizationFilter))]
     public class BaseController : ControllerBase
     {

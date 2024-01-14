@@ -125,10 +125,10 @@ namespace UtilityToolkit.Tools
         /// <returns></returns>
         public static string GenerateRandomCode()
         {
-            var result = new StringBuilder();
+            StringBuilder result = new();
             for (var i = 0; i < 6; i++)
             {
-                var r = new Random(Guid.NewGuid().GetHashCode());
+                Random r = new Random(Guid.NewGuid().GetHashCode());
                 result.Append(r.Next(0, 10));
             }
             return result.ToString();

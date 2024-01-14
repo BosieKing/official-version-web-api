@@ -1,11 +1,11 @@
-﻿using BusinesLogic.BackEnd.BackEndOAuthManage;
-using BusinesLogic.Center.Captcha;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Commons.CoreData;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.BackEndOAuthManage;
+using Service.BackEnd.BackEndOAuthManage;
+using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using System.ComponentModel.DataAnnotations;
@@ -50,17 +50,17 @@ namespace WebApi_Offcial.Controllers.BackEnd
         public async Task<ActionResult<ServiceResult>> getMenuTree()
         {
             bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
-            List<MenuTreeModel> list;
+            List<MenuTreeModel> result;
             if (isSuperManage)
             {
-                list = await _backEndOAuthManageService.GetSuperManageMenuTree();
+                result = await _backEndOAuthManageService.GetSuperManageMenuTree();
             }
             else
             {
                 string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID).Value;
-                list = await _backEndOAuthManageService.GetMenuTree(roleIds);
+                result = await _backEndOAuthManageService.GetMenuTree(roleIds);
             }
-            return ServiceResult.SetData(list);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -71,9 +71,9 @@ namespace WebApi_Offcial.Controllers.BackEnd
         public async Task<ActionResult<ServiceResult>> GetUserInfo()
         {
             // todo:获取用户信息，完成
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value;
-            var data = await _backEndOAuthManageService.GetUserInfo(long.Parse(userId));
-            return ServiceResult.SetData(data);
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value;
+            dynamic result = await _backEndOAuthManageService.GetUserInfo(long.Parse(userId));
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -87,14 +87,14 @@ namespace WebApi_Offcial.Controllers.BackEnd
             bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
             if (isSuperManage)
             {
-                string[] list = await _backEndOAuthManageService.GetSuperManageButtonArray();
-                return ServiceResult.SetData(list);
+                string[] result = await _backEndOAuthManageService.GetSuperManageButtonArray();
+                return ServiceResult.SetData(result);
             }
             else
             {
                 var roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID).Value;
-                var list = await _backEndOAuthManageService.GetButtonArray(roleIds);
-                return ServiceResult.SetData(list);
+                var result = await _backEndOAuthManageService.GetButtonArray(roleIds);
+                return ServiceResult.SetData(result);
             }
         }
 
@@ -110,13 +110,13 @@ namespace WebApi_Offcial.Controllers.BackEnd
             bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
             if (isSuperManage)
             {
-                var data = await _backEndOAuthManageService.GetSuperManageBindTenantList(userId);
-                return ServiceResult.SetData(data);
+                var result = await _backEndOAuthManageService.GetSuperManageBindTenantList(userId);
+                return ServiceResult.SetData(result);
             }
             else
             {
-                var data = await _backEndOAuthManageService.GetBindTenantList(userId);
-                return ServiceResult.SetData(data);
+                var result = await _backEndOAuthManageService.GetBindTenantList(userId);
+                return ServiceResult.SetData(result);
             }
 
         }
@@ -133,7 +133,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         public async Task<ActionResult<ServiceResult>> LoginByPassword([FromBody] BackEndLoginByPasswordInput input)
         {
             // 设置返回头
-            var result = await _backEndOAuthManageService.LoginByPassWord(input.IsRemember, phone: input.Phone);
+            (string Token, string RefreshToken) result = await _backEndOAuthManageService.LoginByPassWord(input.IsRemember, phone: input.Phone);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
             return ServiceResult.SetData(true);
@@ -149,7 +149,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         public async Task<ActionResult<ServiceResult>> LoginByVerifyCode([FromBody] BackEndLoginByVerifyCodeInput input)
         {
             // 设置返回头
-            var result = await _backEndOAuthManageService.LoginByPassWord(input.IsRemember, phone: input.Phone);
+            (string Token, string RefreshToken) result = await _backEndOAuthManageService.LoginByPassWord(input.IsRemember, phone: input.Phone);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
             return ServiceResult.SetData(true);
@@ -168,12 +168,11 @@ namespace WebApi_Offcial.Controllers.BackEnd
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             long tenantId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.TENANT_ID).Value);
             bool isRemember = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_REMEMBER).Value);
-            var result = await _backEndOAuthManageService.LoginByPassWord(isRemember, userId: userId, tenantId: tenantId);
+            (string Token, string RefreshToken) result = await _backEndOAuthManageService.LoginByPassWord(isRemember, userId: userId, tenantId: tenantId);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
             return ServiceResult.SetData(true);
         }
-
 
         /// <summary>
         /// 退出
@@ -186,7 +185,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             string refreshToken = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head];
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var result = await RedisMulititionHelper.LoginOut(userId.ToString(), token);
+            bool result = await RedisMulititionHelper.LoginOut(userId.ToString(), token);
             return ServiceResult.SetData(result);
         }
         #endregion
@@ -202,7 +201,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         {
             // todo:修改用户信息
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var result = await _backEndOAuthManageService.UpdateUserInfo(input, userId);
+            bool result = await _backEndOAuthManageService.UpdateUserInfo(input, userId);
             return ServiceResult.SetData(result);
         }
 
@@ -217,7 +216,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
             // todo:修改密码
             // 设置返回头
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var result = await _backEndOAuthManageService.UpdatePassword(input, userId);
+            bool result = await _backEndOAuthManageService.UpdatePassword(input, userId);
             return ServiceResult.SetData(result);
         }
 
@@ -233,8 +232,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         {
             string url = "测试头像地址";
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            bool data = await _backEndOAuthManageService.UploadAvatar(url, userId);
-            return ServiceResult.SetData(data);
+            bool result = await _backEndOAuthManageService.UploadAvatar(url, userId);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -247,8 +246,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> GetGraphicCaptcha()
         {
-            dynamic data = await _captchaService.GetGraphicCaptcha();
-            return ServiceResult.SetData(data);
+            dynamic result = await _captchaService.GetGraphicCaptcha();
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -262,8 +261,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [Required(ErrorMessage = "PhoneRequired")]
         [RegularExpression(@"^1[3|4|5|7|8|9][0-9]{9}$", ErrorMessage = "PhoneFormatError")] string phone)
         {
-            var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: phone);
-            return ServiceResult.SetData(data);
+            return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: phone);
         }
 
         /// <summary>
@@ -276,8 +274,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         {
             // todo:发送修改密码验证码
             var userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            var data = await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.UpdatePwd, userId: userId);
-            return ServiceResult.SetData(data);
+            return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.UpdatePwd, userId: userId);
         }
         #endregion
     }

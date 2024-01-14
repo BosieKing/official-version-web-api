@@ -29,24 +29,27 @@ namespace WebApi_Offcial.ActionFilters
         public Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             return Task.CompletedTask;
+            // 判断是否是超管
             bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
             if (isSuperManage)
             {
                 return Task.CompletedTask;
             }
-            string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID)?.Value ?? "";
-            long tenantId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value ?? "0");
-            // 权限处理
-            string actioName = context.RouteData.Values["action"].ToString().ToLower();
-            string controllerName = context.RouteData.Values["controller"].ToString().ToLower();
-            if (!RedisMulititionHelper.HasRole(roleIds.Split(","), controllerName, tenantId))
+            else
             {
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                var result = ServiceResult.IsFailure("无权访问");
-                // 管道短路
-                context.Result = new JsonResult(result);
-                return Task.CompletedTask;
-            }
+                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID)?.Value ?? "";
+                long tenantId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value ?? "0");
+                // 判断有无权限访问此接口
+                string actioName = context.RouteData.Values["action"].ToString().ToLower();
+                string controllerName = context.RouteData.Values["controller"].ToString().ToLower();
+                if (!RedisMulititionHelper.HasRole(roleIds.Split(","), controllerName, tenantId))
+                {
+                    context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                    // 管道短路
+                    context.Result = new JsonResult(ServiceResult.IsFailure("无权访问"));
+                    return Task.CompletedTask;
+                }
+            } 
             return Task.CompletedTask;
         }
     }

@@ -1,10 +1,10 @@
-﻿using BusinesLogic.Center.Captcha;
-using IDataSphere.Interfaces.FronDesk;
+﻿using IDataSphere.Interfaces.FronDesk;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.DTOs.FronDesk.FrontDeskOAuth;
+using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
@@ -89,10 +89,10 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> LoginByPassWordVerify(LoginByPassWordInput input)
         {
             // 验证滑动验证码值
-            var result = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
-            if (!result.Success)
+            ServiceResult captchaResult = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
+            if (!captchaResult.Success)
             {
-                return result;
+                return captchaResult;
             }
             // 判断账号是否注册
             bool accountExist = await _frontDeskOAuthDao.PhoneExiste(input.Phone);
@@ -100,11 +100,11 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
-            // 密码出错有效期 
+            // 允许密码出错有效时间
             int pwdExpirationTime = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorCountExpirationTime * 60;
-            // 密码最大出错次数
+            // 允许密码最大出错次数
             int pwdErrorMaxCount = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorMaxCount;
-            // 密码出错次数Key
+            // 密码已出错次数Key
             string passwordErrorCountKey = CaptchaCacheConst.PASSWORD_ERROR_COUNT_KEY + input.Phone;
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
             // 获取密码已出错次数
@@ -117,18 +117,16 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 long expTime = redisClient.Ttl(passwordErrorCountKey);
                 return ServiceResult.IsFailure(_stringLocalizer["PasswrodErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
-
-            // 判断密码是否正确
+            // 判断密码是否匹配
             bool passWordExist = await _frontDeskOAuthDao.PassWordExiste(input.Phone, input.Password);
-            // 密码不存在
+            // 密码不匹配
             if (!passWordExist)
-            {
+            {                
                 passwordErrorCount++;
                 redisClient.Set(passwordErrorCountKey, passwordErrorCount, pwdExpirationTime);
                 return ServiceResult.IsFailure(_stringLocalizer["PasswrodError"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
             }
-            // 走到这里代表密码、验证码完全匹配
-            // 删除Key
+            // 完全匹配删除Key
             redisClient.Del(passwordErrorCountKey);
             return ServiceResult.Successed();
         }
@@ -143,7 +141,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             // 获取缓存中的滑动验证码值
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
             // 验证滑动验证码值
-            var captchaResult = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
+            ServiceResult captchaResult = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
             if (!captchaResult.Success)
             {
                 return captchaResult;
@@ -155,7 +153,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
-            var phoneCodeResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Login, input.Phone, input.VerifyCode);
+            ServiceResult phoneCodeResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Login, input.Phone, input.VerifyCode);
             if (!phoneCodeResult.Success)
             {
                 return phoneCodeResult;
@@ -171,7 +169,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> RegisteredVerify(RegisteredInput input)
         {
             // 验证邀请码是否正确
-            var tenandInfo = await _frontDeskOAuthDao.GetIdByInviteCode(input.InviteCode);
+            (long Id, string Code) tenandInfo = await _frontDeskOAuthDao.GetIdByInviteCode(input.InviteCode);
             if (tenandInfo.Id.Equals(0))
             {
                 return ServiceResult.IsFailure(_stringLocalizer["InviteCodeError"].Value);
@@ -183,10 +181,10 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return ServiceResult.IsFailure(_stringLocalizer["UserExisted"].Value);
             }
             // 验证验证码是否匹配
-            var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Register, input.Phone, input.VerifyCode);
-            if (!result.Success)
+            ServiceResult codeVerifyResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Register, input.Phone, input.VerifyCode);
+            if (!codeVerifyResult.Success)
             {
-                return result;
+                return codeVerifyResult;
             }
             return ServiceResult.Successed();
         }
@@ -205,10 +203,10 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
-            var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.ForgetPwd, input.Phone, input.VerifyCode);
-            if (!result.Success)
+            ServiceResult codeVerifyResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.ForgetPwd, input.Phone, input.VerifyCode);
+            if (!codeVerifyResult.Success)
             {
-                return result;
+                return codeVerifyResult;
             }
             return ServiceResult.Successed();
         }

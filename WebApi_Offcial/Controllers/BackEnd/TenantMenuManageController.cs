@@ -1,8 +1,8 @@
-using BusinesLogic.BackEnd.TenantMenuManage;
 using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.TenantMenuManage;
+using Service.BackEnd.TenantMenuManage;
 using SharedLibrary.Enums;
 using WebApi_Offcial.ActionFilters.BackEnd;
 
@@ -39,8 +39,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getPage")]
         public async Task<ActionResult<ServiceResult>> GetPage([FromQuery] GetTenantMenuPageInput input)
         {
-            var data = await _tenantMenuManageService.GetPage(input);
-            return ServiceResult.SetData(data);
+            PageResult result = await _tenantMenuManageService.GetPage(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getTenantDirectory")]
         public async Task<ActionResult<ServiceResult>> GetTenantDirectory()
         {
-            var data = await _tenantMenuManageService.GetTenantDirectory();
-            return ServiceResult.SetData(data);
+            List<DropdownDataResult> result = await _tenantMenuManageService.GetTenantDirectory();
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -64,7 +64,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("addTenantDirectory")]
         public async Task<ActionResult<ServiceResult>> AddTenantDirectory([FromBody] AddTenantDirectoryInput input)
         {
-            var result = await _tenantMenuManageService.AddTenantDirectory(input);
+            bool result = await _tenantMenuManageService.AddTenantDirectory(input);
             return ServiceResult.SetData(result);
         }
 
@@ -76,7 +76,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("addTenantMenu")]
         public async Task<ActionResult<ServiceResult>> AddTenantMenu([FromBody] AddTenantMenuInput input)
         {
-            var result = await _tenantMenuManageService.AddTenantMenu(input);
+            bool result = await _tenantMenuManageService.AddTenantMenu(input);
             return ServiceResult.SetData(result);
         }
 
@@ -88,7 +88,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("addTenantMenuButton")]
         public async Task<ActionResult<ServiceResult>> AddTenantMenuButton([FromBody] AddTenantMenuButtonInput input)
         {
-            var result = await _tenantMenuManageService.AddTenantMenuButton(input);
+            bool result = await _tenantMenuManageService.AddTenantMenuButton(input);
             return ServiceResult.SetData(result);
         }
         #endregion
@@ -102,7 +102,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("updateTenantDirectory")]
         public async Task<ActionResult<ServiceResult>> UpdateTenantDirectory([FromBody] UpdateTenantDirectoryInput input)
         {
-            var result = await _tenantMenuManageService.UpdateTenantDirectory(input);
+            bool result = await _tenantMenuManageService.UpdateTenantDirectory(input);
             return ServiceResult.SetData(result);
         }
 
@@ -114,7 +114,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("updateTenantMenu")]
         public async Task<ActionResult<ServiceResult>> UpdateTenantMenu([FromBody] UpdateTenantMenuInput input)
         {
-            var result = await _tenantMenuManageService.UpdateTenantMenu(input);
+            bool result = await _tenantMenuManageService.UpdateTenantMenu(input);
             return ServiceResult.SetData(result);
         }
 
@@ -126,7 +126,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("updateTenantMenuButton")]
         public async Task<ActionResult<ServiceResult>> UpdateTenantMenuButton([FromBody] UpdateTenantMenuButtonInput input)
         {
-            var result = await _tenantMenuManageService.UpdateTenantMenuButton(input);
+            bool result = await _tenantMenuManageService.UpdateTenantMenuButton(input);
             return ServiceResult.SetData(result);
         }
         #endregion
@@ -140,7 +140,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("deleteTenantDirectory")]
         public async Task<ActionResult<ServiceResult>> DeleteTenantDirectory([FromBody] IdInput input)
         {
-            var result = await _tenantMenuManageService.DeleteTenantDirectory(input.Id);
+            bool result = await _tenantMenuManageService.DeleteTenantDirectory(input.Id);
             return ServiceResult.SetData(result);
         }
 
@@ -152,7 +152,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("deleteTenantMenu")]
         public async Task<ActionResult<ServiceResult>> DeleteTenantMenu([FromBody] IdInput input)
         {
-            var result = await _tenantMenuManageService.DeleteTenantMenu(input.Id);
+            bool result = await _tenantMenuManageService.DeleteTenantMenu(input.Id);
             return ServiceResult.SetData(result);
         }
 
@@ -164,7 +164,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("deleteTenantMenuButton")]
         public async Task<ActionResult<ServiceResult>> DeleteTenantMenuButton([FromBody] IdInput input)
         {
-            var result = await _tenantMenuManageService.DeleteTenantMenuButton(input.Id);
+            bool result = await _tenantMenuManageService.DeleteTenantMenuButton(input.Id);
             return ServiceResult.SetData(result);
         }
         #endregion

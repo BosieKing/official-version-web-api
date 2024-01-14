@@ -22,12 +22,17 @@ namespace WebApi_Offcial.ConfigureServices
     {
         private readonly HttpContextAccessor _httpContextAccessor;
         private static JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-        private static SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigSettingTool.JwtConfigOptions.IssuerSigningKey));
+        private static SymmetricSecurityKey Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigSettingTool.JwtConfigOptions.IssuerSigningKey));
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public JwtHandler(HttpContextAccessor httpContextAccessor, IOptionsMonitor<JwtBearerOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+        public JwtHandler(
+            HttpContextAccessor httpContextAccessor, 
+            IOptionsMonitor<JwtBearerOptions> options,
+            ILoggerFactory logger, 
+            UrlEncoder encoder,
+            ISystemClock clock) : base(options, logger, encoder, clock)
         {
             _httpContextAccessor = httpContextAccessor;
         }
@@ -43,8 +48,9 @@ namespace WebApi_Offcial.ConfigureServices
             {
                 return await Task.FromResult(AuthenticateResult.Fail("Token不能为空"));
             }
+            // 获取Token
             string token = Request.Headers[ClaimsUserConst.HTTP_Token_Head].ToString().Substring("bearer".Length).Trim();
-            // 验证Token信息
+            // 判断Token是否合法
             if (!jwtSecurityTokenHandler.CanReadToken(token))
             {
                 return await Task.FromResult(AuthenticateResult.Fail(""));
@@ -60,21 +66,22 @@ namespace WebApi_Offcial.ConfigureServices
                     ValidAudience = ConfigSettingTool.JwtConfigOptions.Audience,
                     ValidateLifetime = ConfigSettingTool.JwtConfigOptions.IsValidateExpirationTime,
                     ValidateIssuerSigningKey = ConfigSettingTool.JwtConfigOptions.IsValidateIssuerSigningKey,
-                    IssuerSigningKey = key,
+                    IssuerSigningKey = Key,
                     ClockSkew = TimeSpan.Zero
                 };
                 try
                 {  // 获取令牌完整信息
-                    var claimsPrincipal = jwtSecurityTokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
+                    ClaimsPrincipal claimsPrincipal = jwtSecurityTokenHandler.ValidateToken(token, parameters, out SecurityToken validatedToken);
                     string userId = claimsPrincipal.FindFirstValue(ClaimsUserConst.USER_ID);
-                    // 判断这个token是否已经手动注销->退出、修改密码等情况
+                    // 判断这个token是否已经手动注销（退出、修改密码等情况）
                     bool hasBlack = await RedisMulititionHelper.IsWork(userId, token);
                     if (hasBlack)
                     {
                         return await Task.FromResult(AuthenticateResult.Fail(""));
                     }
-                    // 有无需要重新获取新token->绑定角色之类的，需要修改token信息
-                    if (await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HExistsAsync(UserCacheConst.MAKE_IN_TABLE, userId))
+                    // 是否需要重载token信息，如需重载则重新生成Token信息
+                    bool needReload = await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HExistsAsync(UserCacheConst.MAKE_IN_TABLE, userId);
+                    if (needReload)
                     {
                         throw new Exception("");
                     }
@@ -90,8 +97,8 @@ namespace WebApi_Offcial.ConfigureServices
                         long userId = long.Parse(refreshClaimsPrincipal.Claims.FirstOrDefault(p => p.Type == ClaimsUserConst.USER_ID).Value);
                         long tenantId = long.Parse(refreshClaimsPrincipal.Claims.FirstOrDefault(p => p.Type == ClaimsUserConst.TENANT_ID).Value);
                         string key = UserCacheConst.USER_INFO_TABLE + tenantId;
-                        var userInfo = await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HGetAsync(key, userId.ToString());
-                        var user = userInfo.ToObject<TokenInfoModel>();
+                        string userInfo = await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HGetAsync(key, userId.ToString());
+                        TokenInfoModel user = userInfo.ToObject<TokenInfoModel>();
                         token = TokenTool.CreateToken(user, RedisMulititionHelper.IsSuperManage(user.TenantId));
                         await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
                         _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = token;

@@ -1,9 +1,9 @@
-﻿using BusinesLogic.BackEnd.TenantManage;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.TenantManage;
+using Service.BackEnd.TenantManage;
 using SharedLibrary.Enums;
 using WebApi_Offcial.ActionFilters.BackEnd;
 
@@ -45,8 +45,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> GetTenantPage([FromQuery] GetTenantPageInput input)
         {
-            var data = await _tenantManagerService.GetTenantPage(input);
-            return ServiceResult.SetData(data);
+            PageResult result = await _tenantManagerService.GetTenantPage(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> GetTenantMenuList([FromQuery] IdInput input)
         {
-            var data = await _tenantManagerService.GetTenantMenuList(input);
-            return ServiceResult.SetData(data);
+            List<DropdownSelectionResult> result = await _tenantManagerService.GetTenantMenuList(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -71,8 +71,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> GetTenantDirectoryList([FromQuery] IdInput input)
         {
-            var data = await _tenantManagerService.GetTenantDirectoryList(input.Id);
-            return ServiceResult.SetData(data);
+            List<DropdownDataResult> result = await _tenantManagerService.GetTenantDirectoryList(input.Id);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -85,8 +85,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("addTenant")]
         public async Task<ActionResult<ServiceResult>> AddTenant([FromBody] AddTenantInput input)
         {
-            var data = await _tenantManagerService.AddTenant(input);
-            return ServiceResult.SetData(data);
+            bool result = await _tenantManagerService.AddTenant(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("pushTenantMenu")]
         public async Task<ActionResult<ServiceResult>> PushTenantMenu([FromBody] PushTenantMenuInput input)
         {
-            var data = await _tenantManagerService.PushTenantMenu(input);
-            return ServiceResult.SetData(data);
+            bool result = await _tenantManagerService.PushTenantMenu(input);
+            return ServiceResult.SetData(result);
         }
         #endregion
 
@@ -111,8 +111,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("updateTenant")]
         public async Task<ActionResult<ServiceResult>> UpdateTenantAsync([FromBody] UpdateTenantInput input)
         {
-            var data = await _tenantManagerService.UpdateTenant(input);
-            return ServiceResult.SetData(data);
+            bool result = await _tenantManagerService.UpdateTenant(input);
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -123,8 +123,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("uptateInviteCode")]
         public async Task<ActionResult<ServiceResult>> UptateInviteCodeAsync([FromBody] IdInput input)
         {
-            var data = await _tenantManagerService.UptateInviteCode(input.Id);
-            return ServiceResult.SetData(data);
+            bool result = await _tenantManagerService.UptateInviteCode(input.Id);
+            return ServiceResult.SetData(result);
         }
         #endregion
 

@@ -1,5 +1,4 @@
-﻿using BusinesLogic.Center.Captcha;
-using IDataSphere.Interfaces.BackEnd;
+﻿using IDataSphere.Interfaces.BackEnd;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
@@ -7,6 +6,7 @@ using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.BackEndOAuthManage;
 using Model.Repositotys;
+using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
@@ -92,16 +92,16 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> LoginByPassWordVerify(BackEndLoginByPasswordInput input)
         {
             // 验证滑动验证码值
-            var result = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
-            if (!result.Success)
+            ServiceResult captchaResult = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
+            if (!captchaResult.Success)
             {
-                return result;
+                return captchaResult;
             }
-            // 密码出错有效期 
+            // 允许密码出错有效期 
             int pwdExpirationTime = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorCountExpirationTime * 60;
-            // 密码最大出错次数
+            // 允许密码最大出错次数
             int pwdErrorMaxCount = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorMaxCount;
-            // 密码出错次数Key
+            // 拼接密码已出错次数Key
             string passwordErrorCountKey = CaptchaCacheConst.PASSWORD_ERROR_COUNT_KEY + input.Phone;
             var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
             // 获取密码已出错次数
@@ -123,12 +123,10 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                 redisClient.Set(passwordErrorCountKey, passwordErrorCount, pwdExpirationTime);
                 return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
             }
-            // 走到这里代表密码、验证码完全匹配
-            // 删除Key
+            // 完全匹配删除Key
             redisClient.Del(passwordErrorCountKey);
             return ServiceResult.Successed();
         }
-
 
         /// <summary>
         /// 验证码登录
@@ -178,6 +176,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         {
             // 判断用户是否在该平台担任管理员
             long uniqueNumber = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.UNIQUE_NUMBER).Value);
+            // 判断是否在选择的平台下担任管理员
             bool isManage = await _backEndOAuthDao.InTenantIsManage(uniqueNumber, input.Id);
             if (!isManage)
             {
@@ -185,7 +184,6 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             }
             return ServiceResult.Successed();
         }
-
 
         /// <summary>
         /// 修改密码验证
@@ -203,10 +201,10 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             }
             // 验证验证码是否匹配
             string phone = await _backEndOAuthDao.GetPhoneById(userId);
-            var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.UpdatePwd, phone, input.VerifyCode);
-            if (!result.Success)
+            ServiceResult codeVerifyResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.UpdatePwd, phone, input.VerifyCode);
+            if (!codeVerifyResult.Success)
             {
-                return result;
+                return codeVerifyResult;
             }
             return ServiceResult.Successed();
         }

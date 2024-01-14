@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using SharedLibrary.Enums;
+using UtilityToolkit.Utils;
 
 namespace WebApi_Offcial.Controllers
 {
     /// <summary>
-    /// 标记此特性可实现Swagger分组 
+    /// Swagger分组特性
     /// </summary>
     public class ApiDescriptionAttribute : Attribute, IApiDescriptionGroupNameProvider
     {
@@ -16,10 +17,10 @@ namespace WebApi_Offcial.Controllers
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="swaggerGroupConst">分组名称</param>
-        public ApiDescriptionAttribute(SwaggerGroupEnum swaggerGroupConst)
+        /// <param name="swaggerGroupEnum"></param>
+        public ApiDescriptionAttribute(SwaggerGroupEnum swaggerGroupEnum)
         {
-            GroupName = swaggerGroupConst.ToString();
+            GroupName = swaggerGroupEnum.ToString();
         }
     }
 }

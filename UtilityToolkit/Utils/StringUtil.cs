@@ -16,7 +16,7 @@
         }
 
         /// <summary>
-        /// 判断是否为null、空、空白字符组合
+        /// 判断字符串是否为null、空、空白字符组合
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>

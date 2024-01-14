@@ -13,7 +13,6 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
     /// </summary>
     public class TenantManageActionFilter : IAsyncActionFilter
     {
-
         #region 构造函数及参数
         private readonly ITenantManageDao _tenantDao;
         private readonly IHttpContextAccessor _httpContextAccessor;

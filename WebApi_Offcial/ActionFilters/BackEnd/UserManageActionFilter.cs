@@ -18,6 +18,11 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private readonly IUserManageDao _userManageDao;
         private readonly IStringLocalizer<UserTips> _stringLocalizer;
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="userManageDao"></param>
+        /// <param name="stringLocalizer"></param>
         public UserManageActionFilter(IUserManageDao userManageDao, IStringLocalizer<UserTips> stringLocalizer)
         {
             _stringLocalizer = stringLocalizer;
@@ -91,8 +96,8 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             }
             if (input.RoleIds.Count() > 0)
             {
-                bool roidsExist = await _userManageDao.DataExisted<T_Role>(p => input.RoleIds.Contains(p.Id));
-                if (!roidsExist)
+                bool roIdsExist = await _userManageDao.DataExisted<T_Role>(p => input.RoleIds.Contains(p.Id));
+                if (!roIdsExist)
                 {
                     return ServiceResult.IsFailure(_stringLocalizer["RoleNotExist"].Value);
                 }

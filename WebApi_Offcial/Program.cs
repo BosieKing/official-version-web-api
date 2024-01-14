@@ -15,13 +15,13 @@ using WebApi_Offcial.MiddleWares;
 using Yitter.IdGenerator;
 
 var builder = WebApplication.CreateBuilder(args);
-// 业务配置
+// 注入业务配置
 builder.Configuration.AddJsonFile("serversettings.json");
 
-// 冷配置
+// 模型绑定
 builder.Configuration.AddConfigSettingBind();
 
-// 注入http服务访问
+// 注入Http服务访问
 builder.Services.AddHttpContextAccessor();
 
 // 注入数据库池服务
@@ -44,56 +44,48 @@ builder.Services.AddControllers(option =>
 {
     // 全局权限过滤器
     option.Filters.Add(new AuthorizeFilter());
+}).AddDataAnnotationsLocalization(option =>
+{
+    // 提供多语言模板
+    option.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(UserTips));
 })
-                .AddDataAnnotationsLocalization(option =>
-                {
-                    // 模型注释多语言
-                    option.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(UserTips));
-                })
-                .ConfigureApiBehaviorOptions(options =>
-                {
-                    // 友好化模型验证失败
-                    options.InvalidModelStateResponseFactory = (context) =>
-                    {
-                        var error = context.ModelState;
-                        return new JsonResult(ServiceResult.IsFailure("模型验证失败"));
-                    };
-                })
-                .AddNewtonsoftJson(p =>
-                {
-                    // 输出的时间格式化
-                    p.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                    // 忽略循环引用
-                    p.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                });
 
-// 依赖注入，替换原始容器。引入自定义依赖注入配置
+.AddNewtonsoftJson(p =>
+{
+    // 输出的时间格式化
+    p.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+    // 忽略循环引用
+    p.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+});
+
+// AutoFac替换原始容器
 builder.Services.AddAutofacMultitenantRequestServices();
-// 配置多租户业务支持
+
+// 配置多租户业务支持服务
 builder.Host.UseServiceProviderFactory(new AutofacMultitenantServiceProviderFactory(MultitenantServiceRegister.ConfigureMultitenantContainer));
-// 注入服务
+
+// AutoFac服务注入
 builder.Host.ConfigureContainer<ContainerBuilder>(p =>
 {
     p.RegisterModule<ServiceRegister>();
 });
 
-// 注入雪花函数
+// 注入分布式雪花函数
 YitIdHelper.SetIdGenerator(new IdGeneratorOptions { WorkerId = 1 });
 
-// Jwt认证
+// 注入Jwt认证服务
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddScheme<JwtBearerOptions, JwtHandler>(JwtBearerDefaults.AuthenticationScheme, null);
-
 
 // 注入最小API服务，为了在Swagger中展示
 builder.Services.AddEndpointsApiExplorer();
 
-// 注入Swagger服务
+// 注入Swagger文档服务
 builder.Services.AddSwaggerDoc();
 
 // 替换为Log4Net日志
 builder.Logging.AddLog4Net("ConfigFiles/Log4net.config");
 
-// 添加本地化服务
+// 添加本地化多语言服务
 builder.Services.AddLocalization();
 
 // 修改模型验证返回格式
@@ -107,18 +99,21 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     };
 });
 
-//  和swagger一起搭配使用会在左上角出现请求耗时分析哦！
+// 注入请求分析服务
 builder.Services.AddMiniProfiler(option =>
 {
     //  配置基础路由路径
     option.RouteBasePath = "/profiler";
 });
+
 var app = builder.Build();
 
 // 启用本地化支持
-var languages = app.Configuration.GetSection("UserTipsConfig").GetChildren().Select(p => new CultureInfo(p.Value)).ToArray();
+// 从配置文件中获取可支持的语言
+CultureInfo[] languages = app.Configuration.GetSection("UserTipsConfig").GetChildren().Select(p => new CultureInfo(p.Value)).ToArray();
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
+    // 默认语言为zh-CN
     DefaultRequestCulture = new RequestCulture(culture: languages[0], uiCulture: languages[0]),
     SupportedCultures = languages,
     SupportedUICultures = languages
@@ -148,8 +143,7 @@ app.UseAuthentication();
 // 启用授权中间件
 app.UseAuthorization();
 
-// 判断是否为开发环境
-// 开发环境启用Swagger
+// 启用Swagger
 app.UseSwagger();
 app.UseSwaggerUIOption();
 
