@@ -11,7 +11,6 @@ namespace IDataSphere.Interfaces.BackEnd
     public interface ITenantManageDao : IBaseDao
     {
         Task<bool> AddTenantMenu(long tenantId);
-        Task<List<DropdownSelectionResult>> GetTenantMenuList(long tenandId);
         Task<PageResult> GetTenantPage(GetTenantPageInput input);
         Task<bool> PushTenantMenu(long menuId, long directoryId, long tenantId);
         Task<bool> UpdateTenant(string name, string code, long Id);

@@ -7,6 +7,7 @@ using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.Repositotys;
 using System.Linq.Expressions;
+using System.Reflection;
 using UtilityToolkit.Utils;
 using Yitter.IdGenerator;
 
@@ -82,7 +83,7 @@ namespace DataSphere
             {
                 return await rep.AnyAsync(expression);
             }
-            
+
         }
 
         /// <summary>
@@ -211,15 +212,40 @@ namespace DataSphere
         /// 获取下拉选中列表
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
-        /// <param name="expression"></param>
-        /// <param name="fieldName"></param>
-        /// <param name="isIgnoreTenant"></param>
+        /// <param name="checkFieldName">判断的字段来源: IsCheck = checkIds.Contains(checkFieldName)</param>
+        /// <param name="checkIds">数据源</param>
+        /// <param name="expression">过滤条件</param>
+        /// <param name="fieldName">替换Name字段的字段来源</param>
         /// <returns></returns>
-        public async Task<List<DropdownSelectionResult>> GetCheckList<TEntity>(Expression<Func<TEntity, bool>> expression, IEnumerable<long> checkIds, string checkFieldName, string fieldName = "" ) where TEntity : EntityBaseDO
+        public async Task<List<DropdownSelectionResult>> GetCheckList<TEntity>(
+            string checkFieldName,
+            IEnumerable<long> checkIds,
+            Expression<Func<TEntity, bool>> expression = default,
+            string fieldName = "") where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            
-            return new List<DropdownSelectionResult>();
+            Type resultType = typeof(DropdownSelectionResult);
+            // 构建P
+            ParameterExpression p = Expression.Parameter(typeof(TEntity), "p");
+            // 设置一个常量
+            ConstantExpression longs = Expression.Constant(checkIds);
+            // 构建属性访问器
+            MemberExpression idField = Expression.PropertyOrField(p, nameof(EntityBaseDO.Id));
+            MemberExpression nameField = Expression.PropertyOrField(p, fieldName == "" ? "Name" : fieldName);
+            MemberExpression checkField = Expression.PropertyOrField(p, checkFieldName);
+            // 初始化Contains方法
+            MethodInfo method = checkIds.GetType().GetMethod("Contains");
+            Expression check = Expression.Call(longs, method, checkField);
+            // 构建赋值
+            PropertyInfo[] properties = resultType.GetProperties();
+            MemberAssignment idAssign = Expression.Bind(properties.FirstOrDefault(p => p.Name == nameof(DropdownSelectionResult.Id)), idField);
+            MemberAssignment nameAssign = Expression.Bind(properties.FirstOrDefault(p => p.Name == nameof(DropdownSelectionResult.Name)), nameField);
+            MemberAssignment checkAssign = Expression.Bind(properties.FirstOrDefault(p => p.Name == nameof(DropdownSelectionResult.IsCheck)), check);
+            // 返回模板
+            NewExpression newExpression = Expression.New(resultType);
+            MemberInitExpression initExpression = Expression.MemberInit(newExpression, idAssign, nameAssign, checkAssign);
+            var query = Expression.Lambda<Func<TEntity, DropdownSelectionResult>>(initExpression, p);
+            return await rep.Where(expression != default, expression).Select(query).ToListAsync();
         }
         #endregion
 
@@ -448,7 +474,7 @@ namespace DataSphere
             {
                 transaction.Rollback();
                 throw new Exception("复制失败");
-            }           
+            }
             return true;
         }
 
@@ -485,7 +511,7 @@ namespace DataSphere
             {
                 transaction.Rollback();
                 throw new Exception("复制失败");
-            }           
+            }
             return true;
         }
 
@@ -517,7 +543,7 @@ namespace DataSphere
             {
                 transaction.Rollback();
                 throw new Exception("复制失败");
-            }          
+            }
             return true;
         }
         #endregion
@@ -629,7 +655,7 @@ namespace DataSphere
             {
                 transaction.Rollback();
                 throw new Exception("删除失败");
-            }       
+            }
             return true;
         }
         #endregion

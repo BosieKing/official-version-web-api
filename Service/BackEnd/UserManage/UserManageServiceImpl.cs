@@ -41,7 +41,7 @@ namespace Service.BackEnd.UserManage
         public async Task<List<DropdownSelectionResult>> GetUserRoleList(long id)
         {
             List<long> ids = await _userManageDao.Getlds<T_UserRole>(p => p.UserId == id, nameof(T_UserRole.RoleId));
-            return await _userManageDao.GetCheckList<T_Role>(p => p.IsDeleted == false, ids, nameof(T_Role.Id));
+            return await _userManageDao.GetCheckList<T_Role>(nameof(T_Role.Id), ids);
         }
         #endregion
 
@@ -108,6 +108,6 @@ namespace Service.BackEnd.UserManage
             return await _userManageDao.UpdateIsDisableLogin(input.UserId, input.IsDisableLogin);
         }
         #endregion
-            
+
     }
 }

@@ -25,25 +25,6 @@ namespace DataSphere.BackEnd
 
         #region 查询数据
         /// <summary>
-        /// 获取租户已配置的菜单
-        /// </summary>
-        /// <param name="tenandId"></param>
-        /// <returns></returns>
-        public async Task<List<DropdownSelectionResult>> GetTenantMenuList(long tenandId)
-        {
-            List<long> uniqueNumbers = await dbContext.TenantMenuRep.IgnoreTenantFilter().Where(t => t.TenantId == tenandId)
-                                             .Select(p => p.UniqueNumber).ToListAsync();
-            var list = await dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization)
-                                       .Select(p => new DropdownSelectionResult
-                                       {
-                                           IsCheck = uniqueNumbers.Contains(p.UniqueNumber),
-                                           Id = p.Id,
-                                           Name = p.Name
-                                       }).ToListAsync();
-            return list;
-        }
-
-        /// <summary>
         /// 分页查询
         /// </summary>
         /// <param name="input"></param>

@@ -125,18 +125,22 @@ namespace IDataSphere.Interfaces
         /// <param name="checkFieldName"></param>
         /// <param name="fieldName"></param>
         /// <returns></returns>
-        public Task<List<DropdownSelectionResult>> GetCheckList<TEntity>(Expression<Func<TEntity, bool>> expression, IEnumerable<long> checkIds, string checkFieldName, string fieldName = "") 
+        public Task<List<DropdownSelectionResult>> GetCheckList<TEntity>(
+            string checkFieldName,
+            IEnumerable<long> checkIds,
+            Expression<Func<TEntity, bool>> expression = default,
+            string fieldName = "")
             where TEntity : EntityBaseDO;
         #endregion
 
-            #region 获取集合
-            /// <summary>
-            /// 查询指定long类型字段集合
-            /// </summary>
-            /// <typeparam name="TEntity"></typeparam>
-            /// <param name="expression"></param>
-            /// <param name="fieldName">自定义采集id名称</param>
-            /// <returns></returns>
+        #region 获取集合
+        /// <summary>
+        /// 查询指定long类型字段集合
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="expression"></param>
+        /// <param name="fieldName">自定义采集id名称</param>
+        /// <returns></returns>
         public Task<List<long>> GetLongFields<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "")
             where TEntity : EntityBaseDO;
 
@@ -150,12 +154,12 @@ namespace IDataSphere.Interfaces
         public Task<List<long>> Getlds<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "") where TEntity : EntityBaseDO;
         #endregion
 
-            #region 查询单条数据
-            /// <summary>
-            /// 通过主键查询单条数据
-            /// </summary>
-            /// <param name="id"></param>
-            /// <returns></returns>
+        #region 查询单条数据
+        /// <summary>
+        /// 通过主键查询单条数据
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Task<TEntity> GetDataById<TEntity>(long id) where TEntity : EntityBaseDO;
 
         /// <summary>

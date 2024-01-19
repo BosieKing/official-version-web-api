@@ -1,4 +1,4 @@
-﻿using SharedLibrary.SystemConfigurations;
+﻿ using SharedLibrary.SystemConfigurations;
 
 namespace UtilityToolkit.Tools
 {

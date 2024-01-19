@@ -46,7 +46,10 @@ namespace Service.BackEnd.TenantManage
         /// <returns></returns>
         public async Task<List<DropdownSelectionResult>> GetTenantMenuList(IdInput input)
         {
-            return await _tenantDao.GetTenantMenuList(input.Id);
+            List<long> uniqueNumbers = await _tenantDao.GetLongFields<T_TenantMenu>(t => t.TenantId == input.Id, nameof(T_TenantMenu.UniqueNumber));
+
+            return await _tenantDao.GetCheckList<T_Menu>(nameof(T_Menu.UniqueNumber), uniqueNumbers,
+                                                             p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization);          
         }
 
         /// <summary>
