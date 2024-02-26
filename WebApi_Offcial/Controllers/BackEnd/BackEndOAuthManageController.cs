@@ -57,7 +57,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
             }
             else
             {
-                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID).Value;
+                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_IDs).Value;
                 result = await _backEndOAuthManageService.GetMenuTree(roleIds);
             }
             return ServiceResult.SetData(result);
@@ -92,7 +92,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
             }
             else
             {
-                var roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID).Value;
+                var roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_IDs).Value;
                 var result = await _backEndOAuthManageService.GetButtonArray(roleIds);
                 return ServiceResult.SetData(result);
             }

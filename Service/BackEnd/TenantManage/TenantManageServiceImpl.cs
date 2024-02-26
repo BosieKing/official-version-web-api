@@ -10,6 +10,7 @@ using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using System.Text;
 using UtilityToolkit.Helpers;
+using UtilityToolkit.Utils;
 
 namespace Service.BackEnd.TenantManage
 {
@@ -49,7 +50,7 @@ namespace Service.BackEnd.TenantManage
             List<long> uniqueNumbers = await _tenantDao.GetLongFields<T_TenantMenu>(t => t.TenantId == input.Id, nameof(T_TenantMenu.UniqueNumber));
 
             return await _tenantDao.GetCheckList<T_Menu>(nameof(T_Menu.UniqueNumber), uniqueNumbers,
-                                                             p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization);          
+                                                             p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization);
         }
 
         /// <summary>
@@ -121,8 +122,35 @@ namespace Service.BackEnd.TenantManage
             tenant.InviteCode = await CreateInviteCode(tenant.Id);
             // 新增租户
             await _tenantDao.AddAsync(tenant);
+            // 新增租户的时候增加对应后台管理员用户
+            T_User user = input.Adapt<T_User>();
+            user.NickName = user.NickName;
+            user.Password = input.Password;
+            user.TenantId = tenant.Id;
+            user.CreatedUserId = user.Id;
+            await _tenantDao.AddAsync<T_User>(user);
             // 新增租户对应菜单
-            return await _tenantDao.AddTenantMenu(tenant.Id);
+            List<(long Id, string Router)> menuIds = await _tenantDao.AddTenantMenu(tenant.Id, user.Id);
+            // 新增租户的后台管理员角色
+            T_Role role = new T_Role();
+            role.Name = tenant.Name + "后台管理员";
+            role.CreatedUserId = user.Id;
+            role.TenantId = tenant.Id;
+            await _tenantDao.AddAsync<T_Role>(role);
+            // 配置对应的菜单
+            List<T_RoleMenu> menus = menuIds.Select(p => new T_RoleMenu { RoleId = role.Id, MenuId = p.Id, TenantId = tenant.Id, CreatedUserId = user.Id }).ToList();
+            await _tenantDao.BatchAddAsync<T_RoleMenu>(menus);
+            // 缓存
+            string key = BasicDataCacheConst.ROLE_TABLE + tenant.Id;
+            menuIds.ForEach(p => { p.Router = p.Router.ToLower(); });
+            await RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData).HMSetAsync(key, role.Id.ToString(), menuIds.ToJson());
+            // 配置角色与用户的关系
+            T_UserRole userRole = new T_UserRole();
+            userRole.UserId = user.Id;
+            userRole.RoleId = role.Id;
+            userRole.TenantId = tenant.Id;
+            userRole.CreatedUserId = user.Id;
+            return await _tenantDao.AddAsync<T_UserRole>(userRole);
         }
 
         /// <summary>

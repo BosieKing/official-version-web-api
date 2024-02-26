@@ -6,8 +6,8 @@ using Model.Commons.CoreData;
 using Model.Commons.Domain;
 using Model.Repositotys;
 using SharedLibrary.Enums;
+using UtilityToolkit.Extensions;
 using UtilityToolkit.Helpers;
-using UtilityToolkit.Utils;
 
 namespace DataSphere.BackEnd
 {
@@ -149,7 +149,7 @@ namespace DataSphere.BackEnd
                                            .Join(dbContext.TenantRep, p => p.TenantId, t => t.Id, (p, t) => new TokenInfoModel
                                            {
                                                UserId = p.UserId.ToString(),
-                                               RoleId = string.Join(",", p.RoleId),
+                                               RoleIds = string.Join(",", p.RoleId),
                                                TenantId = p.TenantId.ToString(),
                                                SchemeName = t.Code
                                            }).FirstOrDefaultAsync();
@@ -184,7 +184,7 @@ namespace DataSphere.BackEnd
                                            .Join(dbContext.TenantRep, p => p.TenantId, t => t.Id, (p, t) => new TokenInfoModel
                                            {
                                                UserId = p.UserId.ToString(),
-                                               RoleId = "",
+                                               RoleIds = "",
                                                TenantId = p.TenantId.ToString(),
                                                SchemeName = t.Code
                                            }).FirstOrDefaultAsync();

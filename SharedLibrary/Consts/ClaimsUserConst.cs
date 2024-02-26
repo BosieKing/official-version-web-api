@@ -18,7 +18,7 @@
         /// <summary>
         /// token中的角色字段
         /// </summary>
-        public const string ROLE_ID = "RoleId";
+        public const string ROLE_IDs = "RoleIds";
 
         /// <summary>
         /// token中的租户字段

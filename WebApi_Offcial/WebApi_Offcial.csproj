@@ -60,6 +60,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ControllerTemplate.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DataSphere\DataSphere.csproj" />
     <ProjectReference Include="..\IDataSphere\IDataSphere.csproj" />
     <ProjectReference Include="..\Service\Service.csproj" />
@@ -73,76 +81,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ConfigFiles\GenerateQuicklyTemplate\ActionFilterTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ActionFilterTemplate.cs</LastGenOutput>
-    </None>
-    <None Update="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>ControllerTemplate.cs</LastGenOutput>
-    </None>
-    <None Update="ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>DataSphereTemplate.cs</LastGenOutput>
-    </None>
-    <None Update="ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>IDataSphereTemplate.cs</LastGenOutput>
-    </None>
-    <None Update="ConfigFiles\GenerateQuicklyTemplate\InputTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>InputTemplate.cs</LastGenOutput>
-    </None>
-    <None Update="ConfigFiles\GenerateQuicklyTemplate\IBusinesLogicTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>IBusinesLogicTemplate.cs</LastGenOutput>
-    </None>
-    <None Update="ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>BusinesLogicImplTemplate.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\ActionFilterTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ActionFilterTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Update="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>DataSphereTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IDataSphereTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\InputTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>InputTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\IBusinesLogicTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IBusinesLogicTemplate.tt</DependentUpon>
-    </Compile>
-    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\BusinesLogicImplTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>BusinesLogicImplTemplate.tt</DependentUpon>
-    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ControllerTemplate.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

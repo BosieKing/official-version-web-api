@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.UserManage;
 using Model.Repositotys;
-using UtilityToolkit.Utils;
+using UtilityToolkit.Extensions;
 
 namespace DataSphere.BackEnd
 {

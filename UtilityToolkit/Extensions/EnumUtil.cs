@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace UtilityToolkit.Utils
+namespace UtilityToolkit.Extensions
 {
     /// <summary>
     /// 枚举帮助类
@@ -16,14 +16,14 @@ namespace UtilityToolkit.Utils
         /// <remarks>Key为属性名称，value为属性描述</remarks>
         public static Dictionary<string, string> TryParseDic(this Type enumType)
         {
-            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            var keyValuePairs = new Dictionary<string, string>();
             try
             {
                 // 获取枚举属性值名称               
-                string[] fieldNames = Enum.GetNames(enumType);
+                var fieldNames = Enum.GetNames(enumType);
                 foreach (var item in fieldNames)
                 {
-                    string value = enumType.GetField(item).GetCustomAttribute<DescriptionAttribute>().Description ?? item;
+                    var value = enumType.GetField(item).GetCustomAttribute<DescriptionAttribute>().Description ?? item;
                     keyValuePairs.Add(item, value);
                 }
                 return keyValuePairs;
@@ -51,19 +51,17 @@ namespace UtilityToolkit.Utils
         /// <returns>枚举属性描述的集合</returns>
         public static List<string> TryParseList(this Type enumType)
         {
-            List<string> list = new List<string>();
+            var list = new List<string>();
             try
             {
                 // 获取枚举属性值名称
                 // 非枚举抛出异常
                 if (!enumType.IsEnum)
-                {
                     throw new ArgumentException("Type '" + enumType.Name + "' is not an enum.");
-                }
-                string[] fieldNames = Enum.GetNames(enumType);
+                var fieldNames = Enum.GetNames(enumType);
                 foreach (var item in fieldNames)
                 {
-                    string value = enumType.GetField(item).GetCustomAttribute<DescriptionAttribute>().Description ?? item;
+                    var value = enumType.GetField(item).GetCustomAttribute<DescriptionAttribute>().Description ?? item;
                     list.Add(value);
                 }
                 return list;

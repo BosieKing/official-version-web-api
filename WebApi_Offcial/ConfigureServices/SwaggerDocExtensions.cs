@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using SharedLibrary.Enums;
 using Swashbuckle.AspNetCore.SwaggerUI;
-using UtilityToolkit.Utils;
+using UtilityToolkit.Extensions;
 using WebApi_Offcial.ActionFilters;
 
 namespace WebApi_Offcial.ConfigureServices

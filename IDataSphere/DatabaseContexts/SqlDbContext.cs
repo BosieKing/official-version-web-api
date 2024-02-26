@@ -73,7 +73,7 @@ namespace IDataSphere.DatabaseContexts
                             obj.Id = obj.Id == 00 ? YitIdHelper.NextId() : obj.Id;
                             // 设置创建人和创建时间
                             obj.CreatedTime = DateTime.Now;
-                            if (!UserId.Equals(0))
+                            if (!UserId.Equals(0) && obj.CreatedUserId.Equals(0))
                             {
                                 obj.CreatedUserId = UserId;
                             }
@@ -112,7 +112,10 @@ namespace IDataSphere.DatabaseContexts
                             obj.Id = obj.Id == 00 ? YitIdHelper.NextId() : obj.Id;
                             // 设置创建人和创建时间
                             obj.CreatedTime = DateTime.Now;
-                            obj.CreatedUserId = UserId;
+                            if (!UserId.Equals(0) && obj.CreatedUserId.Equals(0))
+                            {
+                                obj.CreatedUserId = UserId;
+                            }
                             break;
                         case EntityState.Modified:
                         case EntityState.Deleted:

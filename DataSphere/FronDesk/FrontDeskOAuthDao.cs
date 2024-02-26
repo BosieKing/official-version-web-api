@@ -33,7 +33,7 @@ namespace DataSphere.FronDesk
                                           UserId = u.Id.ToString(),
                                           TenantId = u.TenantId.ToString(),
                                           SchemeName = t.Code.ToString(),
-                                          RoleId = string.Join(",", dbContext.UserRoleRep.Where(p => p.UserId == u.Id).Select(p => p.RoleId))
+                                          RoleIds = string.Join(",", dbContext.UserRoleRep.Where(p => p.UserId == u.Id).Select(p => p.RoleId))
                                       }).FirstOrDefaultAsync();
         }
 

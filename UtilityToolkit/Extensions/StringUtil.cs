@@ -1,4 +1,4 @@
-﻿namespace UtilityToolkit.Utils
+﻿namespace System
 {
     /// <summary>
     /// 字符串静态帮助类

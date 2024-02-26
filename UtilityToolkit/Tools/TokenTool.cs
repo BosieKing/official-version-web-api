@@ -13,11 +13,6 @@ namespace UtilityToolkit.Tools
     public static class TokenTool
     {
         /// <summary>
-        /// 读取验证Token类
-        /// </summary>
-        private static JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-
-        /// <summary>
         /// 根据用户信息生成Token
         /// </summary>
         /// <returns>普通Token</returns>
@@ -40,7 +35,7 @@ namespace UtilityToolkit.Tools
             // 自定义携带内容
             claimList.Add(new Claim(ClaimsUserConst.USER_ID, tokenResult.UserId));
             claimList.Add(new Claim(ClaimsUserConst.TENANT_ID, tokenResult.TenantId));
-            claimList.Add(new Claim(ClaimsUserConst.ROLE_ID, tokenResult.RoleId));
+            claimList.Add(new Claim(ClaimsUserConst.ROLE_IDs, tokenResult.RoleIds));
             claimList.Add(new Claim(ClaimsUserConst.SCHEME_NAME, tokenResult.SchemeName));
             if (IsSuperManage)
             {
@@ -53,8 +48,8 @@ namespace UtilityToolkit.Tools
 
             // 生成token
             JwtSecurityToken token = new JwtSecurityToken(claims: claimList, signingCredentials: signingCredentials);
-            //JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
-            return jwtSecurityTokenHandler.WriteToken(token);
+            JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
+            return jwtHandler.WriteToken(token);
         }
 
         /// <summary>
@@ -88,8 +83,8 @@ namespace UtilityToolkit.Tools
 
             // 生成token
             JwtSecurityToken token = new JwtSecurityToken(claims: claimList, signingCredentials: signingCredentials);
-            //JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
-            return jwtSecurityTokenHandler.WriteToken(token);
+            JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
+            return jwtHandler.WriteToken(token);
         }
 
         /// <summary>
@@ -100,7 +95,6 @@ namespace UtilityToolkit.Tools
         public static bool CancelToken(string key)
         {
             return true;
-
         }
 
         /// <summary>
@@ -110,9 +104,9 @@ namespace UtilityToolkit.Tools
         /// <returns></returns>
         public static IEnumerable<Claim> GetClaims(string token)
         {
-            //JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();        
             // 获取令牌完整信息
-            IEnumerable<Claim> claims = jwtSecurityTokenHandler.ReadJwtToken(token.Substring("bearer".Length).Trim()).Claims;
+            JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
+            IEnumerable<Claim> claims = jwtHandler.ReadJwtToken(token.Substring("bearer".Length).Trim()).Claims;
             return claims;
         }
     }

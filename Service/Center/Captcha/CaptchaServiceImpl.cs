@@ -5,9 +5,9 @@ using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp.Drawing.Processing;
+using UtilityToolkit.Extensions;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
-using UtilityToolkit.Utils;
 
 namespace Service.Center.Captcha
 {

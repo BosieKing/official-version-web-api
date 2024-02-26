@@ -4,7 +4,7 @@ using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.RoleManage;
-using UtilityToolkit.Utils;
+using UtilityToolkit.Extensions;
 
 namespace DataSphere.BackEnd
 {

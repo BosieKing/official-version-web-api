@@ -4,6 +4,7 @@ using Model.Commons.Domain;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using System.IdentityModel.Tokens.Jwt;
+using UtilityToolkit.Extensions;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
 

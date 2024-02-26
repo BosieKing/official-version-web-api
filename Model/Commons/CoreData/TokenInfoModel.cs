@@ -13,7 +13,7 @@
         /// <summary>
         /// 角色id集合
         /// </summary>
-        public string RoleId { get; set; }
+        public string RoleIds { get; set; }
 
         /// <summary>
         /// 租户id

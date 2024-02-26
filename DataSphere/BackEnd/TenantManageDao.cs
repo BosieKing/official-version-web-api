@@ -7,7 +7,7 @@ using Model.Commons.Domain;
 using Model.DTOs.BackEnd.TenantManage;
 using Model.Repositotys;
 using SharedLibrary.Enums;
-using UtilityToolkit.Utils;
+using UtilityToolkit.Extensions;
 using Yitter.IdGenerator;
 
 namespace DataSphere.BackEnd
@@ -61,10 +61,15 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<bool> AddTenantMenu(long tenantId)
+        /// <summary>
+        /// 新增租户菜单
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<List<(long Id, string Router)>> AddTenantMenu(long tenantId, long userId)
         {
             var menuQuery = dbContext.Set<T_Menu>().Where(p => p.Weight == (int)MenuWeightTypeEnum.Service)
-                                                   .Select(p => new { p.DirectoryId, MenuId = p.Id }).ToList();
+                                           .Select(p => new { DirectoryId = p.DirectoryId, MenuId = p.Id }).ToList();
             IEnumerable<long> dirIds = menuQuery.GroupBy(p => p.DirectoryId).Select(p => p.Key);
             List<T_Directory> dbDirectoryList = await dbContext.DirectoryRep.Where(p => dirIds.Contains(p.Id)).ToListAsync();
             List<T_Menu> dbMenuList = await dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.Service).ToListAsync();
@@ -77,12 +82,14 @@ namespace DataSphere.BackEnd
                 T_TenantDirectory tenantDirectory = dir.Adapt<T_TenantDirectory>();
                 tenantDirectory.Id = YitIdHelper.NextId();
                 tenantDirectory.TenantId = tenantId;
+                tenantDirectory.CreatedUserId = userId;
                 tenantDirectorieList.Add(tenantDirectory);
                 IEnumerable<T_Menu> menuList = dbMenuList.Where(p => p.DirectoryId == dir.Id);
                 foreach (var menu in menuList)
                 {
                     T_TenantMenu tenantMenu = menu.Adapt<T_TenantMenu>();
                     tenantMenu.Id = YitIdHelper.NextId();
+                    tenantMenu.CreatedUserId = userId;
                     tenantMenu.TenantId = tenantId;
                     tenantMenu.DirectoryId = tenantDirectory.Id;
                     List<T_TenantMenuButton> buttonlist = dbButtonList.Where(p => p.MenuId == menu.Id).Select(p => p.Adapt<T_TenantMenuButton>()).ToList();
@@ -91,6 +98,7 @@ namespace DataSphere.BackEnd
                         p.Id = YitIdHelper.NextId();
                         p.TenantId = tenantId;
                         p.MenuId = tenantMenu.Id;
+                        p.CreatedUserId = userId;
                     });
                     tenantMenuButtonList.AddRange(buttonlist);
                     tenantMenuList.Add(tenantMenu);
@@ -100,7 +108,7 @@ namespace DataSphere.BackEnd
             await dbContext.TenantMenuRep.AddRangeAsync(tenantMenuList);
             await dbContext.TenantMenuButtonRep.AddRangeAsync(tenantMenuButtonList);
             await dbContext.SaveChangesAsync();
-            return true;
+            return tenantMenuList.Select(p => (p.Id, p.Router)).ToList();
         }
 
         /// <summary>

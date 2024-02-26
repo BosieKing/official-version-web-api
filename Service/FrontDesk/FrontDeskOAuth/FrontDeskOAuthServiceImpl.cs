@@ -49,7 +49,7 @@ namespace Service.FrontDesk.FrontDeskOAuth
             {
                 UserId = user.Id.ToString(),
                 TenantId = user.TenantId.ToString(),
-                RoleId = "",
+                RoleIds = "",
                 SchemeName = tenantInfo.Code,                
             };
             bool isSuperManage = RedisMulititionHelper.IsSuperManage(tokenResult.TenantId);

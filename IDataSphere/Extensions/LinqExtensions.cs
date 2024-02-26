@@ -5,7 +5,7 @@ using Model.Commons.SharedData;
 using Model.Repositotys;
 using System.Linq.Expressions;
 using System.Reflection;
-using UtilityToolkit.Utils;
+using UtilityToolkit.Extensions;
 
 namespace IDataSphere.Extensions
 {

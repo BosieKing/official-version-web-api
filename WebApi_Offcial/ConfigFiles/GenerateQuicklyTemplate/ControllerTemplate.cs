@@ -18,7 +18,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+    #line 1 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "17.0.0.0")]
     public partial class ControllerTemplate : ControllerTemplateBase
     {
@@ -28,335 +28,180 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using Microsoft.AspNetCore.Mvc;\r\nusing SharedLibrary.Enums;\r\nusing SharedLibrary." +
-                    "Consts;\r\nusing SharedLibrary.NormalizeModel;\r\nusing BusinesLogic.");
+            this.Write("using Microsoft.AspNetCore.Mvc;\r\nusing Model.Commons.Domain;\r\nusing Model.Commons" +
+                    ".SharedData;\r\nusing Model.DTOs.");
             
-            #line 11 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
-            
-            #line default
-            #line hidden
-            this.Write(".");
-            
-            #line 11 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\nusing BusinesLogic.");
-            
-            #line 12 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
+            #line 10 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 12 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 10 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
-            this.Write(".Dto;\r\nusing WebAPI.ActionFilters.");
+            this.Write(";\r\nusing Service.");
             
-            #line 13 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\nusing IDataSphere.Interface.");
-            
-            #line 14 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
+            #line 11 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write(".");
             
-            #line 14 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 11 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
-            this.Write(";\r\n\r\nnamespace WebAPI.Controllers.");
+            this.Write(";\r\nusing SharedLibrary.Consts;\r\nusing SharedLibrary.Enums;\r\nusing WebApi_Offcial." +
+                    "ActionFilters.");
             
-            #line 16 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
+            #line 14 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.SwaggerGroupEnumName));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\nnamespace WebApi_Offcial.Controllers.");
+            
+            #line 15 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.SwaggerGroupEnumName));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n    /// <summary>\r\n    /// ");
             
-            #line 19 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ChinesesName));
+            #line 18 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ChinesesName));
             
             #line default
             #line hidden
             this.Write("控制层\r\n    /// </summary>\r\n    [ApiController]\r\n    [Route(\"");
             
-            #line 22 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 21 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
-            this.Write("\")]\r\n    [ApiDescription(SwaggerGroupEnum.");
+            this.Write("\")]\r\n    [ServiceFilter(typeof(");
             
-            #line 23 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.SwaggerGroupEnumName));
-            
-            #line default
-            #line hidden
-            this.Write(")]\r\n    [ServiceFilter(typeof(");
-            
-            #line 24 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 22 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
-            this.Write("ActionFilter))]\r\n    public class ");
+            this.Write("ActionFilter))]\r\n    [ApiDescription(SwaggerGroupEnum.");
             
-            #line 25 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 23 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.SwaggerGroupEnumName));
+            
+            #line default
+            #line hidden
+            this.Write(")]\r\n    public class ");
+            
+            #line 24 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Controller : ");
             
-            #line 25 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ControllerBase));
+            #line 24 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ControllerBaseName));
             
             #line default
             #line hidden
             this.Write("\r\n    {\r\n        #region 构造函数\r\n        private readonly I");
             
-            #line 28 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 27 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Service _");
             
-            #line 28 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
+            #line 27 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ParameterName));
             
             #line default
             #line hidden
-            this.Write("Service;\r\n        private readonly IHttpContextAccessor _httpContextAccessor;\r\n  " +
-                    "      /// <summary>\r\n        /// 构造函数\r\n        /// </summary>\r\n        public ");
+            this.Write("Service;");
             
-            #line 33 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 27 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.IsNeedHttpContext? "\r\n        private readonly IHttpContextAccessor _httpContextAccessor;":""));
+            
+            #line default
+            #line hidden
+            this.Write("     \r\n\r\n        /// <summary>\r\n        /// 构造函数\r\n        /// </summary>\r\n       " +
+                    " public ");
+            
+            #line 32 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Controller(I");
             
-            #line 33 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ClassNamePrefix));
+            #line 32 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ClassNamePrefix));
             
             #line default
             #line hidden
             this.Write("Service ");
             
-            #line 33 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
+            #line 32 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ParameterName));
             
             #line default
             #line hidden
-            this.Write("Service, IHttpContextAccessor httpContextAccessor)\r\n        {\r\n            this._" +
-                    "");
+            this.Write("Service");
             
-            #line 35 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
+            #line 32 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.IsNeedHttpContext ? ", IHttpContextAccessor httpContextAccessor" : ""));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n        {\r\n            _");
+            
+            #line 34 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ParameterName));
             
             #line default
             #line hidden
             this.Write("Service = ");
             
-            #line 35 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
+            #line 34 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.ParameterName));
             
             #line default
             #line hidden
-            this.Write(@"Service;
-            this._httpContextAccessor = httpContextAccessor;
-        }
-        #endregion
-
-        #region 查询
-        /// <summary>
-        /// 分页查询
-        /// </summary>
-        /// <param name=""input""></param>
-        /// <returns></returns>
-        [HttpGet(""get");
+            this.Write("Service;");
             
-            #line 46 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
+            #line 34 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(this.input.IsNeedHttpContext? "\r\n            _httpContextAccessor = httpContextAccessor;":""));
             
             #line default
             #line hidden
-            this.Write("Page\")]\r\n        public async Task<ActionResult<ServiceResult>> Get");
+            this.Write("            \r\n        }\r\n        #endregion   \r\n\r\n        #region 新增\r\n        ");
             
-            #line 47 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("Page([FromQuery] Get");
-            
-            #line 47 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("PageInput input)\r\n        {\r\n            var data = await _");
-            
-            #line 49 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
+            #line 39 "D:\Student\Net项目\github项目\WebApi_Offcial\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
+ 
+        foreach (var item in input.ActionDic)
+            {
+                if (item.ActionName.StartsWith("add"))
+                {
+                  this.Write(this.ToStringHelper.ToStringWithCulture("        /// <summary>\r\n        /// 分页查询\r\n        /// </summary>\r\n        /// <param name=\"input\"></param>\r\n        /// <returns></returns>"));
+                 
+                }
+            }
+        
             
             #line default
             #line hidden
-            this.Write("Service.Get");
-            
-            #line 49 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write(@"Page(input);
-            return ServiceResult.SetData(data);
-        }
-        #endregion
-
-        #region 新增
-        /// <summary>
-        /// 新增
-        /// </summary>
-        /// <param name=""input""></param>
-        /// <returns></returns>
-        [HttpPost(""add");
-            
-            #line 60 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("\")]\r\n        public async Task<ActionResult<ServiceResult>> Add");
-            
-            #line 61 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("([FromBody] Add");
-            
-            #line 61 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("Input input)\r\n        {\r\n            var result = await _");
-            
-            #line 63 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
-            
-            #line default
-            #line hidden
-            this.Write("Service.Add");
-            
-            #line 63 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write(@"(input);
-            return ServiceResult.SetData(result);
-        }
-        #endregion
-
-        #region 更新
-        /// <summary>
-        /// 更新
-        /// </summary>
-        /// <param name=""input""></param>
-        /// <returns></returns>
-        [HttpPost(""update");
-            
-            #line 74 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("\")]\r\n        public async Task<ActionResult<ServiceResult>> Update");
-            
-            #line 75 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("([FromBody] Update");
-            
-            #line 75 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("Input input)\r\n        {\r\n            var result = await _");
-            
-            #line 77 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
-            
-            #line default
-            #line hidden
-            this.Write("Service.Update");
-            
-            #line 77 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write(@"(input);
-            return ServiceResult.SetData(result);
-        }
-        #endregion
-
-        #region 删除
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name=""input""></param>
-        /// <returns></returns>
-        [HttpPost(""delete");
-            
-            #line 88 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("\")]\r\n        public async Task<ActionResult<ServiceResult>> Delete");
-            
-            #line 89 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("([FromBody] IdInput input)\r\n        {\r\n            var result = await _");
-            
-            #line 91 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.ParameterName));
-            
-            #line default
-            #line hidden
-            this.Write("Service.Delete");
-            
-            #line 91 "D:\Student\Net项目\webapi\正式版本\official-version-web-api\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
-            
-            #line default
-            #line hidden
-            this.Write("(input.Id);\r\n            return ServiceResult.SetData(result);\r\n        }\r\n      " +
-                    "  #endregion\r\n    }\r\n}\r\n");
+            this.Write("        #endregion  \r\n        \r\n    \r\n    \r\n    \r\n    }  \r\n}");
             return this.GenerationEnvironment.ToString();
         }
     }

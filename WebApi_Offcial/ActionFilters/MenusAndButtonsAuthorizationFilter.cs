@@ -37,7 +37,7 @@ namespace WebApi_Offcial.ActionFilters
             }
             else
             {
-                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_ID)?.Value ?? "";
+                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_IDs)?.Value ?? "";
                 long tenantId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value ?? "0");
                 // 判断有无权限访问此接口
                 string actioName = context.RouteData.Values["action"].ToString().ToLower();

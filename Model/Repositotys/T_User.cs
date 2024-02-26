@@ -47,7 +47,7 @@ namespace Model.Repositotys
         /// <summary>
         /// 登录时间
         /// </summary>
-        public DateTime LoginTime { get; set; }
+        public DateTime? LoginTime { get; set; }
         
         /// <summary>
         /// 是否禁止登录
