@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UtilityToolkit.Helpers
+namespace DataSphere.Center
 {
-    public class ESHelper
+    internal class ESDao
     {
     }
 }

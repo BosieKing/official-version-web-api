@@ -15,8 +15,7 @@ namespace WebApi_Offcial.ConfigureServices
         /// </summary>
         /// <param name="input"></param>
         public void CreateController(ControllerGenerateQuicklyInput input) 
-        {
-            
+        {            
             ControllerTemplate controllerTemplate = new ControllerTemplate(input);
             string controllerText = controllerTemplate.TransformText();
             string controllerPath = GetPath("Controllers", input.SwaggerGroupEnumName);
