@@ -1,7 +1,4 @@
-﻿using Model.ESIndexs;
-using Nest;
-
-namespace IDataSphere.ESContexts
+﻿namespace IDataSphere.ESContexts
 {
     /// <summary>
     /// 错误日志仓储
@@ -13,7 +10,7 @@ namespace IDataSphere.ESContexts
         /// </summary>
         /// <param name="elasticsearchHelper"></param>
         /// <param name="indexName"></param>
-        public PostIndexRepository(IElasticsearchHelper elasticsearchHelper, string indexName) : base(elasticsearchHelper, indexName)
+        public PostIndexRepository(IElasticSearchHelper elasticsearchHelper, string indexName) : base(elasticsearchHelper, indexName)
         {    
         }
 

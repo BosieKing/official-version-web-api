@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Nest;
+﻿using Nest;
 namespace IDataSphere.ESContexts
 {
     /// <summary>
@@ -19,7 +14,7 @@ namespace IDataSphere.ESContexts
         /// </summary>
         /// <param name="elasticsearchHelper"></param>
         /// <param name="indexName"></param>
-        public BaseElasticsearchRepository(IElasticsearchHelper elasticsearchHelper, string indexName)
+        public BaseElasticsearchRepository(IElasticSearchHelper elasticsearchHelper, string indexName)
         {
             _elasticClient = elasticsearchHelper.GetClient(indexName);
             ExistsResponse existRespones = _elasticClient.Indices.Exists(indexName);
@@ -57,15 +52,15 @@ namespace IDataSphere.ESContexts
                 {
                     Dynamic = true,
                     DynamicTemplates = dynamicTemplateContainer,
-
                 };
-                _elasticClient.Indices.Create(indexName, p =>
+                _elasticClient.Indices.CreateAsync(indexName, p =>
                 p.Map<PostIndexRepository>(p => p.AutoMap())
                  .InitializeUsing(state)
                 );
-
-
-
+                var meoo = _elasticClient.Indices.GetType().GetMethods().Select(p =>
+                {                    
+                    return p.Name.Contains("Async") ? p.Name.Replace("Async", "") : p.Name;
+                }).GroupBy(p => p).Select(p => p.Key).OrderBy(p => p).ToList();
             }
         }
     }

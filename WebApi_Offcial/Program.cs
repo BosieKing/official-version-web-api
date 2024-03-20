@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Globalization;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
+using WebApi_Offcial.ActionFilters;
 using WebApi_Offcial.ConfigureServices;
 using WebApi_Offcial.MiddleWares;
 using Yitter.IdGenerator;
@@ -43,7 +44,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddControllers(option =>
 {
     // 全局权限过滤器
-    option.Filters.Add(new AuthorizeFilter());
+    option.Filters.Add(typeof(MenusAndButtonsAuthorizationFilter));
 }).AddDataAnnotationsLocalization(option =>
 {
     // 提供多语言模板

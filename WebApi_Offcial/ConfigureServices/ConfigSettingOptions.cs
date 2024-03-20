@@ -37,6 +37,7 @@ namespace WebApi_Offcial.ConfigureServices
             configuration.GetSection(nameof(RedisCacheConfig)).Bind(ConfigSettingTool.RedisCacheConfigOptions);
             configuration.GetSection(nameof(SmsConfig)).Bind(ConfigSettingTool.SmsConfigOptions);
             configuration.GetSection(nameof(CaptchaConfig)).Bind(ConfigSettingTool.CaptchaConfigOptions);
+            configuration.GetSection(nameof(ElasticSearchConfig)).Bind(ConfigSettingTool.ElasticSearchConfig);
             return configuration;
         }
     }

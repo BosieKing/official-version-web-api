@@ -4,7 +4,7 @@ namespace IDataSphere.ESContexts
     /// <summary>
     /// ES连接帮助类
     /// </summary>
-    public interface IElasticsearchHelper
+    public interface IElasticSearchHelper
     {
         /// <summary>
         /// 获取连接

@@ -7,7 +7,7 @@ namespace WebApi_Offcial.Controllers
     /// 权限验证控制器
     /// </summary>
     /// <remarks>Controller继承此类实现菜单权限验证</remarks>
-    [TypeFilter(typeof(MenusAndButtonsAuthorizationFilter))]
+   // [TypeFilter(typeof(MenusAndButtonsAuthorizationFilter))]
     public class BaseController : ControllerBase
     {
     }

@@ -32,5 +32,11 @@ namespace UtilityToolkit.Tools
         /// 验证码配置
         /// </summary>
         public static readonly CaptchaConfig CaptchaConfigOptions = new CaptchaConfig();
+
+        /// <summary>
+        /// ES配置
+        /// </summary>
+
+        public static readonly ElasticSearchConfig ElasticSearchConfig = new ElasticSearchConfig();
     }
 }

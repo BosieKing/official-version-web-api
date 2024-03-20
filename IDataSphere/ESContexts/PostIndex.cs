@@ -5,6 +5,7 @@ namespace IDataSphere.ESContexts
     /// <summary>
     /// 帖子索引
     /// </summary>
+    [ElasticsearchType(IdProperty = "Name")]
     public class PostIndex
     {
         /// <summary>

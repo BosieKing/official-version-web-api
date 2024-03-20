@@ -61,7 +61,7 @@ namespace WebApi_Offcial.ConfigureServices
                 {
                     Reference = new OpenApiReference() { Type = ReferenceType.SecurityScheme, Id = "JwtBearer" }
                 };
-                // 注册请求的时候必须使用该验证方式
+                // 注册请求的时候必须使用该验证方式              
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement { [scheme] = new string[0] });
                 // 分组下拉回调
                 options.DocInclusionPredicate((docName, apiDescription) =>
