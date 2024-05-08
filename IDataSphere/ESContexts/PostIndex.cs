@@ -12,7 +12,7 @@ namespace IDataSphere.ESContexts
         /// id
         /// </summary>
         [Text(Name = nameof(PostIndex.Title), Index = true, Analyzer = "ik_max_word")]
-        public long  Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 标题

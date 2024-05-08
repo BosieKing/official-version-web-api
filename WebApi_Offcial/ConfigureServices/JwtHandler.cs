@@ -9,7 +9,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using UtilityToolkit.Extensions;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
@@ -29,9 +28,9 @@ namespace WebApi_Offcial.ConfigureServices
         /// 构造函数
         /// </summary>
         public JwtHandler(
-            HttpContextAccessor httpContextAccessor, 
+            HttpContextAccessor httpContextAccessor,
             IOptionsMonitor<JwtBearerOptions> options,
-            ILoggerFactory logger, 
+            ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock) : base(options, logger, encoder, clock)
         {

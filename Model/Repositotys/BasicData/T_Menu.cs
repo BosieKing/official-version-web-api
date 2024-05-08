@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Model.Repositotys
+namespace Model.Repositotys.BasicData
 {
     /// <summary>
-    /// 租户菜单表
+    /// 菜单表
     /// </summary>
-    [Table("T_TenantMenu")]
-    public class T_TenantMenu : EntityTenantDO
+
+    [Table("T_Menu")]
+    public class T_Menu : EntityBaseDO
     {
         /// <summary>
         /// 名称
@@ -65,5 +66,15 @@ namespace Model.Repositotys
         /// 唯一编号
         /// </summary>
         public long UniqueNumber { get; set; }
+
+        /// <summary>
+        /// 所属目录
+        /// </summary>
+        public virtual T_Directory BelongDirectory { get; set; }
+
+        /// <summary>
+        /// 子按钮
+        /// </summary>
+        public virtual ICollection<T_MenuButton> MenuButtons { get; set; }
     }
 }

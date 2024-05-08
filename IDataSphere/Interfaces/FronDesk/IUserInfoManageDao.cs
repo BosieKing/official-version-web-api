@@ -1,5 +1,4 @@
-﻿using Model.Commons.Domain;
-using Model.Repositotys;
+﻿using Model.Repositotys.Service;
 
 namespace IDataSphere.Interfaces.FronDesk
 {
@@ -7,11 +6,11 @@ namespace IDataSphere.Interfaces.FronDesk
     /// 前台用户中心数据访问接口
     /// </summary>
     /// <remarks>T_User</remarks>
-    public interface IUserInfoManageDao : IBaseDao
+    public interface IUserInfoManageDao : IBaseDao<T_User>
     {
         Task<dynamic> GetUserInfoById(long userId);
         Task<bool> UpdateAvatar(string url, long userId);
         Task<bool> UpdatePassword(string newPassword, long userId);
-        Task<bool> UpdateUserInfo(T_User user);      
+        Task<bool> UpdateUserInfo(T_User user);
     }
 }

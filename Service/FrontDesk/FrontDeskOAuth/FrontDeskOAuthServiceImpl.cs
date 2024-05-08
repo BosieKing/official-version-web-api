@@ -2,14 +2,12 @@
 using Mapster;
 using Model.Commons.CoreData;
 using Model.DTOs.FronDesk.FrontDeskOAuth;
-using Model.Repositotys;
+using Model.Repositotys.Service;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
-using Yitter.IdGenerator;
-
 namespace Service.FrontDesk.FrontDeskOAuth
 {
     /// <summary>
@@ -50,7 +48,7 @@ namespace Service.FrontDesk.FrontDeskOAuth
                 UserId = user.Id.ToString(),
                 TenantId = user.TenantId.ToString(),
                 RoleIds = "",
-                SchemeName = tenantInfo.Code,                
+                SchemeName = tenantInfo.Code,
             };
             bool isSuperManage = RedisMulititionHelper.IsSuperManage(tokenResult.TenantId);
             string token = TokenTool.CreateToken(tokenResult, isSuperManage);

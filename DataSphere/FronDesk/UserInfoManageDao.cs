@@ -2,15 +2,14 @@
 using IDataSphere.Extensions;
 using IDataSphere.Interfaces.FronDesk;
 using Microsoft.EntityFrameworkCore;
-using Model.Commons.Domain;
-using Model.Repositotys;
+using Model.Repositotys.Service;
 
 namespace DataSphere.FronDesk
 {
     /// <summary>
     /// 前台用户中心数据访问实现类
     /// </summary>
-    public class UserInfoManageDao : BaseDao, IUserInfoManageDao
+    public class UserInfoManageDao : BaseDao<T_User>, IUserInfoManageDao
     {
         #region 构造函数
         public UserInfoManageDao(SqlDbContext dbContext) : base(dbContext)
@@ -36,9 +35,9 @@ namespace DataSphere.FronDesk
                 TenantId = p.TenantId,
                 Sex = p.Sex
             }).FirstOrDefaultAsync();
-        }  
+        }
 
-        #endregion            
+        #endregion
 
         #region 更新
         /// <summary>

@@ -1,13 +1,14 @@
 ﻿using IDataSphere.DatabaseContexts;
 using IDataSphere.Interfaces.Center;
 using Microsoft.EntityFrameworkCore;
+using Model.Repositotys.Service;
 
 namespace DataSphere.Center
 {
     /// <summary>
     /// 验证码业务访问数据实现类
     /// </summary>
-    public class CaptchaDao : BaseDao, ICaptchaDao
+    public class CaptchaDao : BaseDao<T_User>, ICaptchaDao
     {
         public CaptchaDao(SqlDbContext dbContext) : base(dbContext)
         {

@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Newtonsoft.Json;
+using Quartz;
 using System.Globalization;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
-using WebApi_Offcial.ActionFilters;
 using WebApi_Offcial.ConfigureServices;
 using WebApi_Offcial.MiddleWares;
 using Yitter.IdGenerator;
@@ -38,25 +38,33 @@ builder.Services.AddResponseCompression();
 // 注入HttpClientFactory
 builder.Services.AddHttpClient();
 
+// AddSignalRCore比AddSignalR多调用
+builder.Services.AddSignalRCore();
+
 // 注入控制器服务
-// 增加全局权限过滤器
+// 全部的控制器增加鉴权过滤器
 // 格式化输出
-builder.Services.AddControllers(option =>
-{
-    // 全局权限过滤器
-    option.Filters.Add(typeof(MenusAndButtonsAuthorizationFilter));
-}).AddDataAnnotationsLocalization(option =>
+builder.Services.AddControllers(option => option.Filters.Add(new AuthorizeFilter()))
+.AddDataAnnotationsLocalization(option =>
 {
     // 提供多语言模板
     option.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(UserTips));
 })
-
 .AddNewtonsoftJson(p =>
 {
     // 输出的时间格式化
     p.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
     // 忽略循环引用
     p.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+})
+.ConfigureApiBehaviorOptions(options =>
+{
+    // 友好化模型验证失败
+    options.InvalidModelStateResponseFactory = (context) =>
+    {
+        var error = context.ModelState;
+        return new JsonResult(ServiceResult.IsFailure("模型验证失败"));
+    };
 });
 
 // AutoFac替换原始容器
@@ -106,6 +114,9 @@ builder.Services.AddMiniProfiler(option =>
     //  配置基础路由路径
     option.RouteBasePath = "/profiler";
 });
+
+// 注入定时任务
+builder.Services.AddCustomizeQuartz();
 
 var app = builder.Build();
 

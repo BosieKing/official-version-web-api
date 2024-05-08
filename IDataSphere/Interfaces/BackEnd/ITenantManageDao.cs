@@ -1,6 +1,6 @@
 ﻿using Model.Commons.Domain;
 using Model.DTOs.BackEnd.TenantManage;
-using Model.Repositotys;
+using Model.Repositotys.Service;
 
 namespace IDataSphere.Interfaces.BackEnd
 {
@@ -8,7 +8,7 @@ namespace IDataSphere.Interfaces.BackEnd
     /// 后台租户管理数据访问接口
     /// </summary>
     /// <remarks>T_Tenant</remarks>
-    public interface ITenantManageDao : IBaseDao
+    public interface ITenantManageDao : IBaseDao<T_Tenant>
     {
         Task<List<(long Id, string Router)>> AddTenantMenu(long tenantId, long userId);
         Task<PageResult> GetTenantPage(GetTenantPageInput input);

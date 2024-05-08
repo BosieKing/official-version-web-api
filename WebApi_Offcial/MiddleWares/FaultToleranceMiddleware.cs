@@ -1,5 +1,7 @@
 ﻿using log4net;
 using Model.Commons.Domain;
+using Model.Repositotys.Log;
+using UtilityToolkit.Helpers;
 using UtilityToolkit.Utils;
 
 namespace WebApi_Offcial.MiddleWares
@@ -63,6 +65,12 @@ namespace WebApi_Offcial.MiddleWares
             }
             context.Response.ContentType = context.Request.Headers["Accept"];
             context.Response.ContentType = "application/json";
+            TL_ErrorLog log = new();
+            log.ExceptionType = exception.GetType().Name;
+            log.ExceptionSource = exception?.Source;
+            log.ExceptionMessage = exception?.Message;
+            log.InnerExceptionMessage = exception?.InnerException?.Message;
+            QueueSingletonHelper<TL_ErrorLog>.Instance.Add(log);
             await context.Response.WriteAsJsonAsync(ServiceResult.IsFailure(exception.Message)).ConfigureAwait(false);
             // 管道短路
             return;

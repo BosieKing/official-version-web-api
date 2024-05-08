@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.DTOs.FronDesk.UserInfoManage;
-using Model.Repositotys;
+using Model.Repositotys.Service;
 using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;

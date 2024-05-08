@@ -11,9 +11,9 @@
         /// <param name="elasticsearchHelper"></param>
         /// <param name="indexName"></param>
         public PostIndexRepository(IElasticSearchHelper elasticsearchHelper, string indexName) : base(elasticsearchHelper, indexName)
-        {    
+        {
         }
 
-        
+
     }
 }

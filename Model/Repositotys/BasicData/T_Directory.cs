@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Model.Repositotys
+namespace Model.Repositotys.BasicData
 {
     /// <summary>
-    /// 租户目录
+    /// 菜单目录表
     /// </summary>
-    [Table("T_TenantDirectory")]
-    public class T_TenantDirectory : EntityTenantDO
+    [Table("T_Directory")]
+    public class T_Directory : EntityBaseDO
     {
         /// <summary>
         /// 名称
@@ -27,5 +27,9 @@ namespace Model.Repositotys
         [MaxLength(100)]
         public string BrowserPath { get; set; }
 
+        /// <summary>
+        /// 子菜单
+        /// </summary>
+        public virtual ICollection<T_Menu> Menus { get; set; }
     }
 }

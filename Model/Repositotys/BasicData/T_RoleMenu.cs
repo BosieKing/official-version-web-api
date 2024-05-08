@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Model.Repositotys
+namespace Model.Repositotys.BasicData
 {
     /// <summary>
     /// 权限菜单中间表

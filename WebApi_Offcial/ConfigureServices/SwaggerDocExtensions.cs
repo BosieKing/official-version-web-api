@@ -68,7 +68,7 @@ namespace WebApi_Offcial.ConfigureServices
                 {
                     // 没有包含任何Http请求方法不在文档展示
                     if (apiDescription.HttpMethod == null)
-                    {                        
+                    {
                         return false;
                     }
                     // 对应分组的方法返回

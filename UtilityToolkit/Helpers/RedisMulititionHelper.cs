@@ -4,14 +4,13 @@ using Model.Commons.Domain;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using System.IdentityModel.Tokens.Jwt;
-using UtilityToolkit.Extensions;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
 
 namespace UtilityToolkit.Helpers
 {
     /// <summary>
-    /// Redis连接帮助类
+    /// Redis连接帮助类-多例模式
     /// </summary>
     public class RedisMulititionHelper
     {

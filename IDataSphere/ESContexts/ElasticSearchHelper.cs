@@ -1,5 +1,4 @@
-﻿using Elasticsearch.Net;
-using Nest;
+﻿using Nest;
 using System.Collections.Specialized;
 using UtilityToolkit.Tools;
 namespace IDataSphere.ESContexts
@@ -24,9 +23,9 @@ namespace IDataSphere.ESContexts
             nameValue.Add("Key", "Value");
             settings.GlobalQueryStringParameters(nameValue);
             settings.PingTimeout(TimeSpan.FromSeconds(15));
-            settings.OnRequestDataCreated(apiCallDetails => 
-            { 
-             // 回调事件            
+            settings.OnRequestDataCreated(apiCallDetails =>
+            {
+                // 回调事件            
             });
 
 

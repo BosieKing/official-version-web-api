@@ -3,7 +3,7 @@ using Mapster;
 using Model.Commons.CoreData;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.MenuManage;
-using Model.Repositotys;
+using Model.Repositotys.BasicData;
 using SharedLibrary.Enums;
 
 namespace Service.BackEnd.MenuManage

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Model.Repositotys;
+using Model.Repositotys.BasicData;
+using Model.Repositotys.Service;
+using Model.Repositotys.Tarot;
 
 namespace IDataSphere.DatabaseContexts
 {
@@ -67,6 +69,10 @@ namespace IDataSphere.DatabaseContexts
         /// 角色屏蔽按钮
         /// </summary>
         public DbSet<T_RoleBlockButton> RoleBlockButtonsRep { get; set; }
+
+        #region  Tarot
+        public DbSet<T_Customer> CustomerRep { get; set; }
+        #endregion
 
     }
 }

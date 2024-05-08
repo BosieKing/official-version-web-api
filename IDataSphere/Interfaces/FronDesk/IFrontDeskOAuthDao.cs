@@ -1,5 +1,5 @@
 ﻿using Model.Commons.CoreData;
-using Model.Repositotys;
+using Model.Repositotys.Service;
 
 namespace IDataSphere.Interfaces.FronDesk
 {
@@ -7,7 +7,7 @@ namespace IDataSphere.Interfaces.FronDesk
     /// 前台权限业务数据访问接口
     /// </summary>
     /// <remarks>T_User</remarks>
-    public interface IFrontDeskOAuthDao : IBaseDao
+    public interface IFrontDeskOAuthDao : IBaseDao<T_User>
     {
         /// <summary>
         /// 新增用户

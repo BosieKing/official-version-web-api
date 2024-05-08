@@ -10,9 +10,8 @@ namespace IDataSphere.Interfaces
     /// <summary>
     /// 数据库操作CURD方法
     /// </summary>
-    public interface IBaseDao
+    public interface IBaseDao<TEntity>
     {
-
         #region 构造函数       
 
         /// <summary>
@@ -232,42 +231,6 @@ namespace IDataSphere.Interfaces
         /// <param name="list"></param>
         /// <returns></returns>
         public Task<bool> BatchAddAsync<TEntity>(List<TEntity> list) where TEntity : EntityBaseDO;
-
-        /// <summary>
-        /// 批量复制
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TInsertEntity"></typeparam>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public Task<bool> BatchCopyAsync<TEntity, TInsertEntity>(long tenantId = 0)
-            where TInsertEntity : EntityTenantDO
-            where TEntity : EntityBaseDO;
-
-        /// <summary>
-        /// 批量复制，模型自动转查询条件
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TInsertEntity"></typeparam>
-        /// <typeparam name="SearchInput"></typeparam>
-        /// <param name="input"></param>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public Task<bool> BatchCopyAsync<TEntity, TInsertEntity, SearchInput>(SearchInput input, long tenantId = 0)
-            where TInsertEntity : EntityTenantDO
-            where TEntity : EntityBaseDO;
-
-        /// <summary>
-        /// 批量复制，带有查询条件
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TInsertEntity"></typeparam>
-        /// <param name="expression"></param>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public Task<bool> BatchCopyAsync<TSource, TInsertEntity>(Expression<Func<TSource, bool>> expression, long tenantId = 0)
-            where TInsertEntity : EntityTenantDO
-            where TSource : EntityBaseDO;
         #endregion
 
         #region 更新

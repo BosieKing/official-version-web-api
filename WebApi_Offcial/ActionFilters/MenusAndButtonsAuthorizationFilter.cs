@@ -49,7 +49,7 @@ namespace WebApi_Offcial.ActionFilters
                     context.Result = new JsonResult(ServiceResult.IsFailure("无权访问"));
                     return Task.CompletedTask;
                 }
-            } 
+            }
             return Task.CompletedTask;
         }
     }

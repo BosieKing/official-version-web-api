@@ -114,7 +114,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> LoginOut()
         {
-            string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];         
+            string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
             bool result = await _frontDeskOAuthService.LoginOut(userId, token);
             return ServiceResult.SetData(result);
@@ -182,7 +182,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> SendLoginVerifyCode([FromBody] SendPhoneCodeInput input)
         {
-            return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: input.Phone);            
+            return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: input.Phone);
         }
         #endregion
 

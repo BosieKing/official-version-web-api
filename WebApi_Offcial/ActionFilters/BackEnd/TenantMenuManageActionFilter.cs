@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.TenantMenuManage;
-using Model.Repositotys;
+using Model.Repositotys.BasicData;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.ActionFilters.BackEnd

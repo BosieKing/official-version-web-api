@@ -1,6 +1,4 @@
 ﻿using SharedLibrary.Enums;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 using WebApi_Offcial.Controllers;
 
 namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
@@ -8,7 +6,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
     /// <summary>
     /// 模板初始化输入类
     /// </summary>
-    public class GenerateQuicklyInput
+    public class TestGenerateQuicklyInput
     {
         /// <summary>
         /// 类名前缀
@@ -47,7 +45,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
         /// <param name="chinesesName"></param>
         /// <param name="tableName"></param>
         /// <param name="address"></param>
-        public GenerateQuicklyInput(string classNamePrefix, string chinesesName, string tableName, SwaggerGroupEnum address)
+        public TestGenerateQuicklyInput(string classNamePrefix, string chinesesName, string tableName, SwaggerGroupEnum address)
         {
             this.ClassNamePrefix = classNamePrefix;
             this.ChinesesName = chinesesName;
@@ -94,7 +92,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
     /// <summary>
     /// 控制器输入模板
     /// </summary>
-    public class ControllerGenerateQuicklyInput : GenerateQuicklyInput
+    public class ControllerGenerateQuicklyInput : TestGenerateQuicklyInput
     {
         /// <summary>
         /// 是否需要菜单权限验证

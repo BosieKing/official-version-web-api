@@ -1,19 +1,17 @@
-using IDataSphere;
 using IDataSphere.DatabaseContexts;
 using IDataSphere.Extensions;
 using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.UserManage;
-using Model.Repositotys;
-using UtilityToolkit.Extensions;
+using Model.Repositotys.Service;
 
 namespace DataSphere.BackEnd
 {
     /// <summary>
     /// 后台用户管理数据访问实现类
     /// </summary>
-    public class UserManageDao : BaseDao, IUserManageDao
+    public class UserManageDao : BaseDao<T_User>, IUserManageDao
     {
         #region 构造函数
         public UserManageDao(SqlDbContext dbContext) : base(dbContext)
@@ -44,9 +42,9 @@ namespace DataSphere.BackEnd
                             user.UpdateTime
                         };
             return await base.AdaptPage(query, input.PageSize, input.PageNo);
-        }       
+        }
         #endregion
-         
+
         #region 新增
 
         #endregion

@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-namespace Model.Repositotys
+
+namespace Model.Repositotys.Service
 {
     /// <summary>
-    /// 角色屏蔽按钮
+    /// 用户角色中间表
     /// </summary>
-    [Table("T_RoleBlockButton")]
-    public class T_RoleBlockButton : EntityTenantDO
+    [Table("T_UserRole")]
+    public class T_UserRole : EntityTenantDO
     {
         /// <summary>
         /// 角色Id
@@ -13,8 +14,8 @@ namespace Model.Repositotys
         public long RoleId { get; set; }
 
         /// <summary>
-        /// 需要屏蔽的按钮id
+        /// 用户id
         /// </summary>
-        public long ButtonId { get; set; }
+        public long UserId { get; set; }
     }
 }

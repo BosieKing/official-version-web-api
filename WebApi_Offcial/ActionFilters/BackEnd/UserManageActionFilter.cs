@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.UserManage;
-using Model.Repositotys;
+using Model.Repositotys.BasicData;
+using Model.Repositotys.Service;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.ActionFilters.BackEnd

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Model.Repositotys
+namespace Model.Repositotys.Service
 {
     /// <summary>
     /// 租户表

@@ -1,10 +1,8 @@
 ﻿using IDataSphere.Interfaces.FronDesk;
 using Mapster;
-using Model.Commons.Domain;
 using Model.DTOs.FronDesk.UserInfoManage;
-using Model.Repositotys;
+using Model.Repositotys.Service;
 using UtilityToolkit.Helpers;
-
 namespace Service.FrontDesk.UserInfoManage
 {
     /// <summary>

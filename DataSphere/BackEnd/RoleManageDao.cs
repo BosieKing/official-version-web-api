@@ -4,14 +4,14 @@ using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.RoleManage;
-using UtilityToolkit.Extensions;
+using Model.Repositotys.BasicData;
 
 namespace DataSphere.BackEnd
 {
     /// <summary>
     /// 后台角色管理数据访问实现类
     /// </summary>
-    public class RoleManageDao : BaseDao, IRoleManageDao
+    public class RoleManageDao : BaseDao<T_Role>, IRoleManageDao
     {
         #region 构造函数
         public RoleManageDao(SqlDbContext dbContext) : base(dbContext)

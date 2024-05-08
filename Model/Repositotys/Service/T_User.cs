@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Model.Repositotys
+namespace Model.Repositotys.Service
 {
     /// <summary>
     /// 用户表
@@ -48,12 +48,11 @@ namespace Model.Repositotys
         /// 登录时间
         /// </summary>
         public DateTime? LoginTime { get; set; }
-        
+
         /// <summary>
         /// 是否禁止登录
         /// </summary>
         public bool IsDisableLogin { get; set; } = false;
-
 
     }
 }

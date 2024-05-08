@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Model.Repositotys
+namespace Model.Repositotys.BasicData
 {
     /// <summary>
-    /// 菜单表
+    /// 租户菜单表
     /// </summary>
-
-    [Table("T_Menu")]
-    public class T_Menu : EntityBaseDO
+    [Table("T_TenantMenu")]
+    public class T_TenantMenu : EntityTenantDO
     {
         /// <summary>
         /// 名称

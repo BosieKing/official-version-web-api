@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.TenantManage;
-using Model.Repositotys;
+using Model.Repositotys.Service;
 using UtilityToolkit.Helpers;
-
 namespace WebApi_Offcial.ActionFilters.BackEnd
 {
     /// <summary>
@@ -17,7 +16,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         #region 构造函数及参数
         private readonly ITenantManageDao _tenantDao;
         private readonly IStringLocalizer<UserTips> _stringLocalizer;
-        public TenantManageActionFilter(ITenantManageDao tenantDao,IStringLocalizer<UserTips> stringLocalizer)
+        public TenantManageActionFilter(ITenantManageDao tenantDao, IStringLocalizer<UserTips> stringLocalizer)
         {
             _tenantDao = tenantDao;
             _stringLocalizer = stringLocalizer;

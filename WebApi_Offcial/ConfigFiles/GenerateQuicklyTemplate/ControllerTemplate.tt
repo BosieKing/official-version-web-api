@@ -3,53 +3,95 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".txt" #>
+<#@ output extension=".cs" #>
 using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Enums;
+using SharedLibrary.Consts;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
-using Model.DTOs.<#= this.input.SwaggerGroupEnumName#>.<#= this.input.ClassNamePrefix#>;
-using Service.<#= this.input.SwaggerGroupEnumName#>.<#= this.input.ClassNamePrefix#>;
-using SharedLibrary.Consts;
-using SharedLibrary.Enums;
-using WebApi_Offcial.ActionFilters.<#= this.input.SwaggerGroupEnumName#>;
-namespace WebApi_Offcial.Controllers.<#= this.input.SwaggerGroupEnumName#>
+using Service.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>;
+using Model.DTOs.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix#>;
+using WebApi_Offcial.ActionFilters.<#=this.data.SwaggerGroupEnumName#>;
+using IDataSphere.Interface.<#=this.data.SwaggerGroupEnumName#>.<#=this.data.ClassNamePrefix #>;
+
+namespace WebApi_Offcial.Controllers.<#=this.data.SwaggerGroupEnumName #>
 {
     /// <summary>
-    /// <#= this.input.ChinesesName#>控制层
+    /// <#=this.data.ChinesesName #>控制层
     /// </summary>
     [ApiController]
-    [Route("<#= this.input.ClassNamePrefix#>")]
-    [ServiceFilter(typeof(<#= this.input.ClassNamePrefix#>ActionFilter))]
-    [ApiDescription(SwaggerGroupEnum.<#= this.input.SwaggerGroupEnumName#>)]
-    public class <#= this.input.ClassNamePrefix#>Controller : <#= this.input.ControllerBaseName#>
+    [Route("<#=this.data.ClassNamePrefix#>")]
+    [ApiDescription(SwaggerGroupEnum.<#= this.data.SwaggerGroupEnumName #>)]
+    [ServiceFilter(typeof(<#=this.data.ClassNamePrefix#>ActionFilter))]
+    public class <#=this.data.ClassNamePrefix#>Controller : <#= this.data.ControllerBase#>
     {
         #region 构造函数
-        private readonly I<#= this.input.ClassNamePrefix#>Service _<#= this.input.ParameterName#>Service;<#= this.input.IsNeedHttpContext? "\r\n        private readonly IHttpContextAccessor _httpContextAccessor;":""#>     
-
+        private readonly I<#=this.data.ClassNamePrefix#>Service _<#=this.data.ParameterName#>Service;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         /// <summary>
         /// 构造函数
         /// </summary>
-        public <#= this.input.ClassNamePrefix#>Controller(I<#= this.input.ClassNamePrefix#>Service <#= this.input.ParameterName#>Service<#= this.input.IsNeedHttpContext ? ", IHttpContextAccessor httpContextAccessor" : ""#>)
+        public <#=this.data.ClassNamePrefix#>Controller(I<#=this.data.ClassNamePrefix#>Service <#=this.data.ParameterName#>Service, IHttpContextAccessor httpContextAccessor)
         {
-            _<#= this.input.ParameterName#>Service = <#= this.input.ParameterName#>Service;<#= this.input.IsNeedHttpContext? "\r\n            _httpContextAccessor = httpContextAccessor;":""#>            
+            this._<#=this.data.ParameterName#>Service = <#=this.data.ParameterName#>Service;
+            this._httpContextAccessor = httpContextAccessor;
         }
-        #endregion   
+        #endregion
+
+        #region 查询
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpGet("get<#= this.data.TableName.Split("_")[1]#>Page")]
+        public async Task<ActionResult<ServiceResult>> Get<#= this.data.TableName.Split("_")[1]#>Page([FromQuery] Get<#=this.data.TableName.Split("_")[1]#>PageInput input)
+        {
+            var data = await _<#=this.data.ParameterName#>Service.Get<#= this.data.TableName.Split("_")[1]#>Page(input);
+            return ServiceResult.SetData(data);
+        }
+        #endregion
 
         #region 新增
-        <# 
-        foreach (var item in input.ActionDic)
-            {
-                if (item.ActionName.StartsWith("add"))
-                {
-                  this.Write(this.ToStringHelper.ToStringWithCulture("        /// <summary>\r\n        /// 分页查询\r\n        /// </summary>\r\n        /// <param name=\"input\"></param>\r\n        /// <returns></returns>"));
-                 
-                }
-            }
-        #>
-        #endregion  
-        
-    
-    
-    
-    }  
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("add<#= this.data.TableName.Split("_")[1]#>")]
+        public async Task<ActionResult<ServiceResult>> Add<#= this.data.TableName.Split("_")[1]#>([FromBody] Add<#=this.data.TableName.Split("_")[1]#>Input input)
+        {
+            var result = await _<#=this.data.ParameterName#>Service.Add<#= this.data.TableName.Split("_")[1]#>(input);
+            return ServiceResult.SetData(result);
+        }
+        #endregion
+
+        #region 更新
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("update<#= this.data.TableName.Split("_")[1]#>")]
+        public async Task<ActionResult<ServiceResult>> Update<#= this.data.TableName.Split("_")[1]#>([FromBody] Update<#=this.data.TableName.Split("_")[1]#>Input input)
+        {
+            var result = await _<#=this.data.ParameterName#>Service.Update<#= this.data.TableName.Split("_")[1]#>(input);
+            return ServiceResult.SetData(result);
+        }
+        #endregion
+
+        #region 删除
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpPost("delete<#= this.data.TableName.Split("_")[1]#>")]
+        public async Task<ActionResult<ServiceResult>> Delete<#= this.data.TableName.Split("_")[1]#>([FromBody] IdInput input)
+        {
+            var result = await _<#=this.data.ParameterName#>Service.Delete<#= this.data.TableName.Split("_")[1]#>(input.Id);
+            return ServiceResult.SetData(result);
+        }
+        #endregion
+    }
 }

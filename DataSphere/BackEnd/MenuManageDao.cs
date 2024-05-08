@@ -3,6 +3,7 @@ using IDataSphere.Interfaces.BackEnd;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.CoreData;
 using Model.DTOs.BackEnd.MenuManage;
+using Model.Repositotys.BasicData;
 using SharedLibrary.Enums;
 
 namespace DataSphere.BackEnd
@@ -10,7 +11,7 @@ namespace DataSphere.BackEnd
     /// <summary>
     /// 后台菜单库管理数据访问实现类
     /// </summary>
-    public class MenuManageDao : BaseDao, IMenuManageDao
+    public class MenuManageDao : BaseDao<T_Menu>, IMenuManageDao
     {
         #region 构造函数
         public MenuManageDao(SqlDbContext dbContext) : base(dbContext)

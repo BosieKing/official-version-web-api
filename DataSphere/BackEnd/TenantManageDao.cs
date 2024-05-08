@@ -5,17 +5,16 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Model.DTOs.BackEnd.TenantManage;
-using Model.Repositotys;
+using Model.Repositotys.BasicData;
+using Model.Repositotys.Service;
 using SharedLibrary.Enums;
-using UtilityToolkit.Extensions;
 using Yitter.IdGenerator;
-
 namespace DataSphere.BackEnd
 {
     /// <summary>
     /// 后台租户管理数据访问实现类
     /// </summary>
-    public class TenantManageDao : BaseDao, ITenantManageDao
+    public class TenantManageDao : BaseDao<T_Tenant>, ITenantManageDao
     {
         #region 构造函数
         public TenantManageDao(SqlDbContext dbContext) : base(dbContext)

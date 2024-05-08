@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Model.Repositotys
+namespace Model.Repositotys.BasicData
 {
     /// <summary>
-    /// 租户菜单按钮表
+    /// 菜单按钮表
     /// </summary>
-    [Table("T_TenantMenuButton")]
-    public class T_TenantMenuButton : EntityTenantDO
+    [Table("T_MenuButton")]
+    public class T_MenuButton : EntityBaseDO
     {
         /// <summary>
         /// 菜单id
@@ -31,5 +31,10 @@ namespace Model.Repositotys
         /// </summary>
         [MaxLength(500)]
         public string? Remark { get; set; }
+
+        /// <summary>
+        /// 所属菜单
+        /// </summary>
+        public virtual T_Menu BelongMenu { get; set; }
     }
 }

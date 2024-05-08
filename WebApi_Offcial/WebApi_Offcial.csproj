@@ -42,6 +42,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="log4net" Version="2.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="6.0.28" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -49,22 +50,18 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.8.1" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ActionFilters\Center\" />
+    <Folder Include="ActionFilters\Tarot\" />
     <Folder Include="Controllers\FrontDesk\" />
+    <Folder Include="Controllers\Tarot\" />
     <Folder Include="OtherFiles\Log\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ControllerTemplate.tt</DependentUpon>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -85,17 +82,71 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\ActionFilterTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ActionFilterTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Update="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ControllerTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataSphereTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IDataSphereTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\InputTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InputTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\IServiceTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IServiceTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="ConfigFiles\GenerateQuicklyTemplate\ServiceImplTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ServiceImplTemplate.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\ActionFilterTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ActionFilterTemplate.cs</LastGenOutput>
+    </None>
     <None Update="ConfigFiles\GenerateQuicklyTemplate\ControllerTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ControllerTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>DataSphereTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\IDataSphereTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>IDataSphereTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\InputTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InputTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\IServiceTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>IServiceTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="ConfigFiles\GenerateQuicklyTemplate\ServiceImplTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ServiceImplTemplate.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

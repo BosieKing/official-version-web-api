@@ -1,20 +1,66 @@
-﻿namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
+﻿
+namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
 {
-    /// <summary>
-    /// 控制器模板
-    /// </summary>
     public partial class ControllerTemplate : ControllerTemplateBase
     {
-        private ControllerGenerateQuicklyInput input;
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="_input"></param>
-        public ControllerTemplate(ControllerGenerateQuicklyInput _input)
+        private GenerateQuicklyInput data;
+        public ControllerTemplate(GenerateQuicklyInput generateQuicklyInput)
         {
-            this.input = _input;
+            this.data = generateQuicklyInput;
         }
+    }
 
+    public partial class ServiceImplTemplate : ServiceImplTemplateBase
+    {
+        private GenerateQuicklyInput data;
+        public ServiceImplTemplate(GenerateQuicklyInput generateQuicklyInput)
+        {
+            this.data = generateQuicklyInput;
+        }
+    }
+
+    public partial class InputTemplate : InputTemplateBase
+    {
+        private GenerateQuicklyInput data;
+        public InputTemplate(GenerateQuicklyInput generateQuicklyInput)
+        {
+            this.data = generateQuicklyInput;
+        }
+    }
+
+    public partial class IServiceTemplate : IServiceTemplateBase
+    {
+        private GenerateQuicklyInput data;
+        public IServiceTemplate(GenerateQuicklyInput generateQuicklyInput)
+        {
+            this.data = generateQuicklyInput;
+        }
+    }
+
+    public partial class DataSphereTemplate : DataSphereTemplateBase
+    {
+        private GenerateQuicklyInput data;
+        public DataSphereTemplate(GenerateQuicklyInput generateQuicklyInput)
+        {
+            this.data = generateQuicklyInput;
+        }
+    }
+
+    public partial class IDataSphereTemplate : IDataSphereTemplateBase
+    {
+        private GenerateQuicklyInput data;
+        public IDataSphereTemplate(GenerateQuicklyInput generateQuicklyInput)
+        {
+            this.data = generateQuicklyInput;
+        }
+    }
+
+    public partial class ActionFilterTemplate : ActionFilterTemplateBase
+    {
+        private GenerateQuicklyInput data;
+        public ActionFilterTemplate(GenerateQuicklyInput generateQuicklyInput)
+        {
+            this.data = generateQuicklyInput;
+        }
     }
 }

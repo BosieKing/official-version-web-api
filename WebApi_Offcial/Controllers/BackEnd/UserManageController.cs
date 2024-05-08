@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
@@ -20,7 +19,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
     {
         #region 构造函数
         private readonly IUserManageService _userManageService;
-    
+
         /// <summary>
         /// 构造函数
         /// </summary>

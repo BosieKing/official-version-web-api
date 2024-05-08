@@ -1,28 +1,25 @@
 ﻿using IDataSphere.DatabaseContexts;
 using IDataSphere.Extensions;
 using IDataSphere.Interfaces;
-using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.Repositotys;
 using System.Linq.Expressions;
 using System.Reflection;
-using UtilityToolkit.Extensions;
-using Yitter.IdGenerator;
 
 namespace DataSphere
 {
     /// <summary>
     /// 自定义操作数据库方法
     /// </summary>
-    public class BaseDao : IBaseDao
+    public class BaseDao<T> : IBaseDao<T> where T : EntityBaseDO
     {
         #region 构造函数   
         public readonly SqlDbContext dbContext;
-        public BaseDao(SqlDbContext dMDbContext)
+        public BaseDao(SqlDbContext sqlDbContext)
         {
-            this.dbContext = dMDbContext;
+            this.dbContext = sqlDbContext;
         }
 
         /// <summary>
@@ -414,9 +411,20 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<bool> AddAsync<TEntity>(TEntity data) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            await rep.AddAsync(data);
-            await dbContext.SaveChangesAsync();
+            var transaction = await dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                DbSet<TEntity> rep = dbContext.Set<TEntity>();
+                await rep.AddAsync(data);
+                await dbContext.SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+
+                transaction.Rollback();
+                throw new Exception("新增失败");
+            }
             return true;
         }
 
@@ -427,122 +435,21 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<bool> BatchAddAsync<TEntity>(List<TEntity> list) where TEntity : EntityBaseDO
         {
-            var transaction = await dbContext.Database.BeginTransactionAsync();
-            try
+            if (list.Count > 0)
             {
-                DbSet<TEntity> rep = dbContext.Set<TEntity>();
-                await rep.AddRangeAsync(list);
-                await dbContext.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw new Exception("新增失败");
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// 批量复制
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TInsertEntity"></typeparam>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public async Task<bool> BatchCopyAsync<TEntity, TInsertEntity>(long tenantId = 0) where TInsertEntity : EntityTenantDO where TEntity : EntityBaseDO
-        {
-            var transaction = await dbContext.Database.BeginTransactionAsync();
-            try
-            {
-                DbSet<TEntity> soucesRep = dbContext.Set<TEntity>();
-                DbSet<TInsertEntity> insertRep = dbContext.Set<TInsertEntity>();
-                List<TInsertEntity> list = await soucesRep.Select(p => p.Adapt<TInsertEntity>()).ToListAsync();
-                if (!tenantId.Equals(0))
+                var transaction = await dbContext.Database.BeginTransactionAsync();
+                try
                 {
-                    list.ForEach(p =>
-                    {
-                        p.TenantId = tenantId;
-                        p.Id = YitIdHelper.NextId();
-                    });
+                    DbSet<TEntity> rep = dbContext.Set<TEntity>();
+                    await rep.AddRangeAsync(list);
+                    await dbContext.SaveChangesAsync();
+                    transaction.Commit();
                 }
-                await insertRep.AddRangeAsync(list);
-                await dbContext.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw new Exception("复制失败");
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// 批量复制，模型自动转查询条件
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TInsertEntity"></typeparam>
-        /// <typeparam name="SearchInput"></typeparam>
-        /// <param name="input"></param>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public async Task<bool> BatchCopyAsync<TEntity, TInsertEntity, SearchInput>(SearchInput input, long tenantId = 0) where TInsertEntity : EntityTenantDO where TEntity : EntityBaseDO
-        {
-            var transaction = await dbContext.Database.BeginTransactionAsync();
-            try
-            {
-                DbSet<TEntity> soucesRep = dbContext.Set<TEntity>();
-                DbSet<TInsertEntity> rep = dbContext.Set<TInsertEntity>();
-                List<TInsertEntity> list = await soucesRep.AsNoTracking().AddSearchCriteria(input).Select(p => p.Adapt<TInsertEntity>()).ToListAsync();
-                if (!tenantId.Equals(0))
+                catch (Exception)
                 {
-                    list.ForEach(p =>
-                    {
-                        p.TenantId = tenantId;
-                        p.Id = YitIdHelper.NextId();
-                    });
+                    transaction.Rollback();
+                    throw new Exception("新增失败");
                 }
-                await rep.AddRangeAsync(list);
-                await dbContext.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw new Exception("复制失败");
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// 批量复制，带有查询条件
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TInsertEntity"></typeparam>
-        /// <param name="expression"></param>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public async Task<bool> BatchCopyAsync<TSource, TInsertEntity>(Expression<Func<TSource, bool>> expression, long tenantId = 0) where TInsertEntity : EntityTenantDO where TSource : EntityBaseDO
-        {
-            var transaction = await dbContext.Database.BeginTransactionAsync();
-            try
-            {
-                DbSet<TSource> soucesRep = dbContext.Set<TSource>();
-                DbSet<TInsertEntity> rep = dbContext.Set<TInsertEntity>();
-                List<TInsertEntity> list = await soucesRep.AsNoTracking().Where(expression).Select(p => p.Adapt<TInsertEntity>()).ToListAsync();
-                if (!tenantId.Equals(0))
-                {
-                    list.ForEach(p => { p.TenantId = tenantId; p.Id = YitIdHelper.NextId(); });
-                }
-                await rep.AddRangeAsync(list);
-                await dbContext.SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw new Exception("复制失败");
             }
             return true;
         }
@@ -557,9 +464,18 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<bool> UpdateAsync<TEntity>(TEntity data) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            rep.Update(data);
-            await dbContext.SaveChangesAsync();
+            var transaction = await dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                DbSet<TEntity> rep = dbContext.Set<TEntity>();
+                rep.Update(data);
+                await dbContext.SaveChangesAsync(); transaction.Commit();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw new Exception("更新失败");
+            }
             return true;
         }
 
@@ -597,10 +513,20 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<bool> DeleteAsync<TEntity>(long id) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            TEntity data = await rep.FindAsync(id);
-            rep.Remove(data);
-            await dbContext.SaveChangesAsync();
+            var transaction = await dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                DbSet<TEntity> rep = dbContext.Set<TEntity>();
+                TEntity data = await rep.FindAsync(id);
+                rep.Remove(data);
+                await dbContext.SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw new Exception("删除失败");
+            }
             return true;
         }
 
@@ -612,10 +538,20 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<bool> DeleteAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            TEntity data = await rep.Where(expression).FirstOrDefaultAsync();
-            rep.Remove(data);
-            await dbContext.SaveChangesAsync();
+            var transaction = await dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                DbSet<TEntity> rep = dbContext.Set<TEntity>();
+                TEntity data = await rep.Where(expression).FirstOrDefaultAsync();
+                rep.Remove(data);
+                await dbContext.SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw new Exception("删除失败");
+            }
             return true;
         }
 
@@ -627,11 +563,21 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<bool> FakeDeleteAsync<TEntity>(long id) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            TEntity data = await rep.FirstOrDefaultAsync(p => p.Id == id);
-            data.IsDeleted = true;
-            rep.Update(data);
-            await dbContext.SaveChangesAsync();
+            var transaction = await dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                DbSet<TEntity> rep = dbContext.Set<TEntity>();
+                TEntity data = await rep.FirstOrDefaultAsync(p => p.Id == id);
+                data.IsDeleted = true;
+                rep.Update(data);
+                await dbContext.SaveChangesAsync();
+                transaction.Commit();
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw new Exception("删除失败");
+            }
             return true;
         }
 

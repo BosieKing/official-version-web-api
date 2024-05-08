@@ -47,8 +47,8 @@ namespace WebApi_Offcial.ConfigureServices
             {
                 // 每次请求序列化一个新的附加有当前用户信息的类
                 HttpContextAccessor _httpContextAccessor = p.Resolve<HttpContextAccessor>();
-                string tenantId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value;
-                string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID)?.Value;
+                string tenantId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value;
+                string userId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.USER_ID)?.Value;
                 return new UserProvider(long.Parse(tenantId ?? "0"), long.Parse(userId ?? "0")); ;
             }).InstancePerLifetimeScope();
             // 注册数据库上下文实例化工厂
@@ -56,7 +56,7 @@ namespace WebApi_Offcial.ConfigureServices
             // 从工厂中获取一个配置好了的租户信息的数据库上下文
             builder.Register<SqlDbContext>(p => p.Resolve<SqlDbContextFactory>().CreateDbContext()).InstancePerLifetimeScope();
             #endregion
-                       
+
             base.Load(builder);
         }
 

@@ -45,7 +45,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpGet("getUserInfo")]
         public async Task<ActionResult<ServiceResult>> GetUserInfo()
-        {           
+        {
             dynamic result = await _userInfoManageService.GetUserInfo();
             return ServiceResult.SetData(result);
         }
@@ -89,7 +89,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("updatePassword")]
         public async Task<ActionResult<ServiceResult>> UpdatePassword([FromBody] UpdatePasswordInput input)
-        {           
+        {
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             bool result = await _userInfoManageService.UpdatePassword(input.NewPassword, token);
             return ServiceResult.SetData(result);
@@ -102,11 +102,12 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         /// <returns></returns>
         [HttpPost("updatePasswordByCode")]
         public async Task<ActionResult<ServiceResult>> UpdatePasswordByCode([FromBody] UpdatePasswordByCodeInput input)
-        {          
+        {
             string token = _httpContextAccessor.HttpContext.Request.Headers[ClaimsUserConst.HTTP_Token_Head];
             bool result = await _userInfoManageService.UpdatePassword(input.NewPassword, token);
             return ServiceResult.SetData(result);
         }
+
         #endregion
 
         #region 删除

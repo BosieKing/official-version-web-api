@@ -3,12 +3,11 @@ using Mapster;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.RoleManage;
-using Model.Repositotys;
+using Model.Repositotys.BasicData;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Utils;
-
 namespace Service.BackEnd.RoleManage
 {
     /// <summary>
@@ -75,9 +74,9 @@ namespace Service.BackEnd.RoleManage
             await _roleManageDao.BatchDeleteAsync<T_RoleMenu>(p => p.RoleId == input.RoleId);
             await _roleManageDao.BatchAddAsync(list);
             string key = BasicDataCacheConst.ROLE_TABLE + tenantId;
-            routers.ForEach(p => 
-            { 
-                p.Name = p.Name.ToLower(); 
+            routers.ForEach(p =>
+            {
+                p.Name = p.Name.ToLower();
             });
             await RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData).HMSetAsync(key, input.RoleId.ToString(), routers.ToJson());
             return true;
@@ -105,7 +104,7 @@ namespace Service.BackEnd.RoleManage
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<bool> DeleteRole(long id)
-        {            
+        {
             await _roleManageDao.BatchDeleteAsync<T_RoleMenu>(p => p.RoleId == id);
             return await _roleManageDao.DeleteAsync<T_Role>(id);
         }
