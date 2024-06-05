@@ -35,7 +35,7 @@ namespace WebApi_Offcial.ConfigureServices
             configuration.GetSection(nameof(JwtConfig)).Bind(ConfigSettingTool.JwtConfigOptions);
             configuration.GetSection(nameof(DBConnectionConfig)).Bind(ConfigSettingTool.ConnectionConfigOptions);
             configuration.GetSection(nameof(RedisCacheConfig)).Bind(ConfigSettingTool.RedisCacheConfigOptions);
-            configuration.GetSection(nameof(SmsConfig)).Bind(ConfigSettingTool.SmsConfigOptions);
+            configuration.GetSection(nameof(TencentSmsConfig)).Bind(ConfigSettingTool.TencentSmsConfigOptions);
             configuration.GetSection(nameof(CaptchaConfig)).Bind(ConfigSettingTool.CaptchaConfigOptions);
             configuration.GetSection(nameof(ElasticSearchConfig)).Bind(ConfigSettingTool.ElasticSearchConfig);
             return configuration;

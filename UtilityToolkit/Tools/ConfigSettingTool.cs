@@ -26,7 +26,7 @@ namespace UtilityToolkit.Tools
         /// <summary>
         /// 腾讯云短信配置
         /// </summary>
-        public static readonly SmsConfig SmsConfigOptions = new SmsConfig();
+        public static readonly TencentSmsConfig TencentSmsConfigOptions = new TencentSmsConfig();
 
         /// <summary>
         /// 验证码配置

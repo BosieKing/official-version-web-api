@@ -58,7 +58,7 @@ namespace Service.Center.Captcha
             // 清除上一条验证码出错的次数
             await redisClient.DelAsync(errorKey);
             // 设置新的验证码
-            await redisClient.SetAsync(key, number, ConfigSettingTool.SmsConfigOptions.SmsExpirationTime);
+            await redisClient.SetAsync(key, number, ConfigSettingTool.TencentSmsConfigOptions.SmsExpirationTime);
             return ServiceResult.Successed();
         }
 

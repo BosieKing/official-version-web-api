@@ -19,13 +19,20 @@ namespace Model.Repositotys.Tarot
         public string Url { get; set; }
 
         /// <summary>
-        /// 牌面内容
+        /// 关键词
         /// </summary>
-        public string Content { get; set; }
+        public string KeyWord { get; set; }
 
         /// <summary>
-        /// 所属类型id
+        /// 卡牌类型
         /// </summary>
-        public long TarotCardTypeId { get; set; }
+        /// <see cref="SharedLibrary.Enums.TarotCardTypeEnum"/>
+        public int TarotCardType {get; set; }
+
+        /// <summary>
+        /// 1为正位、2为逆位
+        /// </summary>
+        /// <see cref="SharedLibrary.Enums.ForwardOrReverse"/>
+        public int ForwardOrReverse { get; set; }
     }
 }

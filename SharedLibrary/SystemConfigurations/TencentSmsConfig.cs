@@ -3,7 +3,7 @@
     /// <summary>
     /// 腾讯云短信配置
     /// </summary>
-    public class SmsConfig
+    public class TencentSmsConfig
     {
         /// <summary>
         /// 腾讯云SecretId
@@ -18,12 +18,7 @@
         /// <summary>
         /// 腾讯云短信SDKId
         /// </summary>
-        public string SmsSdkId { get; set; }
-
-        /// <summary>
-        /// 腾讯云短信模板Id
-        /// </summary>
-        public string SmsTmplId { get; set; }
+        public string SmsSdkAppId { get; set; }
 
         /// <summary>
         /// 腾讯云签名
@@ -34,5 +29,11 @@
         /// 过期时间，单位秒
         /// </summary>
         public int SmsExpirationTime { get; set; }
+
+        /// <summary>
+        /// 腾讯云短信模板Id
+        /// </summary>
+        public string SmsTmplId { get; set; }
+
     }
 }

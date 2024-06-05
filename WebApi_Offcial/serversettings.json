@@ -1,7 +1,17 @@
 {
+  // 验证码配置
   "CaptchaConfig": {
     "GraphicCaptchaExpirationTime": 1, // 图像验证码过期时间，单位分钟
     "PasswordErrorCountExpirationTime": 15, // 
     "PasswordErrorMaxCount": 5
+  },
+  // 腾讯短信配置
+  "TencentSmsConfig": {
+    "SecretId": "",
+    "SecretKey": "",
+    "SmsSdkAppId": "",
+    "SmsSign": "",
+    "SmsExpirationTime": 1,
+    "SmsTmplId": ""
   }
 } 
