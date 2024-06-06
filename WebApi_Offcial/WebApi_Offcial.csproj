@@ -58,9 +58,7 @@
 
   <ItemGroup>
     <Folder Include="ActionFilters\Center\" />
-    <Folder Include="ActionFilters\Tarot\" />
     <Folder Include="Controllers\FrontDesk\" />
-    <Folder Include="Controllers\Tarot\" />
     <Folder Include="OtherFiles\Log\" />
   </ItemGroup>
 

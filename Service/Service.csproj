@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="FrontDesk\" />
-    <Folder Include="Tarot\" />
   </ItemGroup>
 
   <ItemGroup>

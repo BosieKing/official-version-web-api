@@ -30,11 +30,5 @@ namespace SharedLibrary.Enums
         /// </summary>
         [Description("运营管理接口")]
         System = 4,
-
-        /// <summary>
-        /// 塔罗
-        /// </summary>
-        [Description("塔罗")]
-        Tarot = 5,
     }
 }
