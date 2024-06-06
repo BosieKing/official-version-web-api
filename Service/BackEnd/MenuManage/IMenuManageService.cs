@@ -14,11 +14,11 @@ namespace Service.BackEnd.MenuManage
         Task<PageResult> GetMenuPage(GetMenuPageInput input);
         Task<bool> UpdateMenu(UpdateMeunInput input);
         Task<bool> AddDirectory(AddDirectoryInput input);
-        Task<List<DropdownDataResult>> GetDirectoryList();
+        Task<List<DropdownResult>> GetDirectoryList();
         Task<bool> UpdateDirectory(UpdateDirectoryInput input);
         Task<bool> UpdateMenuButton(UpdateMenuButtonInput input);
         Task<bool> DeleteMenuButton(long id);
         Task<bool> DeleteDirectory(long id);
-        Task<List<DropdownDataResult>> GetMenuList();
+        Task<List<DropdownResult>> GetMenuList();
     }
 }

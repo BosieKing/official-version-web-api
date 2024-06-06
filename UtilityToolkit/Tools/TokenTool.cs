@@ -92,7 +92,7 @@ namespace UtilityToolkit.Tools
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static bool CancelToken(string key)
+        public static bool CancelToken(string userId)
         {
             return true;
         }

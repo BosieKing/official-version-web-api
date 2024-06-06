@@ -69,7 +69,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> GetTenantDirectoryList([FromQuery] IdInput input)
         {
-            List<DropdownDataResult> result = await _tenantManagerService.GetTenantDirectoryList(input.Id);
+            List<DropdownResult> result = await _tenantManagerService.GetTenantDirectoryList(input.Id);
             return ServiceResult.SetData(result);
         }
         #endregion

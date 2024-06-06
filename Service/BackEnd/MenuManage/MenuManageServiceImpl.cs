@@ -68,18 +68,18 @@ namespace Service.BackEnd.MenuManage
         /// 查询目录下拉
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetDirectoryList()
+        public async Task<List<DropdownResult>> GetDirectoryList()
         {
-            return await _menuManageDao.GetStringList<T_Directory>();
+            return await _menuManageDao.GetDropdownResultList<T_Directory>(p => p.IsDeleted == false, nameof(T_Directory.Name));
         }
 
         /// <summary>
         /// 查询菜单下拉
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetMenuList()
+        public async Task<List<DropdownResult>> GetMenuList()
         {
-            return await _menuManageDao.GetStringList<T_Menu>();
+            return await _menuManageDao.GetDropdownResultList<T_Menu>(p => p.IsDeleted == false, nameof(T_Menu.Name));
         }
         #endregion
 

@@ -39,19 +39,19 @@ namespace DataSphere.BackEnd
             var menuList = await dbContext.TenantMenuRep.Select(p => new DropdownSelectionResult
             {
                 Id = p.Id,
-                Name = p.Name,
+                Value = p.Name,
                 IsCheck = checkMenuList.Contains(p.Id)
             })
             .ToListAsync();
             return menuList.Select(p => new
             {
                 p.Id,
-                p.Name,
+                p.Value,
                 p.IsCheck,
                 ButtonList = buttonList.Where(b => p.Id == b.MenuId).Select(b => new DropdownSelectionResult
                 {
                     Id = b.Id,
-                    Name = b.Name,
+                    Value = b.Name,
                     IsCheck = b.IsCheck,
                 }).ToList()
             });

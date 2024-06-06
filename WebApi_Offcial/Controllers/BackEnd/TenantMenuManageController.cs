@@ -48,7 +48,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getTenantDirectory")]
         public async Task<ActionResult<ServiceResult>> GetTenantDirectory()
         {
-            List<DropdownDataResult> result = await _tenantMenuManageService.GetTenantDirectory();
+            List<DropdownResult> result = await _tenantMenuManageService.GetTenantDirectory();
             return ServiceResult.SetData(result);
         }
         #endregion

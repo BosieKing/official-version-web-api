@@ -3,7 +3,7 @@
     /// <summary>
     /// 选中下拉列表规范返回类
     /// </summary>
-    public class DropdownSelectionResult : DropdownDataResult
+    public class DropdownSelectionResult : DropdownResult
     {
         /// <summary>
         /// 是否选中

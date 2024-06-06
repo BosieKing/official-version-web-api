@@ -95,8 +95,8 @@ namespace UtilityToolkit.Helpers
             {
                 return false;
             }
-            IEnumerable<DropdownDataResult> routers = values.Select(p => p.ToObject<List<DropdownDataResult>>()).SelectMany(p => p);
-            return routers.Count() > 0 && routers.Any(p => p.Name == routerName);
+            IEnumerable<DropdownResult> routers = values.Select(p => p.ToObject<List<DropdownResult>>()).SelectMany(p => p);
+            return routers.Count() > 0 && routers.Any(p => p.Value == routerName);
         }
         #endregion
 

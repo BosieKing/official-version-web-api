@@ -36,7 +36,6 @@ namespace UtilityToolkit.Tools
         /// <summary>
         /// ES配置
         /// </summary>
-
         public static readonly ElasticSearchConfig ElasticSearchConfig = new ElasticSearchConfig();
     }
 }

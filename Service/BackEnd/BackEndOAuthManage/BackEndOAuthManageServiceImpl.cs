@@ -87,7 +87,7 @@ namespace Service.BackEnd.BackEndOAuthManage
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetBindTenantList(long userId)
+        public async Task<List<DropdownResult>> GetBindTenantList(long userId)
         {
             return await _backEndOAuthDao.GetBindTenantList();
         }
@@ -97,7 +97,7 @@ namespace Service.BackEnd.BackEndOAuthManage
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId)
+        public async Task<List<DropdownResult>> GetSuperManageBindTenantList(long userId)
         {
             return await _backEndOAuthDao.GetSuperManageBindTenantList(userId);
         }

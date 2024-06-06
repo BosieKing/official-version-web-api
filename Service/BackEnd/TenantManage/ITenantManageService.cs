@@ -14,7 +14,7 @@ namespace Service.BackEnd.TenantManage
         Task<bool> UptateInviteCode(long tenantId);
         Task<PageResult> GetTenantPage(GetTenantPageInput input);
         Task<List<DropdownSelectionResult>> GetTenantMenuList(IdInput input);
-        Task<List<DropdownDataResult>> GetTenantDirectoryList(long tenantId);
+        Task<List<DropdownResult>> GetTenantDirectoryList(long tenantId);
         Task<bool> PushTenantMenu(PushTenantMenuInput input);
     }
 }

@@ -9,7 +9,7 @@ namespace Service.BackEnd.TenantMenuManage
     public interface ITenantMenuManageService
     {
         Task<PageResult> GetPage(GetTenantMenuPageInput input);
-        Task<List<DropdownDataResult>> GetTenantDirectory();
+        Task<List<DropdownResult>> GetTenantDirectory();
         Task<bool> AddTenantDirectory(AddTenantDirectoryInput input);
         Task<bool> AddTenantMenu(AddTenantMenuInput input);
         Task<bool> AddTenantMenuButton(AddTenantMenuButtonInput input);

@@ -8,6 +8,7 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using UtilityToolkit.Extensions;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
+using UtilityToolkit.Utils;
 
 namespace Service.Center.Captcha
 {
@@ -47,8 +48,8 @@ namespace Service.Center.Captcha
             {
                 return ServiceResult.IsFailure(_stringLocalizer["VerifCodeWork"].Value);
             }
-            string number = SmsTool.GenerateRandomCode();
-            bool isSend = SmsTool.SendSMS(phone, number, codeType.GetDescription());
+            string number = TencentSmsUtil.GenerateRandomCode();
+            bool isSend = await TencentSmsUtil.SeedVerifCode(phone, number, codeType.GetDescription());
             if (!isSend)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["SendCodeError"].Value);

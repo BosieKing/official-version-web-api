@@ -13,10 +13,26 @@ namespace DataSphere
     /// <summary>
     /// 自定义操作数据库方法
     /// </summary>
-    public class BaseDao<T> : IBaseDao<T> where T : EntityBaseDO
+    public class BaseDao<T> : IBaseDao<T>  where T : EntityBaseDO
     {
         #region 构造函数   
+        /// <summary>
+        /// 数据库上下文
+        /// </summary>
         public readonly SqlDbContext dbContext;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public BaseDao()
+        {
+
+        }
+
+        /// <summary>
+        /// 注入dbcontext
+        /// </summary>
+        /// <param name="sqlDbContext"></param>
         public BaseDao(SqlDbContext sqlDbContext)
         {
             this.dbContext = sqlDbContext;
@@ -48,19 +64,6 @@ namespace DataSphere
         {
             return dbContext.TenantId;
         }
-
-        /// <summary>
-        /// 获取指定Rep
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="expression"></param>
-        /// <param name="isIgnoreTenant"></param>
-        /// <returns></returns>
-        public DbSet<TEntity> GetRep<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO
-        {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            return rep;
-        }
         #endregion
 
         #region 判断
@@ -72,15 +75,7 @@ namespace DataSphere
         public async Task<bool> DataExisted<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            if (isIgnoreTenant)
-            {
-                return await rep.IgnoreQueryFilters().Where(p => p.IsDeleted == false).AnyAsync(expression);
-            }
-            else
-            {
-                return await rep.AnyAsync(expression);
-            }
-
+            return await (isIgnoreTenant ? rep.IgnoreQueryFilters() : rep).AnyAsync(expression);
         }
 
         /// <summary>
@@ -90,8 +85,7 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<bool> IdExisted<TEntity>(long id) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            return await rep.AnyAsync(p => p.Id == id);
+            return await dbContext.Set<TEntity>().AnyAsync(p => p.Id == id);
         }
         #endregion
 
@@ -108,18 +102,10 @@ namespace DataSphere
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
             IQueryable<TEntity> query = rep.AddSearchCriteria(input);
-            if (isIgnoreTenant)
-            {
-                int count = await query.IgnoreTenantFilter().CountAsync();
-                List<TEntity> data = await query.IgnoreTenantFilter().Select(p => p).Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize).ToListAsync();
-                return new PageResult(input.PageNo, input.PageSize, count, data);
-            }
-            else
-            {
-                int count = await query.CountAsync();
-                List<TEntity> data = await query.Select(p => p).Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize).ToListAsync();
-                return new PageResult(input.PageNo, input.PageSize, count, data);
-            }
+            query = isIgnoreTenant ? query.IgnoreQueryFilters() : query;
+            int count = await query.CountAsync();
+            List<TEntity> data = await query.Select(p => p).Skip((input.PageNo - 1) * input.PageSize).Take(input.PageSize).ToListAsync();
+            return new PageResult(input.PageNo, input.PageSize, count, data);
         }
 
         /// <summary>
@@ -140,69 +126,34 @@ namespace DataSphere
 
         #region 下拉列表
         /// <summary>
-        ///  获取下拉列表，采集int类型字段
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="Int"></typeparam>
-        /// <param name="expression"></param>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
-        public async Task<List<(long Id, int Field)>> GetIntList<TEntity, Int>(Expression<Func<TEntity, bool>> expression, string fieldName) where TEntity : EntityBaseDO
-        {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            Type resultType = typeof(ValueTuple<long, int>);
-            // 参数表达式，构建P
-            ParameterExpression p = Expression.Parameter(typeof(TEntity), "p");
-            // 成员表达式，构建 p.id
-            MemberExpression idMemberExpression = Expression.PropertyOrField(p, "Id");
-            MemberExpression memberExpression = Expression.PropertyOrField(p, fieldName);
-            // 赋值表达式，构建 Id => p.id
-            var fields = resultType.GetFields();
-            MemberAssignment idMemberAssignment = Expression.Bind(fields[0], idMemberExpression);
-            MemberAssignment memberAssignment = Expression.Bind(fields[1], memberExpression);
-            // 规范返回模板
-            NewExpression result = Expression.New(typeof((long Id, int Field)));
-            // 按照指定规范返回模板和赋值表达式填充
-            MemberInitExpression memberInitExpression = Expression.MemberInit(result, idMemberAssignment, memberAssignment);
-            // 转换为查询表达式
-            var searchQuery = Expression.Lambda<Func<TEntity, (long Id, int Field)>>(memberInitExpression, p);
-            var data = await rep.Where(expression).Select(searchQuery).ToListAsync();
-            return data;
-        }
-        /// <summary>
-        /// 整个表转为下拉列表，采集string类型字段
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetStringList<TEntity>(string fieldName = "") where TEntity : EntityBaseDO
-        {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            List<DropdownDataResult> list = await rep.ConvertListSearch(fieldName).ToListAsync();
-            return list;
-        }
-
-        /// <summary>
-        /// 根据表达式过滤数据获取下拉列表，采集string类型字段
+        /// 获取下拉列表
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="expression"></param>
         /// <param name="fieldName"></param>
         /// <param name="isIgnoreTenant"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetStringList<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "", bool isIgnoreTenant = false) where TEntity : EntityBaseDO
+        public async Task<List<DropdownResult>> GetDropdownResultList<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            if (isIgnoreTenant)
-            {
-                List<DropdownDataResult> list = await rep.IgnoreTenantFilter().Where(expression).ConvertListSearch(fieldName).ToListAsync();
-                return list;
-            }
-            else
-            {
-                List<DropdownDataResult> list = await rep.Where(expression).ConvertListSearch(fieldName).ToListAsync();
-                return list;
-            }
+            Type resultType = typeof(DropdownResult);
+            // 参数表达式，构建P
+            ParameterExpression p = Expression.Parameter(typeof(TEntity), "p");
+            // 成员表达式，构建 p.id
+            MemberExpression idMemberExpression = Expression.PropertyOrField(p, "Id");
+            MemberExpression memberExpression = Expression.PropertyOrField(p, fieldName);
+            // 赋值表达式，构建 Id => p.id
+            var fields = resultType.GetProperties();
+            MemberAssignment idMemberAssignment = Expression.Bind(fields[0], idMemberExpression);
+            MemberAssignment memberAssignment = Expression.Bind(fields[1], memberExpression);
+            // 规范返回模板
+            NewExpression result = Expression.New(typeof(DropdownResult));
+            // 按照指定规范返回模板和赋值表达式填充
+            MemberInitExpression memberInitExpression = Expression.MemberInit(result, idMemberAssignment, memberAssignment);
+            // 转换为查询表达式
+            var searchQuery = Expression.Lambda<Func<TEntity, DropdownResult>>(memberInitExpression, p);
+            var data = await (isIgnoreTenant ? rep.IgnoreQueryFilters() : rep).Where(expression).Select(searchQuery).ToListAsync();
+            return data;
         }
 
         /// <summary>
@@ -216,7 +167,7 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<List<DropdownSelectionResult>> GetCheckList<TEntity>(
             string checkFieldName,
-            IEnumerable<long> checkIds,
+            List<long> checkIds,
             Expression<Func<TEntity, bool>> expression = default,
             string fieldName = "") where TEntity : EntityBaseDO
         {
@@ -236,7 +187,7 @@ namespace DataSphere
             // 构建赋值
             PropertyInfo[] properties = resultType.GetProperties();
             MemberAssignment idAssign = Expression.Bind(properties.FirstOrDefault(p => p.Name == nameof(DropdownSelectionResult.Id)), idField);
-            MemberAssignment nameAssign = Expression.Bind(properties.FirstOrDefault(p => p.Name == nameof(DropdownSelectionResult.Name)), nameField);
+            MemberAssignment nameAssign = Expression.Bind(properties.FirstOrDefault(p => p.Name == nameof(DropdownSelectionResult.Value)), nameField);
             MemberAssignment checkAssign = Expression.Bind(properties.FirstOrDefault(p => p.Name == nameof(DropdownSelectionResult.IsCheck)), check);
             // 返回模板
             NewExpression newExpression = Expression.New(resultType);
@@ -254,21 +205,16 @@ namespace DataSphere
         /// <param name="expression"></param>
         /// <param name="fieldName">自定义采集id名称</param>
         /// <returns></returns>
-        public async Task<List<long>> GetLongFields<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "") where TEntity : EntityBaseDO
+        public async Task<List<long>> GetLongArray<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            if (fieldName.IsNullOrEmpty())
-            {
-                List<long> list = await rep.Where(expression).Select(p => p.Id).ToListAsync();
-                return list;
-            }
             // 参数表达式，构建P
             ParameterExpression p = Expression.Parameter(typeof(TEntity), "p");
             // 成员表达式，构建 p.id
             MemberExpression memberExpression = Expression.PropertyOrField(p, fieldName);
             // 转换为查询表达式
             var searchQuery = Expression.Lambda<Func<TEntity, long>>(memberExpression, p);
-            return await rep.Where(expression).Select(searchQuery).ToListAsync();
+            return await (isIgnoreTenant ? rep.IgnoreQueryFilters() : rep).Where(expression).Select(searchQuery).ToListAsync();
         }
 
         /// <summary>
@@ -278,9 +224,9 @@ namespace DataSphere
         /// <param name="expression"></param>
         /// <param name="fieldName">自定义采集id名称</param>
         /// <returns></returns>
-        public async Task<List<long>> Getlds<TEntity>(Expression<Func<TEntity, bool>> expression, string fieldName = "") where TEntity : EntityBaseDO
+        public async Task<List<long>> Getlds<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO
         {
-            return await GetLongFields(expression, fieldName);
+            return await GetLongArray(expression, nameof(EntityBaseDO.Id));
         }
         #endregion
 
@@ -292,8 +238,7 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<TEntity> GetDataById<TEntity>(long id) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            return await rep.FindAsync(id);
+            return await dbContext.Set<TEntity>().FindAsync(id);
         }
 
         /// <summary>
@@ -306,16 +251,7 @@ namespace DataSphere
         public async Task<TEntity> GetDataByCondition<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            if (isIgnoreTenant)
-            {
-                TEntity entity = await rep.IgnoreTenantFilter().FirstOrDefaultAsync(expression);
-                return entity;
-            }
-            else
-            {
-                TEntity entity = await rep.FirstOrDefaultAsync(expression);
-                return entity;
-            }
+            return await (isIgnoreTenant ? rep.IgnoreTenantFilter() : rep).FirstOrDefaultAsync(expression); ;
         }
         #endregion
 
@@ -352,8 +288,7 @@ namespace DataSphere
             MemberExpression memberExpression = Expression.PropertyOrField(p, fieldName);
             // 转换为查询表达式
             var searchQuery = Expression.Lambda<Func<TEntity, string>>(memberExpression, p);
-            var data = await rep.Where(expression).Select(searchQuery).FirstOrDefaultAsync();
-            return data;
+            return await rep.Where(expression).Select(searchQuery).FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -363,22 +298,20 @@ namespace DataSphere
         /// <returns></returns>
         public async Task<int> GetCount<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            return await rep.Where(expression).CountAsync();
+            return await dbContext.Set<TEntity>().Where(expression).CountAsync();
         }
         #endregion
 
         #region 多条数据
         /// <summary>
-        /// 通过主键集合
+        /// 通过主键集合查询数据
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="ids"></param>
         /// <returns></returns>
         public async Task<List<TEntity>> GetDataByIds<TEntity>(List<long> ids) where TEntity : EntityBaseDO
         {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            return await rep.Where(r => ids.Contains(r.Id)).ToListAsync();
+            return await dbContext.Set<TEntity>().Where(r => ids.Contains(r.Id)).ToListAsync();
         }
 
         /// <summary>
@@ -391,15 +324,7 @@ namespace DataSphere
         public async Task<List<TEntity>> GetTableList<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            if (isIgnoreTenant)
-            {
-                return await rep.IgnoreTenantFilter().Where(expression).ToListAsync();
-
-            }
-            else
-            {
-                return await rep.Where(expression).ToListAsync();
-            }
+            return await (isIgnoreTenant ? rep.IgnoreTenantFilter() : rep).Where(expression).ToListAsync();
         }
         #endregion
 
@@ -421,7 +346,6 @@ namespace DataSphere
             }
             catch (Exception)
             {
-
                 transaction.Rollback();
                 throw new Exception("新增失败");
             }

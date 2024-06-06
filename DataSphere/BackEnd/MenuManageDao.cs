@@ -14,9 +14,6 @@ namespace DataSphere.BackEnd
     public class MenuManageDao : BaseDao<T_Menu>, IMenuManageDao
     {
         #region 构造函数
-        public MenuManageDao(SqlDbContext dbContext) : base(dbContext)
-        {
-        }
         #endregion
 
         #region 查询

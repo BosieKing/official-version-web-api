@@ -310,11 +310,11 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetBindTenantList()
+        public async Task<List<DropdownResult>> GetBindTenantList()
         {
-            List<DropdownDataResult> list = new List<DropdownDataResult>();
+            List<DropdownResult> list = new List<DropdownResult>();
             string code = await dbContext.TenantRep.Where(p => p.Id == dbContext.TenantId).Select(p => p.Code).FirstOrDefaultAsync();
-            list.Add(new DropdownDataResult() { Id = dbContext.TenantId, Name = code });
+            list.Add(new DropdownResult() { Id = dbContext.TenantId, Value = code });
             return list;
         }
 
@@ -324,12 +324,12 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId)
+        public async Task<List<DropdownResult>> GetSuperManageBindTenantList(long userId)
         {
             var tenantIdsQuery = dbContext.UserRep.IgnoreTenantFilter().Where(p => p.Id == userId)
                                            .Select(p => p.Phone).Take(1);
             var tenantIdIds = dbContext.UserRep.IgnoreTenantFilter().Where(p => tenantIdsQuery.Contains(p.Phone)).Select(p => p.TenantId);
-            return await dbContext.TenantRep.Where(p => tenantIdIds.Contains(p.Id)).Select(p => new DropdownDataResult { Id = p.Id, Name = p.Name }).ToListAsync();
+            return await dbContext.TenantRep.Where(p => tenantIdIds.Contains(p.Id)).Select(p => new DropdownResult { Id = p.Id, Value = p.Name }).ToListAsync();
 
         }
         #endregion

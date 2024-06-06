@@ -69,14 +69,14 @@ namespace Service.BackEnd.RoleManage
         /// <returns></returns>
         public async Task<bool> AddRoleMenu(AddRoleMenuInput input, string tenantId)
         {
-            List<DropdownDataResult> routers = await _roleManageDao.GetStringList<T_TenantMenu>(p => input.MenuIds.Contains(p.Id), $"{nameof(T_TenantMenu.Router)}");
+            List<DropdownResult> routers = await _roleManageDao.GetDropdownResultList<T_TenantMenu>(p => input.MenuIds.Contains(p.Id), $"{nameof(T_TenantMenu.Router)}");
             List<T_RoleMenu> list = input.MenuIds.Select(p => new T_RoleMenu { RoleId = input.RoleId, MenuId = p }).ToList();
             await _roleManageDao.BatchDeleteAsync<T_RoleMenu>(p => p.RoleId == input.RoleId);
             await _roleManageDao.BatchAddAsync(list);
             string key = BasicDataCacheConst.ROLE_TABLE + tenantId;
             routers.ForEach(p =>
             {
-                p.Name = p.Name.ToLower();
+                p.Value = p.Value.ToString().ToLower();
             });
             await RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData).HMSetAsync(key, input.RoleId.ToString(), routers.ToJson());
             return true;

@@ -66,11 +66,10 @@ namespace Service.BackEnd.TenantMenuManage
         /// 获取目录下拉
         /// </summary>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetTenantDirectory()
+        public async Task<List<DropdownResult>> GetTenantDirectory()
         {
-            return await _tenantMenuManageDao.GetStringList<T_TenantDirectory>();
+            return await _tenantMenuManageDao.GetDropdownResultList<T_TenantDirectory>(p => p.IsDeleted == false, nameof(T_TenantDirectory.Name));
         }
-
         #endregion
 
         #region 新增

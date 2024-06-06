@@ -185,6 +185,5 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             return await _captchaService.SendPhoneCode(VerificationCodeTypeEnum.Login, phone: input.Phone);
         }
         #endregion
-
     }
 }

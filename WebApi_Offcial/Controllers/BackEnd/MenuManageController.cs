@@ -50,7 +50,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getDirectoryList")]
         public async Task<ActionResult<ServiceResult>> GetDirectoryList()
         {
-            List<DropdownDataResult> result = await _menuManageService.GetDirectoryList();
+            List<DropdownResult> result = await _menuManageService.GetDirectoryList();
             return ServiceResult.SetData(result);
         }
 
@@ -61,7 +61,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getMenuList")]
         public async Task<ActionResult<ServiceResult>> GetMenuList()
         {
-            List<DropdownDataResult> result = await _menuManageService.GetMenuList();
+            List<DropdownResult> result = await _menuManageService.GetMenuList();
             return ServiceResult.SetData(result);
         }
         #endregion

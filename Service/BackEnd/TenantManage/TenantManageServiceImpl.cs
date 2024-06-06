@@ -48,7 +48,7 @@ namespace Service.BackEnd.TenantManage
         /// <returns></returns>
         public async Task<List<DropdownSelectionResult>> GetTenantMenuList(IdInput input)
         {
-            List<long> uniqueNumbers = await _tenantDao.GetLongFields<T_TenantMenu>(t => t.TenantId == input.Id, nameof(T_TenantMenu.UniqueNumber));
+            List<long> uniqueNumbers = await _tenantDao.GetLongArray<T_TenantMenu>(t => t.TenantId == input.Id, nameof(T_TenantMenu.UniqueNumber));
 
             return await _tenantDao.GetCheckList<T_Menu>(nameof(T_Menu.UniqueNumber), uniqueNumbers,
                                                              p => p.Weight == (int)MenuWeightTypeEnum.Service || p.Weight == (int)MenuWeightTypeEnum.Customization);
@@ -59,9 +59,9 @@ namespace Service.BackEnd.TenantManage
         /// </summary>
         /// <param name="tenantId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetTenantDirectoryList(long tenantId)
+        public async Task<List<DropdownResult>> GetTenantDirectoryList(long tenantId)
         {
-            return await _tenantDao.GetStringList<T_TenantDirectory>(p => p.TenantId == tenantId, isIgnoreTenant: true);
+            return await _tenantDao.GetDropdownResultList<T_TenantDirectory>(p => p.TenantId == tenantId,nameof(T_TenantDirectory.Name), isIgnoreTenant: true);
         }
         #endregion
 

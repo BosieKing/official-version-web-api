@@ -9,10 +9,10 @@ namespace Service.BackEnd.BackEndOAuthManage
     /// </summary>
     public interface IBackEndOAuthManageService
     {
-        Task<List<DropdownDataResult>> GetBindTenantList(long userId);
+        Task<List<DropdownResult>> GetBindTenantList(long userId);
         Task<string[]> GetButtonArray(string rolds);
         Task<List<MenuTreeModel>> GetMenuTree(string rolds);
-        Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId);
+        Task<List<DropdownResult>> GetSuperManageBindTenantList(long userId);
         Task<string[]> GetSuperManageButtonArray();
         Task<List<MenuTreeModel>> GetSuperManageMenuTree();
         Task<dynamic> GetUserInfo(long userId);

@@ -1,16 +1,30 @@
-﻿using TencentCloud.Common;
+﻿using System.Text;
+using TencentCloud.Common;
 using TencentCloud.Common.Profile;
 using TencentCloud.Sms.V20210111;
 using TencentCloud.Sms.V20210111.Models;
 using UtilityToolkit.Tools;
 
-namespace TencentCloudExamples
+namespace UtilityToolkit.Utils
 {
     /// <summary>
     /// 腾讯云发送短信类
     /// </summary>
     public static class TencentSmsUtil
     {
+        /// <summary>
+        /// 发送手机验证码短信
+        /// </summary>
+        /// <param name="phone">发送电话号码</param>
+        /// <param name="number">参数：验证码数字</param>
+        /// <param name="codeTypeName">参数：验证码类型</param>
+        /// <returns></returns>
+        public static async Task<bool> SeedVerifCode(string phone, string number, string codeTypeName)
+        {
+            await SeedMsg(new string[] { phone }, new string[] { number, codeTypeName }, ConfigSettingTool.TencentSmsConfigOptions.SmsTmplId);
+            return true;
+        }
+
         /// <summary>
         /// 发送短信
         /// </summary>
@@ -61,7 +75,7 @@ namespace TencentCloudExamples
              * 属性可能是基本类型，也可能引用了另一个数据结构
              * 推荐使用 IDE 进行开发，可以方便地跳转查阅各个接口和数据结构的文档说明 */
             SendSmsRequest req = new SendSmsRequest();
-           
+
 
             /* 基本类型的设置:
              * SDK 采用的是指针风格指定参数，即使对于基本类型也需要用指针来对参数赋值
@@ -87,6 +101,22 @@ namespace TencentCloudExamples
             {
                 throw new Exception("发送失败");
             }
+        }
+
+        /// <summary>
+        /// 电话号码--生成6位验证码
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string GenerateRandomCode()
+        {
+            StringBuilder result = new();
+            for (var i = 0; i < 6; i++)
+            {
+                Random r = new Random(Guid.NewGuid().GetHashCode());
+                result.Append(r.Next(0, 10));
+            }
+            return result.ToString();
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace Model.Commons.Domain
 {
     /// <summary>
-    /// 下拉列表规范返回类
+    /// 下拉选项
     /// </summary>
-    public class DropdownDataResult
+    public class DropdownResult
     {
         /// <summary>
         /// Id
@@ -13,6 +13,6 @@
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; } = string.Empty;
+        public object Value { get; set; }
     }
 }

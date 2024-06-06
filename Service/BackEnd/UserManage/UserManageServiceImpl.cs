@@ -41,7 +41,7 @@ namespace Service.BackEnd.UserManage
         /// <returns></returns>
         public async Task<List<DropdownSelectionResult>> GetUserRoleList(long id)
         {
-            List<long> ids = await _userManageDao.Getlds<T_UserRole>(p => p.UserId == id, nameof(T_UserRole.RoleId));
+            List<long> ids = await _userManageDao.GetLongArray<T_UserRole>(p => p.UserId == id, nameof(T_UserRole.RoleId));
             return await _userManageDao.GetCheckList<T_Role>(nameof(T_Role.Id), ids);
         }
         #endregion
