@@ -11,6 +11,6 @@ namespace IDataSphere.ESContexts
         /// </summary>
         /// <param name="indexName">索引名称</param>
         /// <returns></returns>
-        IElasticClient GetClient(string indexName);
+        ElasticClient GetClient(string indexName);
     }
 }

@@ -64,7 +64,7 @@ namespace DataSphere.ES
         public async Task<dynamic> GetPostPage(PostSearchInput input, long userId)
         {
             // 获取当前人关注的用户列表，如果搜寻到的内容包含这些创作者，则加分
-            string[] focusUserIds = RedisMulititionHelper.GetFocusUserIds(userId);
+            //string[] focusUserIds = RedisMulititionHelper.GetFocusUserIds(userId);
             // 同事
 
 
@@ -80,7 +80,5 @@ namespace DataSphere.ES
 
         #region 删除
         #endregion
-
-
     }
 }

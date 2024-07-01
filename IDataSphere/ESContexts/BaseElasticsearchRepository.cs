@@ -57,10 +57,6 @@ namespace IDataSphere.ESContexts
                 p.Map<PostIndexRepository>(p => p.AutoMap())
                  .InitializeUsing(state)
                 );
-                var meoo = _elasticClient.Indices.GetType().GetMethods().Select(p =>
-                {
-                    return p.Name.Contains("Async") ? p.Name.Replace("Async", "") : p.Name;
-                }).GroupBy(p => p).Select(p => p.Key).OrderBy(p => p).ToList();
             }
         }
     }

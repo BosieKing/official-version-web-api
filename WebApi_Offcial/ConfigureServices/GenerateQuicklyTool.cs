@@ -194,9 +194,6 @@ public class GenerateQuicklyInput
                 this.SwaggerGroupEnumName = "System";
                 this.ControllerBase = nameof(BaseController);
                 break;
-            case SwaggerGroupEnum.Tarot:
-                this.SwaggerGroupEnumName = "Tarot";
-                break;
             default:
                 break;
         }

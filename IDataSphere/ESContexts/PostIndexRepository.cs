@@ -1,4 +1,6 @@
-﻿namespace IDataSphere.ESContexts
+﻿using IDataSphere.ESContexts.ESIndexs;
+
+namespace IDataSphere.ESContexts
 {
     /// <summary>
     /// 错误日志仓储
@@ -13,7 +15,5 @@
         public PostIndexRepository(IElasticSearchHelper elasticsearchHelper, string indexName) : base(elasticsearchHelper, indexName)
         {
         }
-
-
     }
 }
