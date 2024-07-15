@@ -35,7 +35,7 @@ namespace Service.Center.Captcha
         /// <returns></returns>
         public async Task<ServiceResult> SendPhoneCode(VerificationCodeTypeEnum codeType, string phone = "", long userId = 0)
         {
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             if (!userId.Equals(0))
             {
                 phone = await _captchaDao.GetPhone(userId);
@@ -71,7 +71,7 @@ namespace Service.Center.Captcha
         public async Task<dynamic> GetGraphicCaptcha()
         {
             Random random = new();
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             char[] chars = new char[4];
             // 加载背景图
             string bgImagesFilePath = Path.Combine(Environment.CurrentDirectory, @"ConfigFiles\GraphicCaptchaBgImage.png");
@@ -119,7 +119,7 @@ namespace Service.Center.Captcha
         {
             return ServiceResult.Successed();
             // 判断手机验证码是否正确
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             // 拼接注册验证码
             string key = codeType + CaptchaCacheConst.VERIF_CODE_KEY + phone;
             // 拼接验证码错误次数Key
@@ -167,7 +167,7 @@ namespace Service.Center.Captcha
             return ServiceResult.Successed();
             // 滑动验证码Key
             string graphicCaptchaKey = CaptchaCacheConst.GRAPHIC_CAPTCHA_KEY + guid;
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             // 获取缓存中的滑动验证码值
             string graphicCaptchaeValue = await redisClient.GetAsync(graphicCaptchaKey);
             if (graphicCaptchaeValue.IsNullOrEmpty())

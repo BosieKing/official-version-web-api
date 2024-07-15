@@ -72,8 +72,8 @@ namespace Service.FrontDesk.FrontDeskOAuth
             string key = UserCacheConst.USER_INFO_TABLE + user.TenantId;
             string value = user.ToJson();
             await _frontDeskOAuthDao.UpdateLastLoginTime(long.Parse(user.UserId));
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HMSetAsync(key, user.UserId.ToString(), value);
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, user.UserId.ToString());
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HMSetAsync(key, user.UserId.ToString(), value);
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, user.UserId.ToString());
             return new ValueTuple<string, string>(token, refreshToken);
         }
 

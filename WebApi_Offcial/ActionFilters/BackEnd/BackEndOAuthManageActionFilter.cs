@@ -101,7 +101,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             int pwdErrorMaxCount = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorMaxCount;
             // 拼接密码已出错次数Key
             string passwordErrorCountKey = CaptchaCacheConst.PASSWORD_ERROR_COUNT_KEY + input.Phone;
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             // 获取密码已出错次数
             string passwordErrorCountValue = redisClient.Get(passwordErrorCountKey);
             int passwordErrorCount = passwordErrorCountValue.IsNullOrEmpty() ? 0 : int.Parse(passwordErrorCountValue);
@@ -140,7 +140,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                 return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value);
             }
             // 获取缓存中的滑动验证码值
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             // 滑动验证码Key
             string graphicCaptchaKey = CaptchaCacheConst.GRAPHIC_CAPTCHA_KEY + input.Guid;
             // 密码出错次数Key

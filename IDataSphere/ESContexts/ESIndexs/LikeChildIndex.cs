@@ -5,17 +5,18 @@ namespace IDataSphere.ESContexts.ESIndexs
     /// <summary>
     /// 喜欢子索引
     /// </summary>
-    public class LikeChildIndex
+    public class LikeChildIndex : ESIndex
     {
         /// <summary>
         /// 喜欢的用户id
         /// </summary>
         [Keyword(Name = nameof(LikeChildIndex.LikeUserId))]
         public string LikeUserId { get; set; }
-   
+
         /// <summary>
-        /// 喜欢的时间
+        /// 属于的类型
         /// </summary>
-        public DateTimeOffset LikeTime { get; set; }
+        [Keyword(Name = nameof(LikeChildIndex.SubType))]
+        public string SubType { get; set; } = nameof(LikeChildIndex);
     }
 }

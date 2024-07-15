@@ -8,6 +8,8 @@
         /// <summary>
         /// 查询字符串
         /// </summary>
-        public string SearchValue { get; set; }
+        public string SearchValue { get; set; } = string.Empty;
+
+        public string PaperId { get; set; } = string.Empty;
     }
 }

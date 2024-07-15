@@ -78,7 +78,7 @@ namespace Service.BackEnd.RoleManage
             {
                 p.Name = p.Name.ToLower();
             });
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData).HMSetAsync(key, input.RoleId.ToString(), routers.ToJson());
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.BaseData).HMSetAsync(key, input.RoleId.ToString(), routers.ToJson());
             return true;
         }
         #endregion

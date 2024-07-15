@@ -92,7 +92,7 @@ namespace Service.BackEnd.TenantManage
                 }
                 result.Append(item);
             }
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.BaseData);
             redisClient.HMSet(BasicDataCacheConst.TENANT_TABLE, tenantId.ToString(), JsonConvert.SerializeObject(new
             {
                 Id = tenantId,
@@ -144,7 +144,7 @@ namespace Service.BackEnd.TenantManage
             // 缓存
             string key = BasicDataCacheConst.ROLE_TABLE + tenant.Id;
             menuIds.ForEach(p => { p.Router = p.Router.ToLower(); });
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.BaseData).HMSetAsync(key, role.Id.ToString(), menuIds.ToJson());
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.BaseData).HMSetAsync(key, role.Id.ToString(), menuIds.ToJson());
             // 配置角色与用户的关系
             T_UserRole userRole = new T_UserRole();
             userRole.UserId = user.Id;

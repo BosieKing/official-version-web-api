@@ -5,17 +5,18 @@ namespace IDataSphere.ESContexts.ESIndexs
     /// <summary>
     /// 收藏子索引
     /// </summary>
-    public class FavoriteChildIndex
+    public class FavoriteChildIndex : ESIndex
     {
         /// <summary>
-        /// 喜欢的用户id
+        /// 收藏的用户id
         /// </summary>
         [Keyword(Name = nameof(FavoriteChildIndex.FavoriteUserId))]
         public string FavoriteUserId { get; set; }
 
         /// <summary>
-        /// 喜欢的时间
+        /// 属于的类型
         /// </summary>
-        public DateTimeOffset FavoriteTime { get; set; }
+        [Keyword(Name = nameof(FavoriteChildIndex.SubType))]
+        public string SubType { get; set; } = nameof(FavoriteChildIndex);
     }
 }

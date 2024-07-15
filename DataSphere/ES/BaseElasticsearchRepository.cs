@@ -16,13 +16,22 @@ namespace DataSphere.ES
         /// </summary>
         /// <param name="elasticsearchHelper"></param>
         /// <param name="indexName"></param>
-        public BaseElasticsearchRepository(IElasticSearchHelper elasticsearchHelper, string indexName)
+        public BaseElasticsearchRepository(ElasticClient elasticClient)
         {
-            _elasticClient = elasticsearchHelper.GetClient(indexName);
-
+            _elasticClient = elasticClient;
         }
 
-        public async Task<bool> IndexHases(string indexName)
+
+        #region
+        
+        #endregion
+
+        /// <summary>
+        /// 判断索引是否存在
+        /// </summary>
+        /// <param name="indexName"></param>
+        /// <returns></returns>
+        public async Task<bool> IndexExist(string indexName)
         {
             var data = await _elasticClient.Indices.ExistsAsync(indexName);
             return data.Exists;
@@ -41,6 +50,15 @@ namespace DataSphere.ES
                 throw new Exception("插入错误");
             }
             return true;
+        }
+
+        /// <summary>
+        /// 清空所有doc
+        /// </summary>
+        /// <returns></returns>
+        public async Task DeleteAll()
+        {
+            _elasticClient.DeleteByQuery<PostIndex>(p => p.Query(q => q.MatchAll()));
         }
     }
 }

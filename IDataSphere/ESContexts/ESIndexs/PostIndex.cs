@@ -10,28 +10,21 @@ namespace IDataSphere.ESContexts.ESIndexs
         /// <summary>
         /// 标题
         /// </summary>
-        /// 启用ik分词器
-        [Text(Name = nameof(Title), Index = true, Analyzer = "ik_max_word")]
+        /// Index = 允许索引
+        /// Store = 启用存储（默认情况下，字段值被索引可以允许他们能被搜索到，但是不会被store存储，即允许查询，但是不允许通过查询返回这个值）
+        /// Analyzer = 启用ik分词器
+        [Text(Name = nameof(Title), Index = true, Store = true, Analyzer = "ik_max_word")]
         public string Title { get; set; }
 
         /// <summary>
         /// 帖子内容
         /// </summary>
+        [Keyword(Name = nameof(Context))]
         public string Context { get; set; }
 
         /// <summary>
-        /// 喜欢子索引
+        /// 标签
         /// </summary>
-        public List<LikeChildIndex> Likes { get; set; } = new();
-
-        /// <summary>
-        /// 收藏子索引
-        /// </summary>
-        public List<FavoriteChildIndex> Favorites { get; set; } = new();
-
-        /// <summary>
-        /// 评论子索引
-        /// </summary>
-        public List<CommentChildIndex> Comments { get; set; } = new();
+        public string[] Tags { get; set; }
     }
 }

@@ -105,7 +105,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             int pwdErrorMaxCount = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorMaxCount;
             // 密码已出错次数Key
             string passwordErrorCountKey = CaptchaCacheConst.PASSWORD_ERROR_COUNT_KEY + input.Phone;
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             // 获取密码已出错次数
             string passwordErrorCountValue = redisClient.Get(passwordErrorCountKey);
             int passwordErrorCount = passwordErrorCountValue.IsNullOrEmpty() ? 0 : int.Parse(passwordErrorCountValue);
@@ -138,7 +138,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> LoginByVerifyCodeVerify(LoginByVerifyCodeInput input)
         {
             // 获取缓存中的滑动验证码值
-            var redisClient = RedisMulititionHelper.GetClinet(CacheTypeEnum.Verify);
+            var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             // 验证滑动验证码值
             ServiceResult captchaResult = await _captchaService.GraphicCaptchaVerify(input.Guid, input.GraphicCaptcha);
             if (!captchaResult.Success)

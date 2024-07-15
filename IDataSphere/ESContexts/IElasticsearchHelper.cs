@@ -7,10 +7,9 @@ namespace IDataSphere.ESContexts
     public interface IElasticSearchHelper
     {
         /// <summary>
-        /// 获取连接
+        /// 获取连接配置
         /// </summary>
-        /// <param name="indexName">索引名称</param>
         /// <returns></returns>
-        ElasticClient GetClient(string indexName);
+        ElasticClient GetClient();
     }
 }

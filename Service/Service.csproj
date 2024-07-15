@@ -20,12 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FrontDesk\" />
+    <ProjectReference Include="..\IDataSphere\IDataSphere.csproj" />
+    <ProjectReference Include="..\UtilityToolkit\UtilityToolkit.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IDataSphere\IDataSphere.csproj" />
-    <ProjectReference Include="..\UtilityToolkit\UtilityToolkit.csproj" />
+    <Folder Include="FrontDesk\PostHome\" />
   </ItemGroup>
 
 </Project>

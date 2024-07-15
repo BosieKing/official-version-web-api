@@ -84,7 +84,7 @@ namespace DataSphere
         }
 
         /// <summary>
-        /// 判断Id是否存在
+        /// 判断主键是否存在
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -169,6 +169,8 @@ namespace DataSphere
             var data = await rep.Where(expression).Select(searchQuery).ToListAsync();
             return data;
         }
+
+
         /// <summary>
         /// 整个表转为下拉列表，采集string类型字段
         /// </summary>
@@ -359,9 +361,9 @@ namespace DataSphere
         /// <summary>
         /// 根据条件获取数量
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        public async Task<int> GetCount<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO
+        public async Task<int> CountIF<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
             return await rep.Where(expression).CountAsync();
@@ -438,10 +440,15 @@ namespace DataSphere
             if (list.Count > 0)
             {
                 var transaction = await dbContext.Database.BeginTransactionAsync();
+                int count = list.Count / 50;
                 try
                 {
                     DbSet<TEntity> rep = dbContext.Set<TEntity>();
-                    await rep.AddRangeAsync(list);
+                    var adds = list.Chunk(count);
+                    foreach (var item in adds)
+                    {                        
+                        await rep.AddRangeAsync(list);                     
+                    }
                     await dbContext.SaveChangesAsync();
                     transaction.Commit();
                 }

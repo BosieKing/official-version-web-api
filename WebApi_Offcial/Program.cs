@@ -131,6 +131,9 @@ app.UseRequestLocalization(new RequestLocalizationOptions
     SupportedUICultures = languages
 });
 
+// 启用分析
+app.UseMiniProfiler();
+
 // 启用容错中间件
 app.UserFaultToleranceMiddleware();
 

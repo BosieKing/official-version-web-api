@@ -80,7 +80,7 @@ namespace WebApi_Offcial.ConfigureServices
                         return await Task.FromResult(AuthenticateResult.Fail(""));
                     }
                     // 是否需要重载token信息，如需重载则重新生成Token信息
-                    bool needReload = await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HExistsAsync(UserCacheConst.MAKE_IN_TABLE, userId);
+                    bool needReload = await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HExistsAsync(UserCacheConst.MAKE_IN_TABLE, userId);
                     if (needReload)
                     {
                         throw new Exception("");
@@ -97,10 +97,10 @@ namespace WebApi_Offcial.ConfigureServices
                         long userId = long.Parse(refreshClaimsPrincipal.Claims.FirstOrDefault(p => p.Type == ClaimsUserConst.USER_ID).Value);
                         long tenantId = long.Parse(refreshClaimsPrincipal.Claims.FirstOrDefault(p => p.Type == ClaimsUserConst.TENANT_ID).Value);
                         string key = UserCacheConst.USER_INFO_TABLE + tenantId;
-                        string userInfo = await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HGetAsync(key, userId.ToString());
+                        string userInfo = await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HGetAsync(key, userId.ToString());
                         TokenInfoModel user = userInfo.ToObject<TokenInfoModel>();
                         token = TokenTool.CreateToken(user, RedisMulititionHelper.IsSuperManage(user.TenantId));
-                        await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
+                        await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
                         _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = token;
                     }
                     catch (Exception)

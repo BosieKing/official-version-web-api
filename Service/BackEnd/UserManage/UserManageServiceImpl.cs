@@ -69,7 +69,7 @@ namespace Service.BackEnd.UserManage
             if (input.RoleIds.Count() > 0)
             {
                 IEnumerable<T_UserRole> list = input.RoleIds.Select(p => new T_UserRole { UserId = input.UserId, RoleId = p });
-                await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HSetAsync(UserCacheConst.MAKE_IN_TABLE, input.UserId.ToString(), input.UserId.ToString());
+                await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HSetAsync(UserCacheConst.MAKE_IN_TABLE, input.UserId.ToString(), input.UserId.ToString());
                 return await _userManageDao.BatchAddAsync(list.ToList());
             }
             return true;

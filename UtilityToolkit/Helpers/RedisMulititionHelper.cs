@@ -51,7 +51,7 @@ namespace UtilityToolkit.Helpers
                 dic.Add((int)CacheTypeEnum.Verify, ConfigSettingTool.RedisCacheConfigOptions.VerifyCacheConnection);
                 dic.Add((int)CacheTypeEnum.User, ConfigSettingTool.RedisCacheConfigOptions.UserCacheConnection);
                 dic.Add((int)CacheTypeEnum.Distributed, ConfigSettingTool.RedisCacheConfigOptions.DistributeLockConnection);
-
+                dic.Add((int)CacheTypeEnum.PostCache, ConfigSettingTool.RedisCacheConfigOptions.PostCacheConnection);
                 for (int i = 0; i < MAX_CONNECTION_NUM; i++)
                 {
                     RedisMulititionHelper connection = new RedisMulititionHelper();
@@ -68,7 +68,7 @@ namespace UtilityToolkit.Helpers
         /// </summary>
         /// <param name="cacheTypeEnum"></param>
         /// <returns></returns>
-        public static CSRedisClient GetClinet(CacheTypeEnum cacheTypeEnum)
+        public static CSRedisClient GetClient(CacheTypeEnum cacheTypeEnum)
         {
             return ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)cacheTypeEnum).redisClient;
         }
@@ -173,6 +173,21 @@ namespace UtilityToolkit.Helpers
         #endregion
 
         #region 分布式锁
+        #endregion
+
+        #region 帖子信息
+        /// <summary>
+        /// 获取关注列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static string[] GetFocusUserIds(long userId) 
+        {
+            var client = GetClient(CacheTypeEnum.PostCache);
+            string key = PostConst.POST_FOCUS_USERIDS + userId.ToString();
+            string[] focusUserIds = client.SMembers(key);
+            return focusUserIds;
+        }
         #endregion
 
     }

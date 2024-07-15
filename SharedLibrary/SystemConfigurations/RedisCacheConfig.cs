@@ -34,5 +34,10 @@
         /// 分布式锁连接字符串
         /// </summary>
         public string DistributeLockConnection { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 帖子模块相关缓存数据连接字符串
+        /// </summary>
+        public string PostCacheConnection { get; set; } = string.Empty;
     }
 }

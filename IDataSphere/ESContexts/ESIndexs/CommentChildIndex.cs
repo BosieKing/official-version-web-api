@@ -5,7 +5,7 @@ namespace IDataSphere.ESContexts.ESIndexs
     /// <summary>
     /// 评论子索引
     /// </summary>
-    public class CommentChildIndex
+    public class CommentChildIndex : ESIndex
     {
         /// <summary>
         /// 评论的用户id
@@ -20,9 +20,15 @@ namespace IDataSphere.ESContexts.ESIndexs
         public string CommentContent { get; set; }
 
         /// <summary>
-        /// 评论的时间
+        /// 父评论id
         /// </summary>
-        public DateTimeOffset CommentTime { get; set; }
+        [Keyword(Name = nameof(CommentChildIndex.ParentComentId))]
+        public string ParentComentId { get; set; }
 
+        /// <summary>
+        /// 属于的类型
+        /// </summary>
+        [Keyword(Name = nameof(CommentChildIndex.SubType))]
+        public string SubType { get; set; } = nameof(CommentChildIndex);
     }
 }

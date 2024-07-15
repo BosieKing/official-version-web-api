@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Model.Repositotys.Log;
 using SharedLibrary.Enums;
+using StackExchange.Profiling;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.Controllers.Center
@@ -20,10 +21,10 @@ namespace WebApi_Offcial.Controllers.Center
         /// </summary>
         /// <returns></returns>
         [HttpGet("throwEx")]
-        public async Task<ActionResult<bool>> throwEx()
+        public async Task<ActionResult<dynamic>> throwEx()
         {
-            throw new Exception("测试");
-            return true;
+            var html = MiniProfiler.Current.RenderIncludes(HttpContext); 
+            return html.Value;
         }
 
         /// <summary>

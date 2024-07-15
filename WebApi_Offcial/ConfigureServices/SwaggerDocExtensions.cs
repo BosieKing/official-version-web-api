@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using SharedLibrary.Enums;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Reflection;
 using UtilityToolkit.Extensions;
 using WebApi_Offcial.ActionFilters;
 
@@ -102,6 +103,8 @@ namespace WebApi_Offcial.ConfigureServices
                     options.DefaultModelsExpandDepth(-1);
                     // 获取文档列表
                     options.SwaggerEndpoint($"/swagger/{p}/swagger.json", $"{p}");
+                    options.IndexStream = () => typeof(Program).GetTypeInfo().Assembly.GetManifestResourceStream(@"WebApi_Offcial.ConfigFiles.swaggerindex.html");
+
                 }
             });
         }

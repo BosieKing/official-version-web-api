@@ -37,6 +37,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="ConfigFiles\swaggerindex.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="7.0.0" />
     <PackageReference Include="Autofac.AspNetCore.Multitenant" Version="7.0.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />

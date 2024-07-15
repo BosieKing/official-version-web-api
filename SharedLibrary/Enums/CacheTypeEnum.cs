@@ -30,5 +30,11 @@ namespace SharedLibrary.Enums
         /// </summary>
         [Description("分布式锁")]
         Distributed = 4,
+
+        /// <summary>
+        /// 帖子模块相关数据缓存
+        /// </summary>
+        [Description("帖子模块相关数据缓存")]
+        PostCache = 5,
     }
 }

@@ -192,9 +192,9 @@ namespace IDataSphere.Interfaces
         /// <summary>
         /// 根据条件获取数量
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="expression"></param>
         /// <returns></returns>
-        public Task<int> GetCount<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO;
+        public Task<int> CountIF<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : EntityBaseDO;
         #endregion
 
         #region 多条数据

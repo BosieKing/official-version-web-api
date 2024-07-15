@@ -123,8 +123,8 @@ namespace Service.BackEnd.BackEndOAuthManage
             // 缓存数据
             var key = UserCacheConst.USER_INFO_TABLE + user.TenantId;
             var value = user.ToJson();
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HMSetAsync(key, user.UserId.ToString(), value);
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HMSetAsync(key, user.UserId.ToString(), value);
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
             return new ValueTuple<string, string>(token, refreshToken);
         }
 
@@ -149,8 +149,8 @@ namespace Service.BackEnd.BackEndOAuthManage
             // 缓存数据
             var key = UserCacheConst.USER_INFO_TABLE + user.TenantId;
             var value = user.ToJson();
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
-            await RedisMulititionHelper.GetClinet(CacheTypeEnum.User).HMSetAsync(key, user.UserId.ToString(), value);
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
+            await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HMSetAsync(key, user.UserId.ToString(), value);
             return new ValueTuple<string, string>(token, refreshToken);
         }
 

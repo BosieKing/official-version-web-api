@@ -15,5 +15,10 @@ namespace Model.DTOs.FronDesk.PostHomePage
         /// </summary>
         public string Context { get; set; }
 
+        /// <summary>
+        /// 标签，#号分割
+        /// </summary>
+        public string Tag{ get; set; }
+
     }
 }
