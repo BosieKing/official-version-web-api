@@ -5,8 +5,17 @@ namespace IDataSphere.ESContexts.ESIndexs
     /// 帖子索引
     /// </summary>
     [ElasticsearchType(IdProperty = "Id")]
-    public class PostIndex : ESIndex
+    public class PostIndex : ESParentChildIndex
     {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public PostIndex()
+        {
+            this.SubType = nameof(PostIndex);
+            this.IndexRelations = typeof(PostIndex);
+        }
+
         /// <summary>
         /// 标题
         /// </summary>

@@ -4,35 +4,22 @@ using Yitter.IdGenerator;
 namespace IDataSphere.ESContexts.ESIndexs
 {
     /// <summary>
-    /// ES基本索引
+    /// ES父子索引
     /// </summary>
-    public class ESIndex
-    {
-        public ESIndex()
-        {
-            this.Id = YitIdHelper.NextId().ToString();
-            this.CreatedTime = DateTimeOffset.Now;
-
-        }
-        /// <summary>
-        /// Id
-        /// </summary>
-        /// <remarks>string类型存储，设置为keyword，避免丢失精度</remarks>
-        [Keyword(Name = nameof(Id), Index = true)]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// 创建时间戳
-        /// </summary>
-        /// <remarks>使用DateTimeOffset可以避免时区的问题，因为Es的时间类型要求为UTC时间的，也就是带有时区的，用了这个类型就不要用Date特性了</remarks>
-        //[Date(Format = "yyyy-MM-dd'T'HH:mm:ssZ")]
-        public DateTimeOffset CreatedTime { get; set; }
-
+    public class ESParentChildIndex : ESBaseIndex
+    {  
         /// <summary>
         /// 子索引
         /// </summary>
         /// <remarks>NEST需要它来映射关系配置</remarks>
         public JoinField IndexRelations { get; set; }
+
+        /// <summary>
+        /// 所属类型
+        /// </summary>
+        /// <remarks>由于父子文档是基于在子文档上设置父文档的id实现的，所以通过普通的查询，比如matchall会一样把子文档查询出来</remarks>
+        [Keyword(Name = nameof(ESParentChildIndex.SubType))]
+        public string SubType { get; set; }
     }
 
     #region 学习数据类型
@@ -110,11 +97,16 @@ namespace IDataSphere.ESContexts.ESIndexs
     /*  
      * 第一步：配置父子文档的关系和确定路由
      * 在映射配置的时候，父子文档需要包含一个JoinField属性的字段，父文档是用于mapping的时候映射关系，子文档是需要索引的时候明确 
-     *  在Map中，调用.Join(j => j.Name(p => p.IndexRelations)
+     * 在Map中，调用.Join(j => j.Name(p => p.IndexRelations)
                         .Relations(r => r.Join("postindex", nameof(LikeChildIndex).ToLower(), nameof(FavoriteChildIndex).ToLower(), nameof(CommentChildIndex).ToLower())))
+     * 子文档JoinField最后会被映射为这种结构（link）
+     * {
+        "name": "likechildindex", // 父文档类型
+        "parent": "569061876179013" // 父文档id
+       }
      * 
      * 第二步：确定索引必填
-     * 设置了routing为必填则附加的dsl语句必须带有routing字段，那么目的是保证父子文档在同一个分片是，优化查询性能和减少跨分片查询的复杂性
+     * 设置了routing为必填则附加的dsl语句必须带有routing字段，那么目的是保证父子文档在同一个分片，优化查询性能和减少跨分片查询的复杂性
      * 首先： .RoutingField(p => p.Required() // 设置路由必填
      * 配置路由推断（查询的时候自动使用） 
      * 1.1从类型中推断：nest可以在索引中声明一个Routing（int、long String、Guid类型） 那么翻译的dsl语句会自动映射为_routing字段
@@ -135,17 +127,30 @@ namespace IDataSphere.ESContexts.ESIndexs
                             post.Routing(postIndex.Id); // 父文档填写自己的id，子文档填写父文档的id，
                             return post;
                         }      
-     * 注意：启用了路由后，则无法使用IndexDocument来插入文档，必须使用Index，因为IndexDocument不会附加_routing字段
-     *       且插入后的文档routing属性不能更改，否则会导致他们不在同一个分片上
      * 
      * 第四步：查询文档 父亲文档为PostIndex、子文档为LikeChildIndex
-     * 1.以父查子 
+     * 1.以父查子：可以根据父文档的某些查询条件来过滤子文档的使用 
      * 满足父文档id为1001的子文档全部返回
      * var child = _elasticClient.Search<LikeChildIndex>(like => like.Query(q => q.HasParent<PostIndex>(post => post.Query(pq => pq.Term(t => t.Field(f => f.Id).Value(1001))))));
-     * 2.以子查父
+     *
+     *2.以子查父
      * 满足子文档id为1002的父文档全部返回
-     * var getParent = _elasticClient.Search<PostIndex>(post => post.Query(q => q.HasChild<LikeChildIndex>(like => like.Query(lq => lq.Term(t => t.Field(f => f.Id).Value(1002))))));
-
+     * var parent =  _elasticClient.Search<PostIndex>(post => post.TrackScores(false).Query(q => q.HasChild<LikeChildIndex>(like => like.ScoreMode(ChildScoreMode.None).Query(lq => lq.Term(t => t.Field(f => f.Id).Value(1002))))));
+     * 
+     * 3.查询所有的父文档/子文档
+     * 由于父子文档在索引中通过在子文档设定父文档的id来建立的，所以当你使用普通查询的适合，即matchall会把其他的子文档也返回
+     * 设立一个isparent字段用于区分是父文档还是子文档，查询父文档就term查询ispatent=true就可以了
+     * 设定一个subtype用于存储该doc的类型，查询父文档就term查询subtype=父文档类型就好了，这个字段也方便我们删除的使用 （建议用这个）
+     * 
+     * 4.根据父文档id返回所有的子文档，无视子文档的类型（父文档也会返回）
+     * var child = _elasticClient.Search<CommentChildIndex>(p => p.Query(q => q.ParentId(par => par.Id(父id))));
+     * 
+     * 使用注意：  
+     * 1.适合父文档少，子文档多的情况
+     * 2.避免在同一个查询中使用多个父子联合查询
+     * 3.在以子查父的时候，HasChild，尽量设置子文档ScoreMode为不需要打分，避免额外的开销，HasParent子文档都只有一个父文档，因此这里不存在将多个评分规约为一个的情况，所以不需要打分
+     * 4.启用了路由后，则无法使用IndexDocument来插入文档，必须使用Index，因为IndexDocument不会附加_routing字段且插入后的文档routing属性不能更改，否则会导致他们不在同一个分片上 
+     * 5.JoinField类型是不适合用于查询的，不要把joinfiled来作为筛选字段
      */
 
 

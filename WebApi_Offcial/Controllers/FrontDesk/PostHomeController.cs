@@ -17,16 +17,17 @@ namespace WebApi_Offcial.Controllers.FrontDesk
     [ApiDescription(SwaggerGroupEnum.FrontDesk)]
     public class PostHomeController : ControllerBase
     {
-
         #region 构造函数
         private readonly PostIndexRepository _postIndexRepository;
+        private readonly PostCommentIndexRepository _postComentIndexRepository;
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="postIndexRepository"></param>
-        public PostHomeController(PostIndexRepository postIndexRepository)
+        public PostHomeController(PostIndexRepository postIndexRepository, PostCommentIndexRepository postComentIndexRepository)
         {
             this._postIndexRepository = postIndexRepository;
+            _postComentIndexRepository = postComentIndexRepository;
         }
         #endregion
 
@@ -38,8 +39,8 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [HttpGet("getPostPage")]
         public async Task<ServiceResult> GetPostPage([FromQuery] PostSearchInput input)
         {
-            var c = await _postIndexRepository.GetPostPage(input);
-            return ServiceResult.Successed();
+            var data = await _postIndexRepository.GetPostPage(input);
+            return ServiceResult.SetData(data);
         }
 
         /// <summary>
@@ -49,8 +50,8 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [HttpGet("getComment")]
         public async Task<ServiceResult> GetComment([FromQuery] IdInput input)
         {
-            var c = await _postIndexRepository.GetComment(input);
-            return ServiceResult.Successed();
+            var data = await _postIndexRepository.GetComment(input);
+            return ServiceResult.SetData(data);
         }
         #endregion
 
@@ -99,7 +100,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [HttpPost("commnet")]
         public async Task<ServiceResult> Commnet([FromBody] CommentInput input)
         {
-            await _postIndexRepository.AddCommnet(input);
+            await _postComentIndexRepository.AddCommnet(input);
             return ServiceResult.Successed();
         }
         #endregion
@@ -109,13 +110,13 @@ namespace WebApi_Offcial.Controllers.FrontDesk
 
         #region 删除
         /// <summary>
-        /// 删除所有
+        /// 删除一个帖子
         /// </summary>
         /// <returns></returns>
-        [HttpPost("deleteAll")]
-        public async Task<ServiceResult> DeleteAll()
+        [HttpPost("deletePost")]
+        public async Task<ServiceResult> DeletePost(IdInput input)
         {
-            await _postIndexRepository.DeleteAll();
+            await _postIndexRepository.DeletePost(input);
             return ServiceResult.Successed();
         }
 
@@ -126,7 +127,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         [HttpPost("deleteComment")]
         public async Task<ServiceResult> DeleteComment(IdInput input)
         {
-            await _postIndexRepository.DeleteComment(input);
+            await _postComentIndexRepository.DeleteComment(input);
             return ServiceResult.Successed();
         }
         #endregion

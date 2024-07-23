@@ -1,9 +1,11 @@
-﻿namespace Model.DTOs.FronDesk.PostHomePage
+﻿using Model.Commons.SharedData;
+
+namespace Model.DTOs.FronDesk.PostHomePage
 {
     /// <summary>
     /// 查询条件
     /// </summary>
-    public class PostSearchInput
+    public class PostSearchInput : PageInput
     {
         /// <summary>
         /// 查询字符串
