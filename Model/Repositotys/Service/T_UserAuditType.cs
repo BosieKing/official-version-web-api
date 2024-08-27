@@ -3,15 +3,15 @@
 namespace Model.Repositotys.Service
 {
     /// <summary>
-    /// 用户角色中间表
+    /// 用户审核身份中间表
     /// </summary>
-    [Table(nameof(T_UserRole))]
-    public class T_UserRole : EntityTenantDO
+    [Table(nameof(T_UserAuditType))]
+    public class T_UserAuditType : EntityTenantDO
     {
         /// <summary>
-        /// 角色Id
+        /// 审核角色
         /// </summary>
-        public long RoleId { get; set; }
+        public long AuditTypeId { get; set; }
 
         /// <summary>
         /// 用户id

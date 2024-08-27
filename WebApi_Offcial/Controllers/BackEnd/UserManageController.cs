@@ -43,7 +43,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         }
 
         /// <summary>
-        /// 查询用户已绑定的角色
+        /// 查询用户已绑定的角色列表
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -51,6 +51,18 @@ namespace WebApi_Offcial.Controllers.BackEnd
         public async Task<ActionResult<ServiceResult>> GetUserRoleList([FromQuery] IdInput input)
         {
             List<DropdownSelectionResult> result = await _userManageService.GetUserRoleList(input.Id);
+            return ServiceResult.SetData(result);
+        }
+
+        /// <summary>
+        /// 查询用户已绑定的审核角色类型列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [HttpGet("getUserAuditTypeList")]
+        public async Task<ActionResult<ServiceResult>> GetUserAuditTypeList([FromQuery] IdInput input)
+        {
+            List<DropdownSelectionResult> result = await _userManageService.GetUserAuditTypeList(input.Id);
             return ServiceResult.SetData(result);
         }
         #endregion

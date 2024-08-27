@@ -42,17 +42,6 @@ namespace UtilityToolkit.Utils
         }
 
         /// <summary>
-        /// 字符串(json)转对象
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="json"></param>
-        /// <returns></returns>
-        public static T ToObject<T>(this string json) where T : class, new()
-        {
-            return JsonConvert.DeserializeObject<T>(json ?? "");
-        }
-
-        /// <summary>
         /// 字符串(json)转对象集合
         /// </summary>
         /// <typeparam name="T"></typeparam>

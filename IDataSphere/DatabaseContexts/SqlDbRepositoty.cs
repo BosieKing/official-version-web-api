@@ -68,5 +68,26 @@ namespace IDataSphere.DatabaseContexts
         /// 角色屏蔽按钮
         /// </summary>
         public DbSet<T_RoleBlockButton> RoleBlockButtonsRep { get; set; }
+
+        /// <summary>
+        /// 审核角色表
+        /// </summary>
+        public DbSet<T_AuditType> AuditTypeRep { get; set; }
+
+        /// <summary>
+        /// 用户与审核角色中间表
+        /// </summary>
+        public DbSet<T_UserAuditType> UserAuditTypeRep { get; set; }
+
+        /// <summary>
+        /// 审核流程配置表
+        /// </summary>
+        public DbSet<T_AuditNodeConfig> AuditNodeConfigRep { get; set; }
+
+
+        /// <summary>
+        /// 审核流程节点配置
+        /// </summary>
+        public DbSet<T_AuditNodeConfigOption> AuditNodeConfigOptionRep { get; set; }
     }
 }

@@ -52,11 +52,12 @@ namespace UtilityToolkit.Utils
             // 设置这一行的高度
             firstRow.HeightInPoints = 40;
             // 先创建列名
-            ICell celltitle = firstRow.CreateCell(0);
             descriptions.ForEach(item =>
             {
+                ICell celltitle = firstRow.CreateCell(cellIndex);
                 celltitle.CellStyle = titleCell;
                 celltitle.SetCellValue(item.DescriptionValue);
+                cellIndex++;
             });
             // 当没有数据的时候 渲染一个表头就返回
             if (list.Count == 0)

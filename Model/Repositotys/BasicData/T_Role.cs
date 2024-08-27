@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model.Repositotys.BasicData
@@ -6,7 +7,7 @@ namespace Model.Repositotys.BasicData
     /// <summary>
     /// 角色表
     /// </summary>
-    [Table("T_Role")]
+    [Table(nameof(T_Role))]
     public class T_Role : EntityTenantDO
     {
         /// <summary>

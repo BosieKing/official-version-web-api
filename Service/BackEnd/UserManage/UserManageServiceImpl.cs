@@ -44,6 +44,17 @@ namespace Service.BackEnd.UserManage
             List<long> ids = await _userManageDao.Getlds<T_UserRole>(p => p.UserId == id, nameof(T_UserRole.RoleId));
             return await _userManageDao.GetCheckList<T_Role>(nameof(T_Role.Id), ids);
         }
+
+        /// <summary>
+        /// 查询用户已绑定的审核角色类型列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<List<DropdownSelectionResult>> GetUserAuditTypeList(long id)
+        {
+            List<long> ids = await _userManageDao.Getlds<T_UserAuditType>(p => p.UserId == id, nameof(T_UserAuditType.AuditTypeId));
+            return await _userManageDao.GetCheckList<T_AuditType>(nameof(T_AuditType.Id), ids);
+        }
         #endregion
 
         #region 新增

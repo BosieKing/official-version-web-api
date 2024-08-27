@@ -53,6 +53,5 @@ namespace Model.Repositotys.Service
         /// 是否禁止登录
         /// </summary>
         public bool IsDisableLogin { get; set; } = false;
-
     }
 }

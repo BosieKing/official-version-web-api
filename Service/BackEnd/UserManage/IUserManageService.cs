@@ -15,5 +15,6 @@ namespace Service.BackEnd.UserManage
         Task<bool> ResetPassword(ResetPasswordInput input);
         Task<List<DropdownSelectionResult>> GetUserRoleList(long id);
         Task<bool> AddUserRole(AddUserRoleInput input);
+        Task<List<DropdownSelectionResult>> GetUserAuditTypeList(long id);
     }
 }
