@@ -76,7 +76,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> AddUserVerify(AddUserInput input)
         {
             // 判断账号是否注册
-            bool accountExist = await _userManageDao.DataExisted<T_User>(p => p.Phone == input.Phone);
+            bool accountExist = await _userManageDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone);
             if (accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["PhoneExisted"].Value);
@@ -97,7 +97,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             }
             if (input.RoleIds.Count() > 0)
             {
-                bool roIdsExist = await _userManageDao.DataExisted<T_Role>(p => input.RoleIds.Contains(p.Id));
+                bool roIdsExist = await _userManageDao.BatchDataExisted<T_Role>(input.RoleIds.Count(), p => input.RoleIds.Contains(p.Id));
                 if (!roIdsExist)
                 {
                     return ServiceResult.IsFailure(_stringLocalizer["RoleNotExist"].Value);
@@ -113,7 +113,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> UpdateUserVerify(UpdateUserInput input)
         {
             // 判断账号是否注册
-            bool accountExist = await _userManageDao.DataExisted<T_User>(p => p.Phone == input.Phone && p.Id != input.Id);
+            bool accountExist = await _userManageDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone && p.Id != input.Id);
             if (accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["PhoneExisted"].Value);

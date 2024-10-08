@@ -69,7 +69,7 @@ namespace Service.BackEnd.RoleManage
         /// <returns></returns>
         public async Task<bool> AddRoleMenu(AddRoleMenuInput input, string tenantId)
         {
-            List<DropdownDataResult> routers = await _roleManageDao.GetStringList<T_TenantMenu>(p => input.MenuIds.Contains(p.Id), $"{nameof(T_TenantMenu.Router)}");
+            List<DropdownDataResult> routers = await _roleManageDao.GetStringList<T_TenantMenu>(p => input.MenuIds.Contains(p.Id), $"{nameof(T_TenantMenu.ControllerRouter)}");
             List<T_RoleMenu> list = input.MenuIds.Select(p => new T_RoleMenu { RoleId = input.RoleId, MenuId = p }).ToList();
             await _roleManageDao.BatchDeleteAsync<T_RoleMenu>(p => p.RoleId == input.RoleId);
             await _roleManageDao.BatchAddAsync(list);

@@ -35,7 +35,7 @@ namespace DataSphere.BackEnd
                                               Id = m == null ? 0 : m.Id,
                                               Name = m == null ? "" : m.Name,
                                               Icon = m == null ? "" : m.Icon,
-                                              Router = m == null ? "" : m.Router,
+                                              Router = m == null ? "" : m.ControllerRouter,
                                               BrowserPath = m == null ? "" : m.BrowserPath,
                                               IsHidden = m == null ? true : m.IsHidden,
                                               Weight = m == null ? 0 : m.Weight,

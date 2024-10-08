@@ -89,5 +89,10 @@ namespace IDataSphere.DatabaseContexts
         /// 审核流程节点配置
         /// </summary>
         public DbSet<T_AuditNodeConfigOption> AuditNodeConfigOptionRep { get; set; }
+
+        /// <summary>
+        ///  审核节点策略审核人
+        /// </summary>
+        public DbSet<T_AuditNodeApproveStrategyUser> AuditNodeApproveStrategyUserRep { get; set; }
     }
 }

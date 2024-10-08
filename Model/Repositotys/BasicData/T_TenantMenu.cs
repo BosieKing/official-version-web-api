@@ -10,7 +10,7 @@ namespace Model.Repositotys.BasicData
     public class T_TenantMenu : EntityTenantDO
     {
         /// <summary>
-        /// 名称
+        /// 菜单名称
         /// </summary>
         [MaxLength(50)]
         public string Name { get; set; }
@@ -25,7 +25,7 @@ namespace Model.Repositotys.BasicData
         /// 后端权限路由-对应的控制器名称
         /// </summary>
         [MaxLength(100)]
-        public string Router { get; set; }
+        public string ControllerRouter { get; set; }
 
         /// <summary>
         /// 前台组件物理地址--前端维护

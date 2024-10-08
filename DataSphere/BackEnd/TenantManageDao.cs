@@ -108,7 +108,7 @@ namespace DataSphere.BackEnd
             await dbContext.TenantMenuRep.AddRangeAsync(tenantMenuList);
             await dbContext.TenantMenuButtonRep.AddRangeAsync(tenantMenuButtonList);
             await dbContext.SaveChangesAsync();
-            return tenantMenuList.Select(p => (p.Id, p.Router)).ToList();
+            return tenantMenuList.Select(p => (p.Id, p.ControllerRouter)).ToList();
         }
 
         /// <summary>

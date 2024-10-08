@@ -1,7 +1,5 @@
 using Model.Commons.Domain;
-using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.AuditTypeManage;
-using IDataSphere.Interface.BackEnd.AuditTypeManage;
 namespace Service.BackEnd.AuditTypeManage
 {
     /// <summary>

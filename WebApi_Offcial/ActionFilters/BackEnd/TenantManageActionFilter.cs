@@ -66,7 +66,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> AddTenantVerify(AddTenantInput input)
         {
             // 判断租户的唯一编码是否已存在
-            bool codeExisted = await _tenantDao.DataExisted<T_Tenant>(p => p.InviteCode == input.Code);
+            bool codeExisted = await _tenantDao.SingleDataExisted<T_Tenant>(p => p.InviteCode == input.Code);
             if (codeExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);
@@ -82,7 +82,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> UpdateTenantVerify(UpdateTenantInput input)
         {
             // 判断租户的唯一编码是否已存在
-            bool codeExisted = await _tenantDao.DataExisted<T_Tenant>(p => p.InviteCode == input.Code && p.Id != input.Id);
+            bool codeExisted = await _tenantDao.SingleDataExisted<T_Tenant>(p => p.InviteCode == input.Code && p.Id != input.Id);
             if (codeExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["TenantCodeExisted"].Value);

@@ -75,7 +75,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> AddRoleVerify(AddRoleInput input)
         {
-            bool nameExistd = await _roleManageDao.DataExisted<T_Role>(p => p.Name == input.Name);
+            bool nameExistd = await _roleManageDao.SingleDataExisted<T_Role>(p => p.Name == input.Name);
             if (nameExistd)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["NameExisted"].Value);
@@ -95,7 +95,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["RoleNotExist"].Value);
             }
-            bool menuExistd = await _roleManageDao.DataExisted<T_TenantMenu>(p => input.MenuIds.Contains(p.Id));
+            bool menuExistd = await _roleManageDao.BatchDataExisted<T_TenantMenu>(input.MenuIds.Count(), p => input.MenuIds.Contains(p.Id));
             if (!menuExistd)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["MenuNotExist"].Value);
@@ -110,7 +110,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> UpdateRoleVerify(UpdateRoleInput input)
         {
-            bool nameExistd = await _roleManageDao.DataExisted<T_Role>(p => p.Name == input.Name && p.Id != input.Id);
+            bool nameExistd = await _roleManageDao.SingleDataExisted<T_Role>(p => p.Name == input.Name && p.Id != input.Id);
             if (nameExistd)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["NameExisted"].Value);
@@ -125,7 +125,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> DeleteRoleVerify(IdInput input)
         {
-            bool unbound = await _roleManageDao.DataExisted<T_UserRole>(p => p.RoleId == input.Id);
+            bool unbound = await _roleManageDao.SingleDataExisted<T_UserRole>(p => p.RoleId == input.Id);
             if (unbound)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["RoleNotUnboundByUser"].Value);

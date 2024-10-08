@@ -49,6 +49,20 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             dynamic result = await _userInfoManageService.GetUserInfo();
             return ServiceResult.SetData(result);
         }
+
+        /// <summary>
+        /// 获取用户的一些数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getCount")]
+        public async Task<ActionResult<ServiceResult>> GetCount()
+        {
+            return ServiceResult.SetData(new { 
+            WaitReadMessageCount =0,
+            WaitAuditCount =0 ,
+            
+            });
+        }
         #endregion
 
         #region 新增

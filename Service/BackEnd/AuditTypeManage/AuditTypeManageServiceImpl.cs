@@ -1,13 +1,8 @@
-using IDataSphere.Interface.BackEnd;
-using Model.Repositotys.BasicData;
+using IDataSphere.Interfaces.BackEnd;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
-using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.AuditTypeManage;
-using IDataSphere.Interface.BackEnd.AuditTypeManage;
-using System.Text;
-using UtilityToolkit.Utils;
+using Model.Repositotys.BasicData;
 
 namespace Service.BackEnd.AuditTypeManage
 {

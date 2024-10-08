@@ -14,6 +14,11 @@ namespace Model.Repositotys.BasicData
         public long AuditNodeConfigId { get; set; }
 
         /// <summary>
+        /// 第几级
+        /// </summary>
+        public int AuditLevel { get; set; }
+
+        /// <summary>
         /// 审核人数据来源
         /// </summary>
         public long AuditType { get; set; }
@@ -35,11 +40,6 @@ namespace Model.Repositotys.BasicData
         /// </summary>
         /// <remarks>如到达第三级审核，这里填3，则审核不通过，修改人重新修改再次提交则继续到3级审核，前面无需再审</remarks>
         public int FailRetrunLevel { get; set; }
-
-        /// <summary>
-        /// 第几级
-        /// </summary>
-        public int AuditLevel { get; set; }
 
     }
 }

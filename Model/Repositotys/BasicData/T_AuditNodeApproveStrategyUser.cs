@@ -2,7 +2,7 @@
 namespace Model.Repositotys.BasicData
 {
     /// <summary>
-    /// 根据审核节点策略
+    /// 审核节点策略审核人
     /// </summary>
     [Table(nameof(T_AuditNodeApproveStrategyUser))]
     public class T_AuditNodeApproveStrategyUser : EntityTenantDO

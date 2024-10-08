@@ -96,7 +96,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return captchaResult;
             }
             // 判断账号是否注册
-            bool accountExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone, true);
+            bool accountExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
@@ -119,7 +119,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return ServiceResult.IsFailure(_stringLocalizer["PasswrodErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
             // 判断密码是否匹配
-            bool passWordExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone && p.Password == input.Password, true);
+            bool passWordExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone && p.Password == input.Password, true);
             // 密码不匹配
             if (!passWordExist)
             {
@@ -148,7 +148,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return captchaResult;
             }
             // 判断账号是否注册
-            bool accountExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone, true);
+            bool accountExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
@@ -176,7 +176,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
                 return ServiceResult.IsFailure(_stringLocalizer["InviteCodeError"].Value);
             }
             // 判断账号在该平台下是否已被注册
-            bool hasRegiste = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone && p.TenantId == tenandInfo.Id, true);
+            bool hasRegiste = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone && p.TenantId == tenandInfo.Id, true);
             if (hasRegiste)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserExisted"].Value);
@@ -198,7 +198,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> ForgotPasswordVerify(ForgotPasswordInput input)
         {
             // 判断账号是否注册
-            bool accountExist = await _frontDeskOAuthDao.DataExisted<T_User>(p => p.Phone == input.Phone, true);
+            bool accountExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);

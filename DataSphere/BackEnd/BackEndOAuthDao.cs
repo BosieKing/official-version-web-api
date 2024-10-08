@@ -218,7 +218,7 @@ namespace DataSphere.BackEnd
                                            Icon = p.Icon,
                                            Name = p.Name,
                                            Component = Convert.ToString(p.Component),
-                                           Router = Convert.ToString(p.Router),
+                                           Router = Convert.ToString(p.ControllerRouter),
                                            Id = p.Id,
                                            BrowserPath = Convert.ToString(p.BrowserPath),
                                            PId = p.DirectoryId,
@@ -256,7 +256,7 @@ namespace DataSphere.BackEnd
                                            Icon = p.Icon,
                                            Name = p.Name,
                                            Component = Convert.ToString(p.Component),
-                                           Router = Convert.ToString(p.Router),
+                                           Router = Convert.ToString(p.ControllerRouter),
                                            BrowserPath = Convert.ToString(p.BrowserPath),
                                            Id = p.Id,
                                            PId = p.DirectoryId,
@@ -289,7 +289,7 @@ namespace DataSphere.BackEnd
             var menuIdsQuery = dbContext.RoleMenuRep.Where(p => roleIds.Contains(p.RoleId)).GroupBy(p => p.MenuId).Select(p => p.Key);
             var list = await dbContext.TenantMenuButtonRep.Where(p => menuIdsQuery.Contains(p.MenuId))
                                           .GroupJoin(dbContext.TenantMenuRep, tm => tm.MenuId, m => m.Id, (tm, m) => new { tm, m })
-                                          .SelectMany(p => p.m.DefaultIfEmpty(), (p, tm) => tm.Router + ":" + p.tm.ActionName).ToArrayAsync();
+                                          .SelectMany(p => p.m.DefaultIfEmpty(), (p, tm) => tm.ControllerRouter + ":" + p.tm.ActionName).ToArrayAsync();
             return list;
         }
 
@@ -302,7 +302,7 @@ namespace DataSphere.BackEnd
             var menuIdsQuery = dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.SystemManage).Select(p => p.Id);
             var list = await dbContext.MenuButtonRep.Where(p => menuIdsQuery.Contains(p.Id))
                                           .GroupJoin(dbContext.MenuRep, tm => tm.MenuId, m => m.Id, (tm, m) => new { tm, m })
-                                          .SelectMany(p => p.m.DefaultIfEmpty(), (p, tm) => tm.Router + ":" + p.tm.ActionName).ToArrayAsync();
+                                          .SelectMany(p => p.m.DefaultIfEmpty(), (p, tm) => tm.ControllerRouter + ":" + p.tm.ActionName).ToArrayAsync();
             return list;
         }
 

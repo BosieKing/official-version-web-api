@@ -90,7 +90,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> AddDirectoryVerify(AddDirectoryInput input)
         {
-            bool dataExisted = await _menuDao.DataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath);
+            bool dataExisted = await _menuDao.SingleDataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -110,7 +110,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
-            bool result = await _menuDao.DataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router);
+            bool result = await _menuDao.SingleDataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.ControllerRouter == input.Router);
             if (result)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -130,7 +130,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["MenuNotExist"].Value);
             }
-            bool dataExisted = await _menuDao.DataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName);
+            bool dataExisted = await _menuDao.SingleDataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -145,7 +145,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> UpdateDirectoryVerify(UpdateDirectoryInput input)
         {
-            bool nameExisted = await _menuDao.DataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Id != input.Id);
+            bool nameExisted = await _menuDao.SingleDataExisted<T_Directory>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Id != input.Id);
             if (nameExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -165,7 +165,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
-            bool dataExisted = await _menuDao.DataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.Router == input.Router && p.Id != input.Id);
+            bool dataExisted = await _menuDao.SingleDataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.ControllerRouter == input.Router && p.Id != input.Id);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -185,7 +185,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["MenuNotExist"].Value);
             }
-            bool dataExisted = await _menuDao.DataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName && p.Id != input.Id);
+            bool dataExisted = await _menuDao.SingleDataExisted<T_MenuButton>(p => p.Name == input.Name && p.ActionName == input.ActionName && p.Id != input.Id);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -201,7 +201,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         private async Task<ServiceResult> DeleteDirectoryVerify(IdInput input)
         {
             // 验证目录是否已经和菜单解除绑定
-            bool unbound = await _menuDao.DataExisted<T_Menu>(p => p.DirectoryId == input.Id);
+            bool unbound = await _menuDao.SingleDataExisted<T_Menu>(p => p.DirectoryId == input.Id);
             if (unbound)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotUnbound"].Value);

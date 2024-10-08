@@ -1,4 +1,3 @@
-using IDataSphere.Interface.BackEnd.AuditNodeConfigManage;
 using Model.Repositotys.BasicData;
 using Microsoft.EntityFrameworkCore;
 using UtilityToolkit.Utils;
@@ -7,6 +6,8 @@ using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.AuditNodeConfigManage;
 using IDataSphere.DatabaseContexts;
 using IDataSphere.Extensions;
+using IDataSphere.Interfaces.BackEnd;
+
 namespace DataSphere.BackEnd
 {
     /// <summary>
@@ -28,37 +29,38 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PageResult> GetAuditNodeConfigPage(GetAuditNodeConfigPageInput input) 
+        public async Task<dynamic> GetAuditNodeConfigPage(GetAuditNodeConfigPageInput input) 
         {
-             var query = from data in dbContext.AuditNodeConfigRep
-                        .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $"%{input.Name}%"))
-                        join createUser in dbContext.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
-                        from createUser in createUserResult.DefaultIfEmpty()
-                        join updateUser in dbContext.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult
-                        from updateUser in updateUserResult.DefaultIfEmpty()
-                        select new
-                        {
-                            Id = data.Id,
-                            Name = data.Name,
-                            CreatedName = createUser.NickName,
-                            CreatedTime = data.CreatedTime,
-                            UpdateUserName = updateUser.NickName,
-                            UpdateTime = data.UpdateTime
-                        };
-            return await base.AdaptPage(query, input.PageSize, input.PageNo);
+
+            var query = dbContext.AuditNodeConfigRep.Where(p => p.AuditNodeConfigType == input.AuditNodeConfigType)
+                                 .GroupJoin(dbContext.AuditNodeConfigOptionRep, c => c.Id, co => co.AuditNodeConfigId, (c, co) => new
+                                 {
+                                     c.Name,
+                                     c.NodeLevel,
+                                     OptionList = co.Select(p => new
+                                     {
+                                         Id = p.Id,
+                                         AuditLevel = p.AuditLevel,
+                                         AuditType = p.AuditType,
+                                         AuditUserCount = p.AuditUserCount,
+                                         ApproveStrategy = p.ApproveStrategy,
+                                         FailRetrunLevel = p.FailRetrunLevel,
+                                     }).OrderBy(o => o.AuditLevel)
+                                 }).OrderBy(p => p.NodeLevel).ToList();          
+            return query;
         }
         #endregion
 
         #region 新增
-      
+
         #endregion
 
         #region 更新
-     
+
         #endregion
 
         #region 删除
-        
+
         #endregion
     }
 }

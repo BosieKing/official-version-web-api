@@ -10,7 +10,7 @@ namespace SharedLibrary.Enums
         /// <summary>
         /// 目录
         /// </summary>
-        [Description("按钮")]
+        [Description("目录")]
         Directory = 1,
 
         /// <summary>

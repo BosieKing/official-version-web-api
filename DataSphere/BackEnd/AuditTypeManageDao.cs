@@ -1,4 +1,3 @@
-using IDataSphere.Interface.BackEnd.AuditTypeManage;
 using Model.Repositotys.BasicData;
 using Microsoft.EntityFrameworkCore;
 using UtilityToolkit.Utils;
@@ -7,14 +6,15 @@ using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.AuditTypeManage;
 using IDataSphere.DatabaseContexts;
 using IDataSphere.Extensions;
+using IDataSphere.Interfaces.BackEnd;
+
 namespace DataSphere.BackEnd
 {
     /// <summary>
     /// 审核角色类型配置表数据访问层
     /// </summary>
     public class AuditTypeManageDao : BaseDao<T_AuditType>, IAuditTypeManageDao
-    {
-      
+    {      
         #region 构造函数
         public AuditTypeManageDao(SqlDbContext dbContext) : base(dbContext)
         {

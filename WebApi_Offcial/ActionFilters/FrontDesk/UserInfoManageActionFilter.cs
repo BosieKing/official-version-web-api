@@ -102,7 +102,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         private async Task<ServiceResult> UpdatePasswordVerify(UpdatePasswordInput input)
         {
             long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            bool result = await _userInfoDao.DataExisted<T_User>(p => p.Id == userId && p.Password == input.OldPassword);
+            bool result = await _userInfoDao.SingleDataExisted<T_User>(p => p.Id == userId && p.Password == input.OldPassword);
             if (!result)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["OldPasswordError"].Value);

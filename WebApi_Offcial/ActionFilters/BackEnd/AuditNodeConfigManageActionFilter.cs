@@ -1,4 +1,3 @@
-using IDataSphere.Interface.BackEnd.AuditNodeConfigManage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
@@ -8,6 +7,8 @@ using Model.DTOs.BackEnd.AuditNodeConfigManage;
 using UtilityToolkit.Utils;
 using Model.Repositotys.BasicData;
 using UtilityToolkit.Helpers;
+using IDataSphere.Interfaces.BackEnd;
+
 namespace WebApi_Offcial.ActionFilters.BackEnd
 {
     /// <summary>
@@ -70,7 +71,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> AddAuditNodeConfigVerify(AddAuditNodeConfigInput input)
         {
-            bool dataExisted = await _auditNodeConfigManageDao.DataExisted(p => p.Name == input.Name);
+            bool dataExisted = await _auditNodeConfigManageDao.SingleDataExisted<T_AuditNodeConfig>(p => p.Name == input.Name);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -84,12 +85,12 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> UpdateAuditNodeConfigVerify(UpdateAuditNodeConfigInput input)
         {
-            bool idExisted = await _auditNodeConfigManageDao.IdExisted(input.Id);
+            bool idExisted = await _auditNodeConfigManageDao.IdExisted<T_AuditNodeConfig>(input.Id);
             if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }
-            bool dataExisted = await _auditNodeConfigManageDao.DataExisted(p => p.Id != input.Id && p.Name == input.Name);
+            bool dataExisted = await _auditNodeConfigManageDao.SingleDataExisted<T_AuditNodeConfig>(p => p.Id != input.Id && p.Name == input.Name);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -103,7 +104,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> DeleteAuditNodeConfigVerify(IdInput input)
         {
-            bool idExisted = await _auditNodeConfigManageDao.IdExisted(input.Id);
+            bool idExisted = await _auditNodeConfigManageDao.IdExisted<T_AuditNodeConfig>(input.Id);
             if (!idExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);

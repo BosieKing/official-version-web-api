@@ -50,7 +50,7 @@ namespace IDataSphere.Interfaces
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<bool> DataExisted<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false)
+        public Task<bool> SingleDataExisted<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false)
             where TEntity : EntityBaseDO;
 
         /// <summary>
@@ -284,6 +284,7 @@ namespace IDataSphere.Interfaces
         /// <returns></returns>
         public Task<bool> BatchDeleteAsync<TEntity>(Expression<Func<TEntity, bool>> expression)
             where TEntity : EntityBaseDO;
+        Task<bool> BatchDataExisted<TEntity>(int count,Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO;
         #endregion
     }
 }

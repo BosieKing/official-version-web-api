@@ -26,7 +26,7 @@ namespace Model.Repositotys.BasicData
         /// 后端权限路由-对应的控制器名称
         /// </summary>
         [MaxLength(100)]
-        public string Router { get; set; }
+        public string ControllerRouter { get; set; }
 
         /// <summary>
         /// 前台组件物理地址--前端维护
@@ -66,15 +66,5 @@ namespace Model.Repositotys.BasicData
         /// 唯一编号
         /// </summary>
         public long UniqueNumber { get; set; }
-
-        /// <summary>
-        /// 所属目录
-        /// </summary>
-        public virtual T_Directory BelongDirectory { get; set; }
-
-        /// <summary>
-        /// 子按钮
-        /// </summary>
-        public virtual ICollection<T_MenuButton> MenuButtons { get; set; }
     }
 }

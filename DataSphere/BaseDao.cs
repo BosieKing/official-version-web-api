@@ -66,22 +66,44 @@ namespace DataSphere
 
         #region 判断
         /// <summary>
-        /// 根据条件判断数据是否存在
+        /// 根据条件判断单条数据是否存在
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<bool> DataExisted<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
+        public async Task<bool> SingleDataExisted<TEntity>(Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
         {
             DbSet<TEntity> rep = dbContext.Set<TEntity>();
             if (isIgnoreTenant)
             {
-                return await rep.IgnoreQueryFilters().Where(p => p.IsDeleted == false).AnyAsync(expression);
+                return await rep.IgnoreTenantFilter().AnyAsync(expression);
             }
             else
             {
                 return await rep.AnyAsync(expression);
             }
+        }
 
+        /// <summary>
+        /// 根据条件判断多条数据是否存在
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="expression"></param>
+        /// <param name="count"></param>
+        /// <param name="isIgnoreTenant"></param>
+        /// <returns></returns>
+        public async Task<bool> BatchDataExisted<TEntity>(int count, Expression<Func<TEntity, bool>> expression, bool isIgnoreTenant = false) where TEntity : EntityBaseDO
+        {
+            DbSet<TEntity> rep = dbContext.Set<TEntity>();
+            int dbCount = 0;
+            if (isIgnoreTenant)
+            {
+                dbCount =  await rep.IgnoreTenantFilter().CountAsync(expression);
+            }
+            else
+            {
+                dbCount =  await rep.CountAsync(expression);
+            }
+            return count.Equals(dbCount);
         }
 
         /// <summary>
@@ -90,9 +112,8 @@ namespace DataSphere
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<bool> IdExisted<TEntity>(long id) where TEntity : EntityBaseDO
-        {
-            DbSet<TEntity> rep = dbContext.Set<TEntity>();
-            return await rep.AnyAsync(p => p.Id == id);
+        {           
+            return await SingleDataExisted<TEntity>(p => p.Id == id);
         }
         #endregion
 

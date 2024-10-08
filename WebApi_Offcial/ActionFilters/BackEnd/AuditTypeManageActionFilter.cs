@@ -1,4 +1,3 @@
-using IDataSphere.Interface.BackEnd.AuditTypeManage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
@@ -8,6 +7,8 @@ using Model.DTOs.BackEnd.AuditTypeManage;
 using UtilityToolkit.Utils;
 using Model.Repositotys.BasicData;
 using UtilityToolkit.Helpers;
+using IDataSphere.Interfaces.BackEnd;
+
 namespace WebApi_Offcial.ActionFilters.BackEnd
 {
     /// <summary>
@@ -70,7 +71,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> AddAuditTypeVerify(AddAuditTypeInput input)
         {
-            bool dataExisted = await _auditTypeManageDao.DataExisted<T_AuditType>(p => p.Name == input.Name);
+            bool dataExisted = await _auditTypeManageDao.SingleDataExisted<T_AuditType>(p => p.Name == input.Name);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -89,7 +90,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataNotExist"].Value);
             }
-            bool dataExisted = await _auditTypeManageDao.DataExisted<T_AuditType>(p => p.Id != input.Id && p.Name == input.Name);
+            bool dataExisted = await _auditTypeManageDao.SingleDataExisted<T_AuditType>(p => p.Id != input.Id && p.Name == input.Name);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);

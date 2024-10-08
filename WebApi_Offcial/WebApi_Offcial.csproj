@@ -152,6 +152,9 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ServiceImplTemplate.cs</LastGenOutput>
     </None>
+    <None Update="ConfigFiles\GraphicCaptchaBgImage.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

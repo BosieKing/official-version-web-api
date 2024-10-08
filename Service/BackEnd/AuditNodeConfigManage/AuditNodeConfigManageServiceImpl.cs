@@ -1,13 +1,7 @@
-using IDataSphere.Interface.BackEnd;
-using Model.Repositotys.BasicData;
+using IDataSphere.Interfaces.BackEnd;
 using Mapster;
-using Microsoft.EntityFrameworkCore;
-using Model.Commons.Domain;
-using Model.Commons.SharedData;
 using Model.DTOs.BackEnd.AuditNodeConfigManage;
-using IDataSphere.Interface.BackEnd.AuditNodeConfigManage;
-using System.Text;
-using UtilityToolkit.Utils;
+using Model.Repositotys.BasicData;
 
 namespace Service.BackEnd.AuditNodeConfigManage
 {
@@ -26,11 +20,11 @@ namespace Service.BackEnd.AuditNodeConfigManage
 
         #region 查询
         /// <summary>
-        /// 分页查询
+        /// 查询节点
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PageResult> GetAuditNodeConfigPage(GetAuditNodeConfigPageInput input)
+        public async Task<dynamic> GetAuditNodeConfigPage(GetAuditNodeConfigPageInput input)
         {
             return await _auditNodeConfigManageDao.GetAuditNodeConfigPage(input);
         }
@@ -38,13 +32,24 @@ namespace Service.BackEnd.AuditNodeConfigManage
 
         #region 新增
         /// <summary>
-        /// 新增
+        /// 新增父节点
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public async Task<bool> AddAuditNodeConfig(AddAuditNodeConfigInput input)
         {
             T_AuditNodeConfig data = input.Adapt<T_AuditNodeConfig>();
+            return await _auditNodeConfigManageDao.AddAsync(data);
+        }
+
+        /// <summary>
+        /// 新增子节点
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<bool> AddAuditNodeConfigOption(AddAuditNodeConfigOptionInput input)
+        {
+            T_AuditNodeConfigOption data = input.Adapt<T_AuditNodeConfigOption>();
             return await _auditNodeConfigManageDao.AddAsync(data);
         }
         #endregion
@@ -71,7 +76,7 @@ namespace Service.BackEnd.AuditNodeConfigManage
         /// <returns></returns>
         public async Task<bool> DeleteAuditNodeConfig(long id)
         {        
-            return await _auditNodeConfigManageDao.DeleteAsync(p => p.Id == id);
+            return true;
         }
         #endregion
     }

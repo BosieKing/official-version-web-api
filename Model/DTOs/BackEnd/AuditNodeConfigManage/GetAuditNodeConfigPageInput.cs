@@ -5,15 +5,9 @@ namespace Model.DTOs.BackEnd.AuditNodeConfigManage
     public class GetAuditNodeConfigPageInput : PageInput
     {
         /// <summary>
-        /// Name
+        /// ≈‰÷√¿‡–Õ
         /// </summary>
-        [MaxLength(50,ErrorMessage = "NameTooLong50")]
-        public string Name { get; set; } = String.Empty;
-        
-        /// <summary>
-        /// NodeLevel
-        /// </summary>
-        public int NodeLevel { get; set; } = 0;
-     }
+        public int AuditNodeConfigType { get; set; }
+    }
                    
 }
