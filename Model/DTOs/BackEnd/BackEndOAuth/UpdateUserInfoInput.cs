@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Model.DTOs.BackEnd.BackEndOAuthManage
+namespace Model.DTOs.BackEnd.BackEndOAuth
 {
     /// <summary>
     /// 个人中心修改个人信息输入类

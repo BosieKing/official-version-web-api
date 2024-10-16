@@ -10,6 +10,11 @@ namespace Model.Repositotys.BasicData
     public class T_TenantMenu : EntityTenantDO
     {
         /// <summary>
+        /// 归属目录id
+        /// </summary>
+        public long DirectoryId { get; set; }
+
+        /// <summary>
         /// 菜单名称
         /// </summary>
         [MaxLength(50)]
@@ -22,7 +27,7 @@ namespace Model.Repositotys.BasicData
         public string Icon { get; set; }
 
         /// <summary>
-        /// 后端权限路由-对应的控制器名称
+        /// 后端权限路由-对应的控制器名称，也对应前端的名称
         /// </summary>
         [MaxLength(100)]
         public string ControllerRouter { get; set; }
@@ -31,7 +36,7 @@ namespace Model.Repositotys.BasicData
         /// 前台组件物理地址--前端维护
         /// </summary>
         [MaxLength(100)]
-        public string Component { get; set; }
+        public string VueComponent { get; set; }
 
         /// <summary>
         /// 前端浏览器路由地址--前端维护
@@ -55,11 +60,6 @@ namespace Model.Repositotys.BasicData
         /// 是否隐藏
         /// </summary>
         public bool IsHidden { get; set; } = false;
-
-        /// <summary>
-        /// 归属目录id
-        /// </summary>
-        public long DirectoryId { get; set; }
 
         /// <summary>
         /// 唯一编号

@@ -125,7 +125,7 @@ namespace DataSphere.BackEnd
             }
 
             // 先找到所有用户id             
-            var userIdsQuery = dbContext.UserRep.IgnoreTenantFilter()
+            var userIdsQuery = await dbContext.UserRep.IgnoreTenantFilter()
                                          .Where(!phone.IsNullOrEmpty() && userId.Equals(0), p => p.Phone == phone)
                                          .Where(!userId.Equals(0) && !tenantId.Equals(0) && phone.IsNullOrEmpty(), p => p.Id == userId && p.TenantId == tenantId)
                                          .GroupJoin(dbContext.UserRoleRep, u => u.Id, ur => ur.UserId, (u, ur) => new { u, ur })
@@ -143,16 +143,16 @@ namespace DataSphere.BackEnd
                                              p.Key.UserId,
                                              p.Key.TenantId,
                                              RoleId = p.Select(p => p.RoleId)
-                                         }).Take(1);
+                                         }).Take(1).ToListAsync();
             // 配置了角色的id          
-            var result = await userIdsQuery
-                                           .Join(dbContext.TenantRep, p => p.TenantId, t => t.Id, (p, t) => new TokenInfoModel
-                                           {
-                                               UserId = p.UserId.ToString(),
-                                               RoleIds = string.Join(",", p.RoleId),
-                                               TenantId = p.TenantId.ToString(),
-                                               SchemeName = t.Code
-                                           }).FirstOrDefaultAsync();
+            var result =  userIdsQuery.Join(dbContext.TenantRep, p => p.TenantId, t => t.Id, (p, t) => new TokenInfoModel
+            {
+                UserId = p.UserId.ToString(),
+                RoleIds = string.Join(",", p.RoleId),
+                TenantId = p.TenantId.ToString(),
+                SchemeName = t.Code
+            }).FirstOrDefault();
+
             return result;
         }
 
@@ -192,18 +192,6 @@ namespace DataSphere.BackEnd
             return result;
         }
 
-
-        /// <summary>
-        /// 获取电话号码
-        /// </summary>
-        /// <param name="phone"></param>
-        /// <returns></returns>
-        public async Task<string> GetPhoneById(long id)
-        {
-            var phone = await dbContext.UserRep.Where(p => p.Id == id).Select(p => p.Phone).FirstOrDefaultAsync();
-            return phone;
-        }
-
         /// <summary>
         /// 获取菜单权限树
         /// </summary>
@@ -215,28 +203,28 @@ namespace DataSphere.BackEnd
             var list = dbContext.TenantMenuRep.Where(p => menuIdsQuery.Contains(p.Id))
                                        .Select(p => new MenuTreeModel
                                        {
+                                           PId = p.DirectoryId,
+                                           Id = p.Id,
                                            Icon = p.Icon,
                                            Name = p.Name,
-                                           Component = Convert.ToString(p.Component),
-                                           Router = Convert.ToString(p.ControllerRouter),
-                                           Id = p.Id,
+                                           ControllerRouter = Convert.ToString(p.ControllerRouter),
                                            BrowserPath = Convert.ToString(p.BrowserPath),
-                                           PId = p.DirectoryId,
+                                           VueComponent = Convert.ToString(p.VueComponent),
                                            Type = (int)MenuTreeTypeEnum.Menu,
                                            IsHidden = p.IsHidden
                                        }).Union(
                       dbContext.TenantDirectoryRep.Where(p => dbContext.TenantMenuRep.Where(p => menuIdsQuery.Contains(p.Id)).Select(p => p.DirectoryId).Contains(p.Id))
                                        .Select(p => new MenuTreeModel
                                        {
+                                           PId = 0,
+                                           Id = p.Id,
                                            Icon = p.Icon,
                                            Name = p.Name,
-                                           Component = "/",
-                                           Router = "/",
+                                           VueComponent = "/",
+                                           ControllerRouter = "/",
                                            BrowserPath = Convert.ToString(p.BrowserPath),
-                                           Id = p.Id,
-                                           PId = 0,
                                            Type = (int)MenuTreeTypeEnum.Directory,
-                                           IsHidden = true
+                                           IsHidden = false
                                        }));
             return await list.ToListAsync();
         }
@@ -253,58 +241,31 @@ namespace DataSphere.BackEnd
             var list = dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.SystemManage)
                                        .Select(p => new MenuTreeModel
                                        {
+                                           PId = p.DirectoryId,
+                                           Id = p.Id,                                      
                                            Icon = p.Icon,
                                            Name = p.Name,
-                                           Component = Convert.ToString(p.Component),
-                                           Router = Convert.ToString(p.ControllerRouter),
+                                           ControllerRouter = Convert.ToString(p.ControllerRouter),
                                            BrowserPath = Convert.ToString(p.BrowserPath),
-                                           Id = p.Id,
-                                           PId = p.DirectoryId,
+                                           VueComponent = Convert.ToString(p.VueComponent),   
                                            Type = (int)MenuTreeTypeEnum.Menu,
                                            IsHidden = p.IsHidden
                                        }).Union(
                       dbContext.DirectoryRep.Where(p => dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.SystemManage).Select(p => p.DirectoryId).Contains(p.Id))
                                        .Select(p => new MenuTreeModel
                                        {
+                                           PId = 0,
+                                           Id = p.Id,                                         
                                            Icon = p.Icon,
                                            Name = p.Name,
-                                           Component = "/",
-                                           Router = "/",
-                                           BrowserPath = Convert.ToString(p.BrowserPath),
-                                           Id = p.Id,
-                                           PId = 0,
+                                           VueComponent = "/",
+                                           ControllerRouter = "/",
+                                           BrowserPath = Convert.ToString(p.BrowserPath),                                          
                                            Type = (int)MenuTreeTypeEnum.Directory,
                                            IsHidden = false
                                        }));
             return await list.ToListAsync();
-        }
-
-        /// <summary>
-        /// 返回按钮集合
-        /// </summary> 
-        /// <param name="roleIds"></param>
-        /// <returns></returns>
-        public async Task<string[]> GetButtonArray(long[] roleIds)
-        {
-            var menuIdsQuery = dbContext.RoleMenuRep.Where(p => roleIds.Contains(p.RoleId)).GroupBy(p => p.MenuId).Select(p => p.Key);
-            var list = await dbContext.TenantMenuButtonRep.Where(p => menuIdsQuery.Contains(p.MenuId))
-                                          .GroupJoin(dbContext.TenantMenuRep, tm => tm.MenuId, m => m.Id, (tm, m) => new { tm, m })
-                                          .SelectMany(p => p.m.DefaultIfEmpty(), (p, tm) => tm.ControllerRouter + ":" + p.tm.ActionName).ToArrayAsync();
-            return list;
-        }
-
-        /// <summary>
-        /// 返回按钮集合
-        /// </summary>
-        /// <returns></returns>
-        public async Task<string[]> GetSuperManageButtonArray()
-        {
-            var menuIdsQuery = dbContext.MenuRep.Where(p => p.Weight == (int)MenuWeightTypeEnum.SystemManage).Select(p => p.Id);
-            var list = await dbContext.MenuButtonRep.Where(p => menuIdsQuery.Contains(p.Id))
-                                          .GroupJoin(dbContext.MenuRep, tm => tm.MenuId, m => m.Id, (tm, m) => new { tm, m })
-                                          .SelectMany(p => p.m.DefaultIfEmpty(), (p, tm) => tm.ControllerRouter + ":" + p.tm.ActionName).ToArrayAsync();
-            return list;
-        }
+        }     
 
         /// <summary>
         /// 查询已绑定的租户列表

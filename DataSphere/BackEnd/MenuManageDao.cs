@@ -30,12 +30,12 @@ namespace DataSphere.BackEnd
                                               Id = m == null ? 0 : m.Id,
                                               Name = m == null ? "" : m.Name,
                                               Icon = m == null ? "" : m.Icon,
-                                              Router = m == null ? "" : m.ControllerRouter,
+                                              ControllerRouter = m == null ? "" : m.ControllerRouter,
                                               BrowserPath = m == null ? "" : m.BrowserPath,
                                               IsHidden = m == null ? true : m.IsHidden,
                                               Weight = m == null ? 0 : m.Weight,
                                               Remark = m == null ? "" : m.Remark,
-                                              Component = m == null ? "" : m.Component,
+                                              VueComponent = m == null ? "" : m.VueComponent,
                                               PId = dm.d.Id,
                                               PName = dm.d.Name,
                                               PIcon = dm.d.Icon,
@@ -46,7 +46,7 @@ namespace DataSphere.BackEnd
             {
                 Id = p.Id,
                 Name = p.Name,
-                Router = p.ActionName,
+                ControllerRouter = p.ActionName,
                 PId = p.MenuId,
                 Type = (int)MenuTreeTypeEnum.Button
             }).ToList();

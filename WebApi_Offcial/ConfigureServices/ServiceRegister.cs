@@ -38,7 +38,7 @@ namespace WebApi_Offcial.ConfigureServices
             builder.RegisterAssemblyTypes(GetAssembly(DAO_ASSEMBLY_NAME))
                    .Where(p => p.Name.EndsWith("Dao"))
                    .AsImplementedInterfaces()
-                   
+
                    .InstancePerLifetimeScope();
 
             // DataSphere层注入ES链接
@@ -74,15 +74,18 @@ namespace WebApi_Offcial.ConfigureServices
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        private ContainerBuilder RegisterDbContext(ContainerBuilder builder) 
+        private ContainerBuilder RegisterDbContext(ContainerBuilder builder)
         {
             builder.Register<UserProvider>(p =>
             {
                 // 每次请求序列化一个新的附加有当前用户信息的类
                 HttpContextAccessor _httpContextAccessor = p.Resolve<HttpContextAccessor>();
-                string tenantId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value;
-                string userId = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.USER_ID)?.Value;
-                return new UserProvider(long.Parse(tenantId ?? "0"), long.Parse(userId ?? "0")); ;
+                long.TryParse(_httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value, out long tenantId);
+                long.TryParse(_httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.USER_ID)?.Value, out long userId);
+                bool.TryParse(_httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.IS_REMEMBER)?.Value, out bool isSuperManage);
+                string roleIds = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.ROLE_IDs)?.Value.ToString();
+              //  string[] roleIds = (user.FindFirst(ClaimsUserConst.ROLE_IDs).Value ?? "") .Split(",", StringSplitOptions.TrimEntries);
+                return new UserProvider(tenantId, userId, roleIds, isSuperManage);
             }).InstancePerLifetimeScope();
             // 注册数据库上下文实例化工厂
             builder.RegisterType<SqlDbContextFactory>().InstancePerLifetimeScope();

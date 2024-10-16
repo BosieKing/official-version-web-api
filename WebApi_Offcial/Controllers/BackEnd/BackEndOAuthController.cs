@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Model.Commons.CoreData;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
-using Model.DTOs.BackEnd.BackEndOAuthManage;
-using Service.BackEnd.BackEndOAuthManage;
+using Model.DTOs.BackEnd.BackEndOAuth;
+using Service.BackEnd.BackEndOAuth;
 using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
@@ -20,17 +20,17 @@ namespace WebApi_Offcial.Controllers.BackEnd
     [ApiController]
     [Route("BackEndOAuth")]
     [ApiDescription(SwaggerGroupEnum.BackEnd)]
-    [ServiceFilter(typeof(BackEndOAuthManageActionFilter))]
-    public class BackEndOAuthManageController : ControllerBase
+    [ServiceFilter(typeof(BackEndOAuthActionFilter))]
+    public class BackEndOAuthController : ControllerBase
     {
         #region 构造函数
         private readonly ICaptchaService _captchaService;
-        private readonly IBackEndOAuthManageService _backEndOAuthManageService;
+        private readonly IBackEndOAuthService _backEndOAuthManageService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         /// <summary>
         /// 构造函数
         /// </summary>
-        public BackEndOAuthManageController(IBackEndOAuthManageService backEndOAuthManageService,
+        public BackEndOAuthController(IBackEndOAuthService backEndOAuthManageService,
             ICaptchaService captchaService,
             IHttpContextAccessor httpContextAccess)
         {
@@ -49,17 +49,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getMenuTree")]
         public async Task<ActionResult<ServiceResult>> getMenuTree()
         {
-            bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
-            List<MenuTreeModel> result;
-            if (isSuperManage)
-            {
-                result = await _backEndOAuthManageService.GetSuperManageMenuTree();
-            }
-            else
-            {
-                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_IDs).Value;
-                result = await _backEndOAuthManageService.GetMenuTree(roleIds);
-            }
+            var result = await _backEndOAuthManageService.GetMenuTree();
             return ServiceResult.SetData(result);
         }
 
@@ -70,32 +60,8 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getUserInfo")]
         public async Task<ActionResult<ServiceResult>> GetUserInfo()
         {
-            // todo:获取用户信息，完成
-            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value;
-            dynamic result = await _backEndOAuthManageService.GetUserInfo(long.Parse(userId));
+            dynamic result = await _backEndOAuthManageService.GetUserInfo();
             return ServiceResult.SetData(result);
-        }
-
-        /// <summary>
-        /// 返回拥有的按钮信息
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("getButtonArray")]
-        public async Task<ActionResult<ServiceResult>> GetButtonArray()
-        {
-            // todo:返回拥有的按钮信息 ，完成
-            bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
-            if (isSuperManage)
-            {
-                string[] result = await _backEndOAuthManageService.GetSuperManageButtonArray();
-                return ServiceResult.SetData(result);
-            }
-            else
-            {
-                var roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_IDs).Value;
-                var result = await _backEndOAuthManageService.GetButtonArray(roleIds);
-                return ServiceResult.SetData(result);
-            }
         }
 
         /// <summary>
@@ -105,20 +71,25 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpGet("getBindTenantList")]
         public async Task<ActionResult<ServiceResult>> getBindTenantList()
         {
-            // todo:获取已绑定的平台，待测试
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
-            if (isSuperManage)
-            {
-                var result = await _backEndOAuthManageService.GetSuperManageBindTenantList(userId);
-                return ServiceResult.SetData(result);
-            }
-            else
-            {
-                var result = await _backEndOAuthManageService.GetBindTenantList(userId);
-                return ServiceResult.SetData(result);
-            }
 
+                var result = await _backEndOAuthManageService.GetBindTenantList();
+                return ServiceResult.SetData(result);
+          
+        }
+
+        /// <summary>
+        /// 获取用户的一些数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getCount")]
+        public async Task<ActionResult<ServiceResult>> GetCount()
+        {
+            return ServiceResult.SetData(new
+            {
+                waitReadMessageCount = 0,
+                waitAuditCount = 0,
+                auditNodeConfigCount = 12
+            });
         }
         #endregion
 
@@ -131,22 +102,6 @@ namespace WebApi_Offcial.Controllers.BackEnd
         [HttpPost("loginByPassword")]
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResult>> LoginByPassword([FromBody] BackEndLoginByPasswordInput input)
-        {
-            // 设置返回头
-            (string Token, string RefreshToken) result = await _backEndOAuthManageService.LoginByPassWord(input.IsRemember, phone: input.Phone);
-            _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
-            _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
-            return ServiceResult.SetData(true);
-        }
-
-        /// <summary>
-        /// 验证码登录
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [HttpPost("loginByVerifyCode")]
-        [AllowAnonymous]
-        public async Task<ActionResult<ServiceResult>> LoginByVerifyCode([FromBody] BackEndLoginByVerifyCodeInput input)
         {
             // 设置返回头
             (string Token, string RefreshToken) result = await _backEndOAuthManageService.LoginByPassWord(input.IsRemember, phone: input.Phone);
@@ -237,7 +192,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         }
         #endregion
 
-        #region 辅助
+        #region 验证码相关
         /// <summary>
         /// 获取滑动验证码
         /// </summary>

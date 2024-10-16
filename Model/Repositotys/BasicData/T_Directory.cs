@@ -25,11 +25,6 @@ namespace Model.Repositotys.BasicData
         ///  前端浏览器路由地址--前端维护
         /// </summary>
         [MaxLength(100)]
-        public string BrowserPath { get; set; }
-
-        /// <summary>
-        /// 子菜单
-        /// </summary>
-        public virtual ICollection<T_Menu> Menus { get; set; }
+        public string BrowserPath { get; set; }      
     }
 }

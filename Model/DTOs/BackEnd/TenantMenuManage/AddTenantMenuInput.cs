@@ -25,14 +25,14 @@ namespace Model.DTOs.BackEnd.TenantMenuManage
         /// </summary>
         [Required(ErrorMessage = "RouterRequired")]
         [MaxLength(100, ErrorMessage = "RouterTooLong100")]
-        public string Router { get; set; }
+        public string ControllerRouter { get; set; }
 
         /// <summary>
         /// Component
         /// </summary>
         [Required(ErrorMessage = "ComponentRequired")]
         [MaxLength(100, ErrorMessage = "ComponentTooLong100")]
-        public string Component { get; set; }
+        public string VueComponent { get; set; }
 
         /// <summary>
         /// Path

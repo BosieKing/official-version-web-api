@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
 using Model.Commons.Domain;
 using Model.Commons.SharedData;
-using Model.DTOs.BackEnd.BackEndOAuthManage;
+using Model.DTOs.BackEnd.BackEndOAuth;
 using Model.Repositotys.Service;
 using Service.Center.Captcha;
 using SharedLibrary.Consts;
@@ -18,7 +18,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
     /// <summary>
     /// 后台登录验证切面
     /// </summary>
-    public class BackEndOAuthManageActionFilter : IAsyncActionFilter
+    public class BackEndOAuthActionFilter : IAsyncActionFilter
     {
         #region 参数和构造函数
 
@@ -29,7 +29,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <summary>
         /// 构造函数
         /// </summary>
-        public BackEndOAuthManageActionFilter(IBackEndOAuthDao backEndOAuthDao,
+        public BackEndOAuthActionFilter(IBackEndOAuthDao backEndOAuthDao,
             IStringLocalizer<UserTips> stringLocalizer, ICaptchaService captchaService,
             IHttpContextAccessor httpContextAccess)
         {
@@ -200,7 +200,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                 return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
-            string phone = await _backEndOAuthDao.GetPhoneById(userId);
+            string phone = await _backEndOAuthDao.GetFirstStringTypeField<T_User>(p => p.Id == userId, nameof(T_User.Phone));
             ServiceResult codeVerifyResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.UpdatePwd, phone, input.VerifyCode);
             if (!codeVerifyResult.Success)
             {

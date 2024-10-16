@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Model.DTOs.BackEnd.BackEndOAuthManage
+namespace Model.DTOs.BackEnd.BackEndOAuth
 {
     /// <summary>
-    /// 后台验证码登录输入类
+    /// 后台忘记密码输入类
     /// </summary>
-    public class BackEndLoginByVerifyCodeInput
+    public class BackEndLoginByPasswordInput
     {
-        /// <summary>
-        /// 验证码
+        /// 密码
         /// </summary>
-        [Required(ErrorMessage = "VerifyCodeRequired")]
-        public string VerifyCode { get; set; }
+        [Required(ErrorMessage = "PasswordRequired")]
+        public string Password { get; set; }
 
         /// <summary>
         /// 账户

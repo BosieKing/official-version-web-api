@@ -110,7 +110,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
-            bool result = await _menuDao.SingleDataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.ControllerRouter == input.Router);
+            bool result = await _menuDao.SingleDataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.ControllerRouter == input.ControllerRouter);
             if (result)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);
@@ -165,7 +165,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DirectoryNotExist"].Value);
             }
-            bool dataExisted = await _menuDao.SingleDataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.ControllerRouter == input.Router && p.Id != input.Id);
+            bool dataExisted = await _menuDao.SingleDataExisted<T_Menu>(p => p.Name == input.Name && p.BrowserPath == input.BrowserPath && p.ControllerRouter == input.ControllerRouter && p.Id != input.Id);
             if (dataExisted)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["DataExisted"].Value);

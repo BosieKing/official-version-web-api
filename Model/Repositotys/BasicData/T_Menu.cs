@@ -11,6 +11,11 @@ namespace Model.Repositotys.BasicData
     public class T_Menu : EntityBaseDO
     {
         /// <summary>
+        /// 归属目录id
+        /// </summary>
+        public long DirectoryId { get; set; }
+
+        /// <summary>
         /// 名称
         /// </summary>
         [MaxLength(50)]
@@ -32,7 +37,7 @@ namespace Model.Repositotys.BasicData
         /// 前台组件物理地址--前端维护
         /// </summary>
         [MaxLength(100)]
-        public string Component { get; set; }
+        public string VueComponent { get; set; }
 
         /// <summary>
         /// 前端浏览器路由地址--前端维护
@@ -41,7 +46,7 @@ namespace Model.Repositotys.BasicData
         public string BrowserPath { get; set; }
 
         /// <summary>
-        /// 菜单类型
+        /// 菜单类型（目的是推送租户）
         /// </summary>
         /// <see cref="SharedLibrary.Enums.MenuWeightTypeEnum"/>
         public int Weight { get; set; }
@@ -56,11 +61,6 @@ namespace Model.Repositotys.BasicData
         /// 是否隐藏
         /// </summary>
         public bool IsHidden { get; set; } = false;
-
-        /// <summary>
-        /// 归属目录id
-        /// </summary>
-        public long DirectoryId { get; set; }
 
         /// <summary>
         /// 唯一编号

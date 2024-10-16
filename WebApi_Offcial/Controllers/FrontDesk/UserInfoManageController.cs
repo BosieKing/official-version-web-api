@@ -48,19 +48,20 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         {
             dynamic result = await _userInfoManageService.GetUserInfo();
             return ServiceResult.SetData(result);
-        }
+        }     
 
         /// <summary>
-        /// 获取用户的一些数据
+        /// 获取用户菜单数据
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getCount")]
-        public async Task<ActionResult<ServiceResult>> GetCount()
+        [HttpGet("getMenuTree")]
+        public async Task<ActionResult<ServiceResult>> GetMenuTree()
         {
-            return ServiceResult.SetData(new { 
-            WaitReadMessageCount =0,
-            WaitAuditCount =0 ,
-            
+            return ServiceResult.SetData(new
+            {
+                waitReadMessageCount = 0,
+                waitAuditCount = 0,
+                auditNodeConfigCount = 12
             });
         }
         #endregion
@@ -122,22 +123,6 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             return ServiceResult.SetData(result);
         }
 
-        #endregion
-
-        #region 删除
-        /// <summary>
-        /// 退出登录
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost("loginOut")]
-        public async Task<ActionResult<ServiceResult>> LoginOut()
-        {
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            string token = Request.Headers[ClaimsUserConst.HTTP_Token_Head].ToString();
-            string referenceToken = Request.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head].ToString();
-            bool result = await RedisMulititionHelper.LoginOut(userId.ToString(), token);
-            return ServiceResult.Successed();
-        }
         #endregion
 
         #region 辅助方法      

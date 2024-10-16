@@ -8,9 +8,14 @@ namespace Model.Commons.CoreData
     public class MenuTreeModel
     {
         /// <summary>
-        /// Icon
+        /// 父id
         /// </summary>
-        public string Icon { get; set; } = string.Empty;
+        public long PId { get; set; } = 0;
+
+        /// <summary>
+        /// id
+        /// </summary>
+        public long Id { get; set; } = 0;
 
         /// <summary>
         /// 名称
@@ -18,24 +23,24 @@ namespace Model.Commons.CoreData
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
+        /// Icon
+        /// </summary>
+        public string Icon { get; set; } = string.Empty;
+
+        /// <summary>
         /// 前端组件物理地址
         /// </summary>
-        public string Component { get; set; } = string.Empty;
+        public string VueComponent { get; set; } = string.Empty;
 
         /// <summary>
         /// 后端权限标识路由
         /// </summary>
-        public string Router { get; set; } = string.Empty;
+        public string ControllerRouter { get; set; } = string.Empty;
 
         /// <summary>
         /// 前端浏览器路由地址
         /// </summary>
         public string BrowserPath { get; set; } = string.Empty;
-
-        /// <summary>
-        /// id
-        /// </summary>
-        public long Id { get; set; } = 0;
 
         /// <summary>
         /// 类型
@@ -57,11 +62,6 @@ namespace Model.Commons.CoreData
         /// 是否隐藏
         /// </summary>
         public bool IsHidden { get; set; } = false;
-
-        /// <summary>
-        /// 父id
-        /// </summary>
-        public long PId { get; set; } = 0;
 
         /// <summary>
         /// 父节点名称

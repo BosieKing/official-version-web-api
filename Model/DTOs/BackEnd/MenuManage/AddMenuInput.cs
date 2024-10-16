@@ -26,7 +26,7 @@ namespace Model.DTOs.BackEnd.MenuManage
         /// </summary>
         [Required(ErrorMessage = "RouterRequired")]
         [MaxLength(100, ErrorMessage = "RouterTooLong100")]
-        public string Router { get; set; }
+        public string ControllerRouter { get; set; }
 
         /// <summary>
         ///  前端浏览器路由地址--前端维护
@@ -40,7 +40,7 @@ namespace Model.DTOs.BackEnd.MenuManage
         /// </summary>
         [Required(ErrorMessage = "ComponentRequired")]
         [MaxLength(100, ErrorMessage = "ComponentTooLong100")]
-        public string Component { get; set; }
+        public string VueComponent { get; set; }
 
         /// <summary>
         /// 菜单权重枚举

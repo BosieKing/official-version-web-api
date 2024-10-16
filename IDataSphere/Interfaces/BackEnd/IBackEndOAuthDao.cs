@@ -9,10 +9,7 @@ namespace IDataSphere.Interfaces.BackEnd
     /// </summary>
     /// <remarks>T_User表</remarks>
     public interface IBackEndOAuthDao : IBaseDao<T_User>
-    {
-        Task<string[]> GetButtonArray(long[] roleIds);
-        Task<List<MenuTreeModel>> GetMenuTree(long[] rolds);
-        Task<string[]> GetSuperManageButtonArray();
+    {       Task<List<MenuTreeModel>> GetMenuTree(long[] rolds);
         Task<List<MenuTreeModel>> GetSuperManageMenuTree();
         Task<dynamic> GetUserInfoById(long id);
         Task<TokenInfoModel> GetUserInfoByPhone(string phone = "", long userId = 0, long tenantId = 0);
@@ -26,6 +23,6 @@ namespace IDataSphere.Interfaces.BackEnd
         Task<bool> UpdateAvatar(string url, long userId);
         Task<bool> UpdateUserInfo(string realName, string email, long userId);
         Task<bool> UpdatePassword(string newPassword, long userId);
-        Task<string> GetPhoneById(long id);
+     
     }
 }

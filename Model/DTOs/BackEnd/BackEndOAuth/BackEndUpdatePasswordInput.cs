@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Model.DTOs.BackEnd.BackEndOAuthManage
+namespace Model.DTOs.BackEnd.BackEndOAuth
 {
     /// <summary>
     /// 后台更新密码输入类

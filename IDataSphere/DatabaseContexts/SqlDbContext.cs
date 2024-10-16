@@ -62,8 +62,7 @@ namespace IDataSphere.DatabaseContexts
             foreach (var entity in entityList)
             {
                 // 继承租户基类
-                bool baseTypeIsTenant = entity.GetType().BaseType.Name == nameof(EntityTenantDO);
-                if (baseTypeIsTenant)
+                if (entity.Entity.GetType().IsSubclassOf(typeof(EntityTenantDO)))
                 {
                     var obj = entity.Entity as EntityTenantDO;
                     switch (entity.State)
@@ -102,7 +101,7 @@ namespace IDataSphere.DatabaseContexts
                     }
                 }
                 // 否则默认是继承的是最高级父类
-                else
+                else if (entity.Entity.GetType().IsSubclassOf(typeof(EntityBaseDO)))
                 {
                     var obj = entity.Entity as EntityBaseDO;
                     switch (entity.State)

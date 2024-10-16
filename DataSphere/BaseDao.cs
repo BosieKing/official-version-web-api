@@ -466,15 +466,15 @@ namespace DataSphere
                 try
                 {
                     DbSet<TEntity> rep = dbContext.Set<TEntity>();
-                    var adds = list.Chunk(count);
+                    var adds = list.Chunk(count == 0 ? list.Count : 50);
                     foreach (var item in adds)
                     {                        
-                        await rep.AddRangeAsync(list);                     
+                        await rep.AddRangeAsync(item);                     
                     }
                     await dbContext.SaveChangesAsync();
                     transaction.Commit();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     transaction.Rollback();
                     throw new Exception("新增失败");

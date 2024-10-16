@@ -34,7 +34,7 @@ namespace Model.Repositotys
         public long CreatedUserId { get; set; }
 
         /// <summary>
-        /// 软删除
+        /// 软删除，false0默认有效数据，true1代表非有效数据
         /// </summary>
         public bool IsDeleted { get; set; } = false;
 

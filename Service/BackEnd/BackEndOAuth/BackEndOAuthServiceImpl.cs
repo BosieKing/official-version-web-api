@@ -1,32 +1,35 @@
-﻿using IDataSphere.Interfaces.BackEnd;
+﻿using IDataSphere.DatabaseContexts;
+using IDataSphere.Interfaces.BackEnd;
 using Model.Commons.CoreData;
 using Model.Commons.Domain;
-using Model.DTOs.BackEnd.BackEndOAuthManage;
+using Model.DTOs.BackEnd.BackEndOAuth;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
 using UtilityToolkit.Tools;
 using UtilityToolkit.Utils;
 
-namespace Service.BackEnd.BackEndOAuthManage
+namespace Service.BackEnd.BackEndOAuth
 {
     /// <summary>
     /// 后台权限管理业务实现类
     /// </summary>
-    public class BackEndOAuthManageServiceImpl : IBackEndOAuthManageService
+    public class BackEndOAuthServiceImpl : IBackEndOAuthService
     {
         #region 构造函数
         /// <summary>
         /// 数据库访问
         /// </summary>
         private readonly IBackEndOAuthDao _backEndOAuthDao;
+        private readonly UserProvider _user;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public BackEndOAuthManageServiceImpl(IBackEndOAuthDao backEndOAuthDao)
+        public BackEndOAuthServiceImpl(IBackEndOAuthDao backEndOAuthDao, UserProvider user)
         {
             _backEndOAuthDao = backEndOAuthDao;
+            _user = user;
         }
         #endregion
 
@@ -36,40 +39,16 @@ namespace Service.BackEnd.BackEndOAuthManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<List<MenuTreeModel>> GetMenuTree(string rolds)
+        public async Task<List<MenuTreeModel>> GetMenuTree()
         {
-            long[] ids = rolds.Split(",").Select(p => long.Parse(p)).ToArray();
-            return await _backEndOAuthDao.GetMenuTree(ids);
-        }
-
-        /// <summary>
-        /// 获取左侧菜单权限树
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<MenuTreeModel>> GetSuperManageMenuTree()
-        {
-            return await _backEndOAuthDao.GetSuperManageMenuTree();
-        }
-
-        /// <summary>
-        /// 获取按钮集合
-        /// </summary>
-        /// <param name="rolds"></param>
-        /// <returns></returns>
-        public async Task<string[]> GetButtonArray(string rolds)
-        {
-            var ids = rolds.Split(",").Select(p => long.Parse(p)).ToArray();
-            return await _backEndOAuthDao.GetButtonArray(ids);
-        }
-
-        /// <summary>
-        /// 获取超管按钮集合
-        /// </summary>
-        /// <param name="rolds"></param>
-        /// <returns></returns>
-        public async Task<string[]> GetSuperManageButtonArray()
-        {
-            return await _backEndOAuthDao.GetSuperManageButtonArray();
+            if (_user.IsSuperManage())
+            {
+                return await _backEndOAuthDao.GetSuperManageMenuTree();
+            }
+            else
+            {
+                return await _backEndOAuthDao.GetMenuTree(_user.GetRoleIds());
+            }   
         }
 
         /// <summary>
@@ -77,9 +56,9 @@ namespace Service.BackEnd.BackEndOAuthManage
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<dynamic> GetUserInfo(long userId)
+        public async Task<dynamic> GetUserInfo()
         {
-            return await _backEndOAuthDao.GetUserInfoById(userId);
+            return await _backEndOAuthDao.GetUserInfoById(_user.GetUserId());
         }
 
         /// <summary>
@@ -87,19 +66,16 @@ namespace Service.BackEnd.BackEndOAuthManage
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetBindTenantList(long userId)
+        public async Task<List<DropdownDataResult>> GetBindTenantList()
         {
-            return await _backEndOAuthDao.GetBindTenantList();
-        }
-
-        /// <summary>
-        /// 超管获取已绑定的租户id
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        public async Task<List<DropdownDataResult>> GetSuperManageBindTenantList(long userId)
-        {
-            return await _backEndOAuthDao.GetSuperManageBindTenantList(userId);
+            if (_user.IsSuperManage())
+            {
+                return await _backEndOAuthDao.GetSuperManageBindTenantList(_user.GetUserId());
+            }
+            else
+            {
+                return await _backEndOAuthDao.GetBindTenantList();
+            }       
         }
         #endregion
 

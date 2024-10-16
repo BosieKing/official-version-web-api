@@ -37,23 +37,23 @@ namespace Service.BackEnd.TenantMenuManage
                                      Id = d.Key.PId,
                                      Name = d.Key.PName,
                                      Icon = d.Key.PIcon,
-                                     Router = "/",
-                                     Path = d.Key.PPath,
-                                     Component = "/",
+                                     ControllerRouter = "/",
+                                     BrowserPath = d.Key.PPath,
+                                     VueComponent = "/",
                                      Weight = 0,
                                      Type = (int)MenuTreeTypeEnum.Directory,
-                                     Children = d.Where(m => !m.Id.Equals(0)).GroupBy(m => new { m.Id, m.Remark, m.Name, m.Router, m.Component, m.BrowserPath, m.IsHidden, m.Icon, m.Weight }).Select(m => new
+                                     Children = d.Where(m => !m.Id.Equals(0)).GroupBy(m => new { m.Id, m.Remark, m.Name, m.ControllerRouter, m.VueComponent, m.BrowserPath, m.IsHidden, m.Icon, m.Weight }).Select(m => new
                                      {
                                          d.Key.PId,
                                          m.Key.Id,
                                          m.Key.Name,
                                          m.Key.Icon,
-                                         m.Key.Router,
+                                         m.Key.ControllerRouter,
                                          m.Key.Weight,
                                          m.Key.BrowserPath,
                                          m.Key.IsHidden,
                                          m.Key.Remark,
-                                         m.Key.Component,
+                                         m.Key.VueComponent,
                                          Type = (int)MenuTreeTypeEnum.Menu,
                                          Children = data.buttonListInfo.Where(b => m.Key.Id == b.PId).Select(r => r.Adapt<MenuTreeModel>())
                                      })
