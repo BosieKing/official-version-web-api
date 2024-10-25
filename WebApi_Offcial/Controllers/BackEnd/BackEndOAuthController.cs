@@ -69,12 +69,10 @@ namespace WebApi_Offcial.Controllers.BackEnd
         /// </summary>
         /// <returns></returns>
         [HttpGet("getBindTenantList")]
-        public async Task<ActionResult<ServiceResult>> getBindTenantList()
+        public async Task<ActionResult<ServiceResult>> GetBindTenantList()
         {
-
-                var result = await _backEndOAuthManageService.GetBindTenantList();
-                return ServiceResult.SetData(result);
-          
+            var result = await _backEndOAuthManageService.GetBindTenantList();
+            return ServiceResult.SetData(result);
         }
 
         /// <summary>
@@ -88,7 +86,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
             {
                 waitReadMessageCount = 0,
                 waitAuditCount = 0,
-                auditNodeConfigCount = 12
+                auditNodeConfigManageCount = 12
             });
         }
         #endregion

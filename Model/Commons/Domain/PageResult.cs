@@ -22,11 +22,11 @@
         /// <summary>
         /// 总页码
         /// </summary>
-        public int TotalPage { get; set; }
+        public int TotalPage { get; set; } = 0;
         /// <summary>
         /// 总条数
         /// </summary>
-        public int TotalRows { get; set; }
+        public int TotalRows { get; set; } = 0;
 
         /// <summary>
         /// 构造函数
