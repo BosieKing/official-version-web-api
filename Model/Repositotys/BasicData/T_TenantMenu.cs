@@ -15,6 +15,11 @@ namespace Model.Repositotys.BasicData
         public long DirectoryId { get; set; }
 
         /// <summary>
+        /// 归属目录
+        /// </summary>
+        public T_TenantDirectory BelongTenantDirectory { get; set; }
+
+        /// <summary>
         /// 菜单名称
         /// </summary>
         [MaxLength(50)]
@@ -65,5 +70,15 @@ namespace Model.Repositotys.BasicData
         /// 唯一编号
         /// </summary>
         public long UniqueNumber { get; set; }
+
+        /// <summary>
+        /// 此菜单已经分配了的角色
+        /// </summary>    
+        public List<T_Role> Roles { get; set; }
+
+        /// <summary>
+        /// 按钮组
+        /// </summary>
+        public List<T_TenantMenuButton> Buttons { get; set; }
     }
 }

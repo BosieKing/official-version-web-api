@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Model.Repositotys.BasicData;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Model.Repositotys.Service
@@ -53,5 +54,15 @@ namespace Model.Repositotys.Service
         /// 是否禁止登录
         /// </summary>
         public bool IsDisableLogin { get; set; } = false;
+
+        /// <summary>
+        /// 角色组
+        /// </summary>
+        public List<T_Role> Roles { get; set; }
+
+        /// <summary>
+        /// 审核角色组
+        /// </summary>
+        public List<T_AuditType> AuditTypes { get; set; }
     }
 }

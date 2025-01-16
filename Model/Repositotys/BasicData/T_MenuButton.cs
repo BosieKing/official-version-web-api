@@ -15,6 +15,11 @@ namespace Model.Repositotys.BasicData
         public long MenuId { get; set; }
 
         /// <summary>
+        /// 归属菜单
+        /// </summary>
+        public T_Menu BelongMenu { get; set; }
+
+        /// <summary>
         /// 按钮名称
         /// </summary>     
         [MaxLength(50)]
@@ -31,10 +36,5 @@ namespace Model.Repositotys.BasicData
         /// </summary>
         [MaxLength(500)]
         public string? Remark { get; set; }
-
-        /// <summary>
-        /// 所属菜单
-        /// </summary>
-        public virtual T_Menu BelongMenu { get; set; }
     }
 }

@@ -36,6 +36,33 @@ namespace IDataSphere.Extensions
         }
 
         /// <summary>
+        /// 根据等式决定是否执行右边表达式
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="sources">查询数据源</param>
+        /// <param name="result">成立条件</param>
+        /// <param name="expression">执行的表达式</param>
+        /// <returns></returns>
+        public static IQueryable<TSource> WhereIfEmpty<TSource>(this IQueryable<TSource> sources, string result, Expression<Func<TSource, bool>> expression)
+        {
+            return Where(sources,!result.IsNullOrEmpty(), expression);           
+        }
+
+        /// <summary>
+        /// 根据等式决定是否执行右边表达式
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <param name="sources">查询数据源</param>
+        /// <param name="result">成立条件</param>
+        /// <param name="expression">执行的表达式</param>
+        /// <returns></returns>
+        public static IQueryable<TSource> WhereIfEquals<TSource>(this IQueryable<TSource> sources, int? result, Expression<Func<TSource, bool>> expression)
+        {
+            return Where(sources, result.Value != 0 || !result.Equals(0), expression);           
+        }
+
+
+        /// <summary>
         /// 无视租户过滤条件
         /// </summary>
         /// <typeparam name="TSource"></typeparam>

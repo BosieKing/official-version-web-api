@@ -27,5 +27,9 @@ namespace Model.Repositotys.BasicData
         [MaxLength(100)]
         public string BrowserPath { get; set; }
 
+        /// <summary>
+        /// 菜单
+        /// </summary>
+        public List<T_TenantMenu> Menus { get; set; }
     }
 }

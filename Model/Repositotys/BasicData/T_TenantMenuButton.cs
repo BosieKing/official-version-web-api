@@ -15,6 +15,11 @@ namespace Model.Repositotys.BasicData
         public long MenuId { get; set; }
 
         /// <summary>
+        /// 归属菜单
+        /// </summary>
+        public T_TenantMenu BelongTenantMenu { get; set; }
+
+        /// <summary>
         /// 按钮名称
         /// </summary>     
         [MaxLength(50)]

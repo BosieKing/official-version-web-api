@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Model.Repositotys.Service;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,5 +22,15 @@ namespace Model.Repositotys.BasicData
         /// </summary>
         [MaxLength(500)]
         public string? Remark { get; set; }
+
+        /// <summary>
+        /// 配置给哪些用户
+        /// </summary>
+        public List<T_User> Users { get; set; }
+
+        /// <summary>
+        /// 此角色拥有的菜单
+        /// </summary>    
+        public List<T_TenantMenu> Menus { get; set; }
     }
 }

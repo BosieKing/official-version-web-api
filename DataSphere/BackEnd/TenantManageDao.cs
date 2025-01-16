@@ -32,8 +32,8 @@ namespace DataSphere.BackEnd
         public async Task<PageResult> GetTenantPage(GetTenantPageInput input)
         {
             var query = from tenant in dbContext.TenantRep
-                        .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $"%{input.Name}%"))
-                        .Where(!input.Code.IsNullOrEmpty(), p => EF.Functions.Like(p.Code, $"%{input.Code}%"))
+                        .WhereIfEmpty(input.Name, p => EF.Functions.Like(p.Name, $"%{input.Name}%"))
+                        .WhereIfEmpty(input.Code, p => EF.Functions.Like(p.Code, $"%{input.Code}%"))
                         join createUser in dbContext.UserRep on tenant.CreatedUserId equals createUser.Id into createUserResult
                         from createUser in createUserResult.DefaultIfEmpty()
                         join updateUser in dbContext.UserRep on tenant.UpdateUserId equals updateUser.Id into updateUserResult

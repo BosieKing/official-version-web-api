@@ -26,5 +26,10 @@ namespace Model.Repositotys.BasicData
         /// </summary>
         [MaxLength(100)]
         public string BrowserPath { get; set; }      
+
+        /// <summary>
+        /// 菜单
+        /// </summary>
+        public List<T_Menu> Menus { get; set; }
     }
 }

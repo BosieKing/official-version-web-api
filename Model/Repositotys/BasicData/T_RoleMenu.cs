@@ -14,8 +14,18 @@ namespace Model.Repositotys.BasicData
         public long RoleId { get; set; }
 
         /// <summary>
+        /// 归属的角色
+        /// </summary>
+        public T_Role BelongRole { get; set; }
+
+        /// <summary>
         /// 菜单Id
         /// </summary>
         public long MenuId { get; set; }
+
+        /// <summary>
+        /// 归属的菜单
+        /// </summary>
+        public T_TenantMenu BelongTenantMenu { get; set; }
     }
 }

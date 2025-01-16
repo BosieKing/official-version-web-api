@@ -189,7 +189,7 @@ namespace IDataSphere.DatabaseContexts
         private BinaryExpression CreateTenantIdExpression(Type type, string fieldName, ParameterExpression p)
         {
             // 构建成员表达式 p.TenantId
-            MemberExpression memberExpression = Expression.PropertyOrField(p, fieldName);
+            MemberExpression memberExpression = Expression.PropertyOrField(p, fieldName); 
             // 传递对象设置常量
             ConstantExpression dbContextConstant = Expression.Constant(this, typeof(SqlDbContext));
             // 得到数据库上下文的属性访问器

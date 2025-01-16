@@ -66,8 +66,8 @@ namespace DataSphere.BackEnd
         public async Task<PageResult> GetRolePage(GetRolePageInput input)
         {
             var query = from data in dbContext.RoleRep
-                        .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $"%{input.Name}%"))
-                        .Where(!input.Remark.IsNullOrEmpty(), p => EF.Functions.Like(p.Remark, $"%{input.Remark}%"))
+                        .WhereIfEmpty(input.Name, p => EF.Functions.Like(p.Name, $"%{input.Name}%"))
+                        .WhereIfEmpty(input.Remark, p => EF.Functions.Like(p.Remark, $"%{input.Remark}%"))
                         join createUser in dbContext.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
                         from createUser in createUserResult.DefaultIfEmpty()
                         join updateUser in dbContext.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult

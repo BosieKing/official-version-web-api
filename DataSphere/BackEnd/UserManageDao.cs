@@ -29,8 +29,8 @@ namespace DataSphere.BackEnd
         public async Task<PageResult> GetUserPage(GetUserPageInput input)
         {
             var query = from user in dbContext.UserRep
-                        .Where(!input.NickName.IsNullOrEmpty(), p => EF.Functions.Like(p.NickName, $"%{input.NickName}%"))
-                        .Where(!input.Phone.IsNullOrEmpty(), p => EF.Functions.Like(p.Phone, $"%{input.Phone}%"))
+                        .WhereIfEmpty(input.NickName, p => EF.Functions.Like(p.NickName, $"%{input.NickName}%"))
+                        .WhereIfEmpty(input.Phone, p => EF.Functions.Like(p.Phone, $"%{input.Phone}%"))
                         select new
                         {
                             user.Id,
