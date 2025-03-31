@@ -86,18 +86,6 @@ namespace WebApi_Offcial.Controllers.BackEnd
             bool result = await _tenantManagerService.AddTenant(input);
             return ServiceResult.SetData(result);
         }
-
-        /// <summary>
-        /// 推送新菜单给租户
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        [HttpPost("pushTenantMenu")]
-        public async Task<ActionResult<ServiceResult>> PushTenantMenu([FromBody] PushTenantMenuInput input)
-        {
-            bool result = await _tenantManagerService.PushTenantMenu(input);
-            return ServiceResult.SetData(result);
-        }
         #endregion
 
         #region 更新

@@ -10,9 +10,7 @@ namespace IDataSphere.Interfaces.BackEnd
     /// <remarks>T_Tenant</remarks>
     public interface ITenantManageDao : IBaseDao<T_Tenant>
     {
-        Task<List<(long Id, string Router)>> AddTenantMenu(long tenantId, long userId);
         Task<PageResult> GetTenantPage(GetTenantPageInput input);
-        Task<bool> PushTenantMenu(long menuId, long directoryId, long tenantId);
         Task<bool> UpdateTenant(string name, string code, long Id);
         Task<bool> UptateInviteCode(long id, string inviteCode);
     }

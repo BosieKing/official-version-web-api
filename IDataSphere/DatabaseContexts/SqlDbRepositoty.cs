@@ -20,29 +20,14 @@ namespace IDataSphere.DatabaseContexts
         public DbSet<T_Directory> DirectoryRep { get; set; }
 
         /// <summary>
-        /// 租户目录表
-        /// </summary>
-        public DbSet<T_TenantDirectory> TenantDirectoryRep { get; set; }
-
-        /// <summary>
         /// 菜单表
         /// </summary>
         public DbSet<T_Menu> MenuRep { get; set; }
 
         /// <summary>
-        /// 租户菜单表
-        /// </summary>
-        public DbSet<T_TenantMenu> TenantMenuRep { get; set; }
-
-        /// <summary>
         /// 菜单按钮表
         /// </summary>
         public DbSet<T_MenuButton> MenuButtonRep { get; set; }
-
-        /// <summary>
-        /// 租户菜单按钮表
-        /// </summary>
-        public DbSet<T_TenantMenuButton> TenantMenuButtonRep { get; set; }
 
         /// <summary>
         /// 角色表
@@ -63,11 +48,6 @@ namespace IDataSphere.DatabaseContexts
         /// 用户权限表
         /// </summary>
         public DbSet<T_UserRole> UserRoleRep { get; set; }
-
-        /// <summary>
-        /// 角色屏蔽按钮
-        /// </summary>
-        public DbSet<T_RoleBlockButton> RoleBlockButtonsRep { get; set; }
 
         /// <summary>
         /// 审核角色表

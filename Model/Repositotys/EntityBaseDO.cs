@@ -29,30 +29,16 @@ namespace Model.Repositotys
         public DateTime CreatedTime { get; set; }
 
         /// <summary>
-        /// 创建人
-        /// </summary>
-        public long CreatedUserId { get; set; }
-
-        /// <summary>
         /// 软删除，false0默认有效数据，true1代表非有效数据
         /// </summary>
         public bool IsDeleted { get; set; } = false;
-
-        /// <summary>
-        /// 更新人
-        /// </summary>
-        public long UpdateUserId { get; set; } = 0;
-
-        /// <summary>
-        /// 更新时间
-        /// </summary>
-        public DateTime? UpdateTime { get; set; }
+   
     }
     /*
      * 导航属性：导航属性一般是指的在实体类中属性类型为List<T>、ICollection<T>、HashSet<T>类型的属性
      * 1.一般对于少量实体而言用List<T>、大量数据使用HashSet<T>
      * 
-     * 2.只有在启用了延迟加载（即只有在访问到属性值的时候才会到数据库查询以提高性能，延迟加载会导致可能出现在循环或者迭代中出现n+1的问题）
+     * 2.只有在启用了延迟加载（即只有在访问到属性值的时候才会到数据库查询以提高性能，延迟加载会导致可能出现在循环或者迭代中出现n+1的问题）,要安装其他的包
      *   或者更改跟踪（即手动更改EntityState）的情况下，才能把导航属性设为虚拟导航（加上virtual修饰）
      *   什么意思呢？户表中有一个ICollection<Like> Likes的导航属性，写一个var user =  UserRep.where(p => p.id ==1).first()
      *  （1）设置为virtual且启用延迟加载，Likes属性不会加载数据，只是一个空集合或者空对象，只有当我调用Likes的比如first()，或者访问他的一个具体属性的时候，才会生成sql去查询
