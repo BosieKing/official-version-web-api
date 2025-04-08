@@ -27,8 +27,7 @@ namespace WebApi_Offcial.ActionFilters
         /// </summary>
         /// <param name="context"></param>
         public Task OnAuthorizationAsync(AuthorizationFilterContext context)
-        {
-            return Task.CompletedTask;
+        {           
             // 判断是否是超管
             bool isSuperManage = bool.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.IS_SUPERMANAGE)?.Value ?? "false");
             if (isSuperManage)
@@ -45,7 +44,7 @@ namespace WebApi_Offcial.ActionFilters
                 if (!RedisMulititionHelper.HasRole(roleIds.Split(","), controllerName, tenantId))
                 {
                     context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-                    // 管道短路
+                    // 设置短路
                     context.Result = new JsonResult(ServiceResult.IsFailure("无权访问"));
                     return Task.CompletedTask;
                 }
