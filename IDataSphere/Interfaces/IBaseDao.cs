@@ -28,12 +28,6 @@ namespace IDataSphere.Interfaces
         public long UserId();
 
         /// <summary>
-        /// 租户Id
-        /// </summary>
-        /// <returns></returns>
-        public long TenantId();
-
-        /// <summary>
         /// 获取指定Rep
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>

@@ -37,12 +37,11 @@ namespace WebApi_Offcial.ActionFilters
             }
             else
             {
-                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_IDs)?.Value ?? "";
-                long tenantId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value ?? "0");
+                string roleIds = _httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.ROLE_IDs)?.Value ?? "";              
                 // 判断有无权限访问此接口
                 string actioName = context.RouteData.Values["action"].ToString().ToLower();
                 string controllerName = context.RouteData.Values["controller"].ToString().ToLower();
-                if (!RedisMulititionHelper.HasRole(roleIds.Split(","), controllerName, tenantId))
+                if (!RedisMulititionHelper.HasRole(roleIds.Split(","), controllerName))
                 {
                     context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     // 管道短路

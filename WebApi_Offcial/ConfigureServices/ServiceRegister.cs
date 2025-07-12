@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using DataSphere.ES;
 using IDataSphere.DatabaseContexts;
+using Microsoft.EntityFrameworkCore;
 using Nest;
 using SharedLibrary.Consts;
 using System.Reflection;
@@ -80,16 +81,16 @@ namespace WebApi_Offcial.ConfigureServices
             {
                 // 每次请求序列化一个新的附加有当前用户信息的类
                 HttpContextAccessor _httpContextAccessor = p.Resolve<HttpContextAccessor>();
-                long.TryParse(_httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.TENANT_ID)?.Value, out long tenantId);
                 long.TryParse(_httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.USER_ID)?.Value, out long userId);
                 bool.TryParse(_httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.IS_REMEMBER)?.Value, out bool isSuperManage);
-                string roleIds = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.ROLE_IDs)?.Value.ToString();
-              //  string[] roleIds = (user.FindFirst(ClaimsUserConst.ROLE_IDs).Value ?? "") .Split(",", StringSplitOptions.TrimEntries);
-                return new UserProvider(tenantId, userId, roleIds, isSuperManage);
+                string roleIds = _httpContextAccessor?.HttpContext?.User.FindFirst(ClaimsUserConst.ROLE_IDs)?.Value.ToString();           
+                return new UserProvider(userId, roleIds, isSuperManage);
             }).InstancePerLifetimeScope();
+
+
             // 注册数据库上下文实例化工厂
             builder.RegisterType<SqlDbContextFactory>().InstancePerLifetimeScope();
-            // 从工厂中获取一个配置好了的租户信息的数据库上下文
+            // 从工厂中获取一个配置好了的租户信息的数据库上下文           
             builder.Register<SqlDbContext>(p => p.Resolve<SqlDbContextFactory>().CreateDbContext()).InstancePerLifetimeScope();
             return builder;
         }

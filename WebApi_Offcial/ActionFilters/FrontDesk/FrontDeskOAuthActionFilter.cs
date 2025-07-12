@@ -169,14 +169,9 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
         /// <returns></returns>
         private async Task<ServiceResult> RegisteredVerify(RegisteredInput input)
         {
-            // 验证邀请码是否正确
-            (long Id, string Code) tenandInfo = await _frontDeskOAuthDao.GetIdByInviteCode(input.InviteCode);
-            if (tenandInfo.Id.Equals(0))
-            {
-                return ServiceResult.IsFailure(_stringLocalizer["InviteCodeError"].Value);
-            }
+         
             // 判断账号在该平台下是否已被注册
-            bool hasRegiste = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone && p.TenantId == tenandInfo.Id, true);
+            bool hasRegiste = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (hasRegiste)
             {
                 return ServiceResult.IsFailure(_stringLocalizer["UserExisted"].Value);

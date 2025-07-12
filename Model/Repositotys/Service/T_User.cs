@@ -8,7 +8,7 @@ namespace Model.Repositotys.Service
     /// 用户表
     /// </summary>
     [Table("T_User")]
-    public class T_User : EntityTenantDO
+    public class T_User : EntityBaseDO
     {
         /// <summary>
         /// 用户名
@@ -46,23 +46,14 @@ namespace Model.Repositotys.Service
         public string? AvatarUrl { get; set; } = string.Empty;
 
         /// <summary>
-        /// 登录时间
-        /// </summary>
-        public DateTime? LoginTime { get; set; }
-
-        /// <summary>
         /// 是否禁止登录
         /// </summary>
         public bool IsDisableLogin { get; set; } = false;
 
         /// <summary>
-        /// 角色组
+        /// 小程序ID
         /// </summary>
-        public List<T_Role> Roles { get; set; }
+        public string UnionId { get; set; }
 
-        /// <summary>
-        /// 审核角色组
-        /// </summary>
-        public List<T_AuditType> AuditTypes { get; set; }
     }
 }

@@ -42,15 +42,6 @@ namespace DataSphere
         }
 
         /// <summary>
-        /// 租户Id
-        /// </summary>
-        /// <returns></returns>
-        public long TenantId()
-        {
-            return dbContext.TenantId;
-        }
-
-        /// <summary>
         /// 获取指定Rep
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>

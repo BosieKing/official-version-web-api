@@ -15,11 +15,6 @@ namespace IDataSphere.DatabaseContexts
     {
         #region 构造函数
         /// <summary>
-        /// 租户Id
-        /// </summary>
-        public long TenantId { get; set; }
-
-        /// <summary>
         /// 用户Id
         /// </summary>
         public long UserId { get; set; }
@@ -61,47 +56,8 @@ namespace IDataSphere.DatabaseContexts
             // 获取操作人信息
             foreach (var entity in entityList)
             {
-                // 继承租户基类
-                if (entity.Entity.GetType().IsSubclassOf(typeof(EntityTenantDO)))
-                {
-                    var obj = entity.Entity as EntityTenantDO;
-                    switch (entity.State)
-                    {
-                        case EntityState.Added:
-                            // 判断id
-                            obj.Id = obj.Id == 00 ? YitIdHelper.NextId() : obj.Id;
-                            // 设置创建人和创建时间
-                            obj.CreatedTime = DateTime.Now;
-                            if (!UserId.Equals(0) && obj.CreatedUserId.Equals(0))
-                            {
-                                obj.CreatedUserId = UserId;
-                            }
-                            // 如果手动设置了租户则不从添加人内获取,否则设置租户id
-                            if (!TenantId.Equals(0) && obj.TenantId.Equals(0))
-                            {
-                                obj.TenantId = TenantId;
-                            }
-                            break;
-                        case EntityState.Modified:
-                        case EntityState.Deleted:
-                            //  排除租户Id
-                            entity.Property(nameof(EntityTenantDO.TenantId)).IsModified = false;
-                            // 排除创建人
-                            entity.Property(nameof(EntityTenantDO.CreatedUserId)).IsModified = false;
-                            // 排除创建日期
-                            entity.Property(nameof(EntityTenantDO.CreatedTime)).IsModified = false;
-                            if (!UserId.Equals(0))
-                            {
-                                obj.UpdateUserId = UserId;
-                            }
-                            obj.UpdateTime = DateTime.Now;
-                            break;
-                        default:
-                            break;
-                    }
-                }
                 // 否则默认是继承的是最高级父类
-                else if (entity.Entity.GetType().IsSubclassOf(typeof(EntityBaseDO)))
+                 if (entity.Entity.GetType().IsSubclassOf(typeof(EntityBaseDO)))
                 {
                     var obj = entity.Entity as EntityBaseDO;
                     switch (entity.State)
@@ -147,12 +103,12 @@ namespace IDataSphere.DatabaseContexts
         private ModelBuilder EntityInjection(ModelBuilder modelBuilder)
         {
             Assembly assembly = Assembly.Load("Model");
-            List<Type> types = assembly.GetTypes().Where(p => p.IsClass && !p.IsInterface && !p.IsSealed && p.Namespace.EndsWith("Repositotys") && p.Name != nameof(EntityBaseDO) && p.Name != nameof(EntityTenantDO))
-                                                  .Where(p => p.BaseType.Name == nameof(EntityBaseDO) || p.BaseType.Name == nameof(EntityTenantDO))
+            List<Type> types = assembly.GetTypes().Where(p => p.IsClass && !p.IsInterface && !p.IsSealed && p.Namespace.EndsWith("Repositotys") && p.Name != nameof(EntityBaseDO) )
+                                                  .Where(p => p.BaseType.Name == nameof(EntityBaseDO))
                                                   .ToList();
             types.ForEach(item =>
             {
-                modelBuilder.Entity(item).HasQueryFilter(TenantIdAndFakeDeleteQueryFilterExpression(item));
+                modelBuilder.Entity(item).HasQueryFilter(FakeDeleteQueryFilterExpression(item));
             });
             return modelBuilder;
         }
@@ -162,40 +118,13 @@ namespace IDataSphere.DatabaseContexts
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private LambdaExpression TenantIdAndFakeDeleteQueryFilterExpression(Type type)
+        private LambdaExpression FakeDeleteQueryFilterExpression(Type type)
         {
             ParameterExpression p = Expression.Parameter(type, "p");
-            BinaryExpression fakeDeleteExpression = CreateFakeDeleteExpression(type, nameof(EntityTenantDO.IsDeleted), p);
+            BinaryExpression fakeDeleteExpression = CreateFakeDeleteExpression(type, nameof(EntityBaseDO.IsDeleted), p);
             LambdaExpression result = null;
-            switch (type.BaseType.Name)
-            {
-                case nameof(EntityBaseDO):
-                    result = Expression.Lambda(fakeDeleteExpression, p);
-                    break;
-                case nameof(EntityTenantDO):
-                    BinaryExpression tenantExpression = CreateTenantIdExpression(type, nameof(EntityTenantDO.TenantId), p);
-                    result = Expression.Lambda(Expression.AndAlso(fakeDeleteExpression, tenantExpression), p);
-                    break;
-            }
+            result = Expression.Lambda(fakeDeleteExpression, p);
             return result;
-        }
-
-        /// <summary>
-        /// 构建多租户过滤器
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="fieldName"></param>
-        /// <returns></returns>
-        private BinaryExpression CreateTenantIdExpression(Type type, string fieldName, ParameterExpression p)
-        {
-            // 构建成员表达式 p.TenantId
-            MemberExpression memberExpression = Expression.PropertyOrField(p, fieldName); 
-            // 传递对象设置常量
-            ConstantExpression dbContextConstant = Expression.Constant(this, typeof(SqlDbContext));
-            // 得到数据库上下文的属性访问器
-            MemberExpression dbTenantId = Expression.PropertyOrField(dbContextConstant, nameof(TenantId));
-            // 构建关系
-            return Expression.MakeBinary(ExpressionType.Equal, memberExpression, dbTenantId);
         }
 
         /// <summary>

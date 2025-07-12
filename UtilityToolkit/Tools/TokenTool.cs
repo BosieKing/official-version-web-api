@@ -34,7 +34,6 @@ namespace UtilityToolkit.Tools
 
             // 自定义携带内容
             claimList.Add(new Claim(ClaimsUserConst.USER_ID, tokenResult.UserId));
-            claimList.Add(new Claim(ClaimsUserConst.TENANT_ID, tokenResult.TenantId));
             claimList.Add(new Claim(ClaimsUserConst.ROLE_IDs, tokenResult.RoleIds));
             claimList.Add(new Claim(ClaimsUserConst.SCHEME_NAME, tokenResult.SchemeName));
             if (IsSuperManage)
@@ -75,7 +74,6 @@ namespace UtilityToolkit.Tools
 
             // 自定义携带内容
             claimList.Add(new Claim(ClaimsUserConst.USER_ID, tokenResult.UserId));
-            claimList.Add(new Claim(ClaimsUserConst.TENANT_ID, tokenResult.TenantId));
             // 获取密钥
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigSettingTool.JwtConfigOptions.IssuerSigningKey));
             // 定义签名方式

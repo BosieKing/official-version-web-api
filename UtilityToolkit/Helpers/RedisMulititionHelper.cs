@@ -80,16 +80,15 @@ namespace UtilityToolkit.Helpers
         /// </summary>
         /// <param name="roleIds"></param>
         /// <param name="routerName"></param>
-        /// <param name="tenantId"></param>
         /// <returns></returns>
-        public static bool HasRole(string[] roleIds, string routerName, long tenantId)
+        public static bool HasRole(string[] roleIds, string routerName)
         {
-            if (roleIds == null || roleIds.Length == 0 || routerName.IsNullOrEmpty() || tenantId == 0)
+            if (roleIds == null || roleIds.Length == 0 || routerName.IsNullOrEmpty() )
             {
                 return false;
             }
             CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.BaseData).redisClient;
-            string key = BasicDataCacheConst.ROLE_TABLE + tenantId.ToString();
+            string key = BasicDataCacheConst.ROLE_TABLE;
             IEnumerable<string> values = client.HMGet(key, roleIds).Where(p => p != null);
             if (values.Count() == 0)
             {
@@ -101,31 +100,7 @@ namespace UtilityToolkit.Helpers
         #endregion
 
         #region 用户信息
-        /// <summary>
-        /// 请求人是否是超管
-        /// </summary>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public static bool IsSuperManage(string tenantId)
-        {
-            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
-            bool result = client.Exists(UserCacheConst.SUPER_MANAGE_KEY + tenantId);
-            return result;
-        }
-
-        /// <summary>
-        /// 请求人是否是超管
-        /// </summary>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        public static bool IsSuperManage(string[] tenantIds)
-        {
-            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.User).redisClient;
-            string[] keys = tenantIds.Select(p => UserCacheConst.SUPER_MANAGE_KEY + p).ToArray();
-            long result = client.Exists(keys);
-            return result >= 1;
-        }
-
+       
         /// <summary>
         /// 判断Token是否被拉黑
         /// </summary>

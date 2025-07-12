@@ -21,11 +21,6 @@
         public const string ROLE_IDs = "RoleIds";
 
         /// <summary>
-        /// token中的租户字段
-        /// </summary>
-        public const string TENANT_ID = "TenantId";
-
-        /// <summary>
         /// token中的SchemeName字段，用于标识不同租户业务的切换
         /// </summary>
         public const string SCHEME_NAME = "SchemeName";

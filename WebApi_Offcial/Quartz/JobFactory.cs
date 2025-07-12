@@ -27,7 +27,7 @@ namespace WebApi_Offcial.Quartz
         /// </summary>
         /// <param name="bundle">封装在触发器触发的时候，需要传递给job的相关信息。每当触发器触发的时候，都会创造一个该实例</param>
         /// <param name="scheduler">调度器</param>
-        /// <returns></returns>
+        /// <returns></returns> 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             // 从依赖注入容器获取注入的任务

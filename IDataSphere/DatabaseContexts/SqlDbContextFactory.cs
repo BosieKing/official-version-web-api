@@ -11,7 +11,6 @@ namespace IDataSphere.DatabaseContexts
         /// 数据库工厂
         /// </summary>
         private readonly IDbContextFactory<SqlDbContext> _pooledFactory;
-        private readonly long _tenantId;
         private readonly long _userId;
 
         /// <summary>
@@ -22,10 +21,9 @@ namespace IDataSphere.DatabaseContexts
         public SqlDbContextFactory(
             IDbContextFactory<SqlDbContext> pooledFactory,
             UserProvider userProvider)
-        {
-            _pooledFactory = pooledFactory;
-            _tenantId = userProvider.GetTenantId();
+        {       
             _userId = userProvider.GetUserId();
+            _pooledFactory = pooledFactory;
         }
 
         /// <summary>
@@ -34,8 +32,7 @@ namespace IDataSphere.DatabaseContexts
         /// <returns></returns>
         public SqlDbContext CreateDbContext()
         {
-            SqlDbContext context = _pooledFactory.CreateDbContext();
-            context.TenantId = _tenantId;
+            SqlDbContext context = _pooledFactory.CreateDbContext(); 
             context.UserId = _userId;
             return context;
         }

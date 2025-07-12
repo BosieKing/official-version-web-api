@@ -32,7 +32,6 @@ namespace DataSphere.FronDesk
                 Phone = p.Phone,
                 NickName = p.NickName,
                 Email = p.Email,
-                TenantId = p.TenantId,
                 Sex = p.Sex
             }).FirstOrDefaultAsync();
         }

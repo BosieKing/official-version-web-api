@@ -16,11 +16,6 @@
         public string RoleIds { get; set; }
 
         /// <summary>
-        /// 租户id
-        /// </summary>
-        public string TenantId { get; set; }
-
-        /// <summary>
         /// 租户Code
         /// </summary>
         public string SchemeName { get; set; }

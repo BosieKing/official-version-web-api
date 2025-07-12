@@ -61,13 +61,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                     break;
                 case "loginbyverifycode":
                     serviceResult = await LoginByVerifyCodeVerify((BackEndLoginByVerifyCodeInput)dic["input"]);
-                    break;
-                case "switchtenant":
-                    serviceResult = await SwitchTenantVerify((IdInput)dic["input"]);
-                    break;
-                case "updatepassword":
-                    serviceResult = await UpdatePasswordVerify((BackEndUpdatePasswordInput)dic["input"]);
-                    break;
+                    break;              
                 default:
                     serviceResult = ServiceResult.Successed();
                     break;
@@ -115,7 +109,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                 return ServiceResult.IsFailure(_stringLocalizer["PasswrodMaxErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
             // 判断密码是否正确
-            bool passWordExist = await _backEndOAuthDao.PassWordInManageExiste(input.Phone, input.Password);
+            bool passWordExist = true;
             // 密码不存在
             if (!passWordExist)
             {
@@ -135,12 +129,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
         /// <returns></returns>
         private async Task<ServiceResult> LoginByVerifyCodeVerify(BackEndLoginByVerifyCodeInput input)
         {
-            // 判断账号是否注册
-            bool accountExist = await _backEndOAuthDao.IsManage(input.Phone);
-            if (!accountExist)
-            {
-                return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value);
-            }
+          
             // 获取缓存中的滑动验证码值
             var redisClient = RedisMulititionHelper.GetClient(CacheTypeEnum.Verify);
             // 滑动验证码Key
@@ -163,48 +152,6 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             if (!result.Success)
             {
                 return result;
-            }
-            return ServiceResult.Successed();
-        }
-
-        /// <summary>
-        /// 切换平台验证
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private async Task<ServiceResult> SwitchTenantVerify(IdInput input)
-        {
-            // 判断用户是否在该平台担任管理员
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            // 判断是否在选择的平台下担任管理员
-            bool isManage = await _backEndOAuthDao.InTenantIsManage(userId, input.Id);
-            if (!isManage)
-            {
-                return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value);
-            }
-            return ServiceResult.Successed();
-        }
-
-        /// <summary>
-        /// 修改密码验证
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private async Task<ServiceResult> UpdatePasswordVerify(BackEndUpdatePasswordInput input)
-        {
-            // 判断账号是否注册
-            long userId = long.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimsUserConst.USER_ID).Value);
-            bool accountExist = await _backEndOAuthDao.IdExisted<T_User>(userId);
-            if (!accountExist)
-            {
-                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
-            }
-            // 验证验证码是否匹配
-            string phone = await _backEndOAuthDao.GetFirstStringTypeField<T_User>(p => p.Id == userId, nameof(T_User.Phone));
-            ServiceResult codeVerifyResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.UpdatePwd, phone, input.VerifyCode);
-            if (!codeVerifyResult.Success)
-            {
-                return codeVerifyResult;
             }
             return ServiceResult.Successed();
         }

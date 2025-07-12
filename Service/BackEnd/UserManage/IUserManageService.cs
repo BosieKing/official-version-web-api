@@ -8,13 +8,6 @@ namespace Service.BackEnd.UserManage
     /// </summary>
     public interface IUserManageService
     {
-        Task<bool> UpdateUser(UpdateUserInput input);
-        Task<bool> UpdateIsDisableLogin(UpdateIsDisableLoginInput input);
-        Task<PageResult> GetUserPage(GetUserPageInput input);
-        Task<bool> AddUser(AddUserInput input);
-        Task<bool> ResetPassword(ResetPasswordInput input);
-        Task<List<DropdownSelectionResult>> GetUserRoleList(long id);
-        Task<bool> AddUserRole(AddUserRoleInput input);
-        Task<List<DropdownSelectionResult>> GetUserAuditTypeList(long id);
+        
     }
 }

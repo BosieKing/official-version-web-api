@@ -94,12 +94,10 @@ namespace WebApi_Offcial.ConfigureServices
                         string refreshToken = Request.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head].ToString().Substring("Bearer".Length).Trim();
                         ClaimsPrincipal refreshClaimsPrincipal = jwtSecurityTokenHandler.ValidateToken(refreshToken, parameters, out SecurityToken refreshValidatedToken);
                         // 如果刷新Token合法则重新赋值返回头的普通Token
-                        long userId = long.Parse(refreshClaimsPrincipal.Claims.FirstOrDefault(p => p.Type == ClaimsUserConst.USER_ID).Value);
-                        long tenantId = long.Parse(refreshClaimsPrincipal.Claims.FirstOrDefault(p => p.Type == ClaimsUserConst.TENANT_ID).Value);
-                        string key = UserCacheConst.USER_INFO_TABLE + tenantId;
+                        long userId = long.Parse(refreshClaimsPrincipal.Claims.FirstOrDefault(p => p.Type == ClaimsUserConst.USER_ID).Value);                       
+                        string key = UserCacheConst.USER_INFO_TABLE;
                         string userInfo = await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HGetAsync(key, userId.ToString());
                         TokenInfoModel user = userInfo.ToObject<TokenInfoModel>();
-                        token = TokenTool.CreateToken(user, RedisMulititionHelper.IsSuperManage(user.TenantId));
                         await RedisMulititionHelper.GetClient(CacheTypeEnum.User).HDelAsync(UserCacheConst.MAKE_IN_TABLE, userId.ToString());
                         _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = token;
                     }

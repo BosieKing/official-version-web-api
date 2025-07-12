@@ -9,7 +9,7 @@ namespace Model.Repositotys.BasicData
     /// 角色表
     /// </summary>
     [Table(nameof(T_Role))]
-    public class T_Role : EntityTenantDO
+    public class T_Role : EntityBaseDO
     {
         /// <summary>
         /// 名称
@@ -27,10 +27,6 @@ namespace Model.Repositotys.BasicData
         /// 配置给哪些用户
         /// </summary>
         public List<T_User> Users { get; set; }
-
-        /// <summary>
-        /// 此角色拥有的菜单
-        /// </summary>    
-        public List<T_TenantMenu> Menus { get; set; }
+     
     }
 }

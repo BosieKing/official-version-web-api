@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using IDataSphere.DatabaseContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
@@ -25,11 +26,15 @@ builder.Configuration.AddConfigSettingBind();
 // 注入Http服务访问
 builder.Services.AddHttpContextAccessor();
 
-// 注入数据库池服务
-builder.Services.AddPooledDbContextFactory<SqlDbContext>(o =>
+// 注入MySql数据库池服务
+builder.Services.AddPooledDbContextFactory<SqlDbContext>(options =>
 {
-    o.UseSqlServer(ConfigSettingTool.ConnectionConfigOptions.DefaultConnectionStr);
-    o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    // 使用 Pomelo 提供的 MySQL 连接方法
+    options.UseMySql(
+        ConfigSettingTool.ConnectionConfigOptions.DefaultConnectionStr,
+        ServerVersion.AutoDetect(ConfigSettingTool.ConnectionConfigOptions.DefaultConnectionStr)
+    );
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
 // 注入响应式压缩服务
@@ -67,11 +72,9 @@ builder.Services.AddControllers(option => option.Filters.Add(new AuthorizeFilter
     };
 });
 
-// AutoFac替换原始容器
-builder.Services.AddAutofacMultitenantRequestServices();
+// 使用 Autofac 作为 DI 容器
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-// 配置多租户业务支持服务
-builder.Host.UseServiceProviderFactory(new AutofacMultitenantServiceProviderFactory(MultitenantServiceRegister.ConfigureMultitenantContainer));
 
 // AutoFac服务注入
 builder.Host.ConfigureContainer<ContainerBuilder>(p =>
