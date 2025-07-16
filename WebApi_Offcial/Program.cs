@@ -68,7 +68,7 @@ builder.Services.AddControllers(option => option.Filters.Add(new AuthorizeFilter
     options.InvalidModelStateResponseFactory = (context) =>
     {
         var error = context.ModelState;
-        return new JsonResult(ServiceResult.IsFailure("模型验证失败"));
+        return new JsonResult(ServiceResult.Fail("模型验证失败"));
     };
 });
 
@@ -107,9 +107,19 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.InvalidModelStateResponseFactory = (context) =>
     {
         var errorMsgs = context.ModelState.Values.SelectMany(p => p.Errors.Select(e => e.ErrorMessage)).ToArray();
-        return new JsonResult(ServiceResult.IsFailure(String.Join(",", errorMsgs)));
+        return new JsonResult(ServiceResult.Fail(String.Join(",", errorMsgs)));
     };
 });
+// 增加跨域支持
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy
+            .AllowAnyOrigin()    // 允许任何域名
+            .AllowAnyMethod()    // 允许任何 HTTP 方法（GET/POST/PUT等）
+            .AllowAnyHeader());  // 允许任何请求头
+});
+
 
 // 注入请求分析服务
 builder.Services.AddMiniProfiler(option =>
@@ -117,6 +127,9 @@ builder.Services.AddMiniProfiler(option =>
     //  配置基础路由路径
     option.RouteBasePath = "/profiler";
 });
+
+// 注入主机事件
+builder.Services.AddHostedService<HostService>();
 
 // 注入定时任务
 builder.Services.AddCustomizeQuartz();
@@ -133,6 +146,9 @@ app.UseRequestLocalization(new RequestLocalizationOptions
     SupportedCultures = languages,
     SupportedUICultures = languages
 });
+// 启用wwwroot文件
+app.UseStaticFiles();
+
 
 // 启用分析
 app.UseMiniProfiler();
@@ -147,7 +163,7 @@ app.UseResponseCaching();
 app.UseResponseCompression();
 
 // 启用跨域
-app.UseCors("WebAPI");
+app.UseCors("AllowAll");
 
 // 映射属性路由控制器  
 app.MapControllers();

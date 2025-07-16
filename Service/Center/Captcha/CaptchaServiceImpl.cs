@@ -46,13 +46,13 @@ namespace Service.Center.Captcha
             // 验证码还没有过期
             if (!code.IsNullOrEmpty())
             {
-                return ServiceResult.IsFailure(_stringLocalizer["VerifCodeWork"].Value);
+                return ServiceResult.Fail(_stringLocalizer["VerifCodeWork"].Value);
             }
             string number = TencentSmsUtil.GenerateRandomCode();
             bool isSend = await TencentSmsUtil.SeedVerifCode(phone, number, codeType.GetDescription());
             if (!isSend)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["SendCodeError"].Value);
+                return ServiceResult.Fail(_stringLocalizer["SendCodeError"].Value);
             }
             // 清除上一条发送的验证码数据
             await redisClient.DelAsync(key);
@@ -141,10 +141,10 @@ namespace Service.Center.Captcha
                     await redisClient.DelAsync(key);
                     await redisClient.DelAsync(errorCountKey);
                     // 提示验证码
-                    return ServiceResult.IsFailure(_stringLocalizer["VerifCodeExpired"].Value);
+                    return ServiceResult.Fail(_stringLocalizer["VerifCodeExpired"].Value);
                 }
                 await redisClient.SetAsync(errorCountKey, errorCount, expTime);
-                return ServiceResult.IsFailure(_stringLocalizer["VerifCodeError"].Value.Replace("@", $"{errorMaxCount - errorCount}"));
+                return ServiceResult.Fail(_stringLocalizer["VerifCodeError"].Value.Replace("@", $"{errorMaxCount - errorCount}"));
             }
             else
             {
@@ -172,13 +172,13 @@ namespace Service.Center.Captcha
             string graphicCaptchaeValue = await redisClient.GetAsync(graphicCaptchaKey);
             if (graphicCaptchaeValue.IsNullOrEmpty())
             {
-                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaExpired"].Value);
+                return ServiceResult.Fail(_stringLocalizer["GraphicCaptchaExpired"].Value);
             }
             // 无论是否相等，进入验证立马销毁
             await redisClient.DelAsync(graphicCaptchaKey);
             if (codeValue != graphicCaptchaeValue)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaError"].Value);
+                return ServiceResult.Fail(_stringLocalizer["GraphicCaptchaError"].Value);
             }
             return ServiceResult.Successed();
         }

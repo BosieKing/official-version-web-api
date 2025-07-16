@@ -71,7 +71,7 @@ namespace WebApi_Offcial.MiddleWares
             log.ExceptionMessage = exception?.Message;
             log.InnerExceptionMessage = exception?.InnerException?.Message;
             QueueSingletonHelper<TL_ErrorLog>.Instance.Add(log);
-            await context.Response.WriteAsJsonAsync(ServiceResult.IsFailure(exception.Message)).ConfigureAwait(false);
+            await context.Response.WriteAsJsonAsync(ServiceResult.Fail(exception.Message)).ConfigureAwait(false);
             // 管道短路
             return;
         }

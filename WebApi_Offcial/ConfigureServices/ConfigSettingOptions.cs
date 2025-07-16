@@ -38,6 +38,7 @@ namespace WebApi_Offcial.ConfigureServices
             configuration.GetSection(nameof(TencentSmsConfig)).Bind(ConfigSettingTool.TencentSmsConfigOptions);
             configuration.GetSection(nameof(CaptchaConfig)).Bind(ConfigSettingTool.CaptchaConfigOptions);
             configuration.GetSection(nameof(ElasticSearchConfig)).Bind(ConfigSettingTool.ElasticSearchConfig);
+            configuration.GetSection(nameof(SystemConfig)).Bind(ConfigSettingTool.SystemConfig);
             return configuration;
         }
     }

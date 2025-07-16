@@ -106,7 +106,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 // 剩余过期时间
                 long expTime = redisClient.Ttl(passwordErrorCountKey);
-                return ServiceResult.IsFailure(_stringLocalizer["PasswrodMaxErrorWait"].Value.Replace("@", $"{expTime / 60}"));
+                return ServiceResult.Fail(_stringLocalizer["PasswrodMaxErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
             // 判断密码是否正确
             bool passWordExist = true;
@@ -115,7 +115,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             {
                 passwordErrorCount++;
                 redisClient.Set(passwordErrorCountKey, passwordErrorCount, pwdExpirationTime);
-                return ServiceResult.IsFailure(_stringLocalizer["IsNotManage"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
+                return ServiceResult.Fail(_stringLocalizer["IsNotManage"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
             }
             // 完全匹配删除Key
             redisClient.Del(passwordErrorCountKey);
@@ -139,13 +139,13 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             string graphicCaptchaeValue = redisClient.Get(graphicCaptchaKey);
             if (graphicCaptchaeValue.IsNullOrEmpty())
             {
-                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaExpired"].Value);
+                return ServiceResult.Fail(_stringLocalizer["GraphicCaptchaExpired"].Value);
             }
             // 无论是否相等，进入验证立马销毁
             redisClient.Del(graphicCaptchaKey);
             if (input.GraphicCaptcha != graphicCaptchaeValue)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["GraphicCaptchaError"].Value);
+                return ServiceResult.Fail(_stringLocalizer["GraphicCaptchaError"].Value);
             }
             // 验证验证码是否匹配
             var result = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Login, input.Phone, input.VerifyCode);

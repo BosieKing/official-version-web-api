@@ -51,7 +51,7 @@ namespace Model.Commons.Domain
         /// <summary>
         /// 标记失败
         /// </summary>
-        public static ServiceResult IsFailure(string msg = null, string data = null)
+        public static ServiceResult Fail(string msg = null, string data = null)
         {
             ServiceResult serviceResult = new();
             serviceResult.Success = false;
@@ -82,9 +82,10 @@ namespace Model.Commons.Domain
         /// <summary>
         /// 标记成功
         /// </summary>
-        public static ServiceResult Successed()
+        public static ServiceResult Successed(string msg = null)
         {
             ServiceResult serviceResult = new();
+            serviceResult.Message = msg ?? "";
             return serviceResult;
         }
 

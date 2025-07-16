@@ -215,7 +215,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             this.Write(@"Verify((IdInput)dic[""input""]);
                     break;
                 default:
-                    serviceResult = ServiceResult.Successed();
+                    serviceResult = ServiceResult.Success();
                     break;
             }
             // 不成功则返回
@@ -257,9 +257,9 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             this.Write(@"Dao.DataExisted(p => p.Name == input.Name);
             if (dataExisted)
             {
-                return ServiceResult.IsFailure(_stringLocalizer[""DataExisted""].Value);
+                return ServiceResult.Fail(_stringLocalizer[""DataExisted""].Value);
             }
-            return ServiceResult.Successed();
+            return ServiceResult.Success();
         }
 
         /// <summary>
@@ -288,7 +288,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             #line default
             #line hidden
             this.Write("Dao.IdExisted(input.Id);\r\n            if (!idExisted)\r\n            {\r\n           " +
-                    "     return ServiceResult.IsFailure(_stringLocalizer[\"DataNotExist\"].Value);\r\n  " +
+                    "     return ServiceResult.Fail(_stringLocalizer[\"DataNotExist\"].Value);\r\n  " +
                     "          }\r\n            bool dataExisted = await _");
             
             #line 97 "D:\Student\Net项目\github项目\webapi项目\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\ActionFilterTemplate.tt"
@@ -299,9 +299,9 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             this.Write(@"Dao.DataExisted(p => p.Id != input.Id && p.Name == input.Name);
             if (dataExisted)
             {
-                return ServiceResult.IsFailure(_stringLocalizer[""DataExisted""].Value);
+                return ServiceResult.Fail(_stringLocalizer[""DataExisted""].Value);
             }
-            return ServiceResult.Successed();
+            return ServiceResult.Success();
         }
 
         /// <summary>
@@ -325,9 +325,9 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             this.Write(@"Dao.IdExisted(input.Id);
             if (!idExisted)
             {
-                return ServiceResult.IsFailure(_stringLocalizer[""DataNotExist""].Value);
+                return ServiceResult.Fail(_stringLocalizer[""DataNotExist""].Value);
             }
-            return ServiceResult.Successed();
+            return ServiceResult.Success();
         }      
         #endregion
     }

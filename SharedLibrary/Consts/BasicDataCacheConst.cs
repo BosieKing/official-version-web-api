@@ -16,5 +16,6 @@
         /// </summary>
         /// <remarks>Key：常量 + 租户id Field：角色id Value：菜单集合</remarks>
         public const string ROLE_TABLE = "Role_Table_";
+
     }
 }

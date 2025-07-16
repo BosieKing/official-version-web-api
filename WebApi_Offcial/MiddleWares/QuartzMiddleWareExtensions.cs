@@ -19,9 +19,7 @@ namespace WebApi_Offcial.MiddleWares
         public static IServiceCollection AddCustomizeQuartz(this IServiceCollection services)
         {
             // 注入服务支持    
-            services.AddQuartz();
-            // 注入主机事件
-            services.AddHostedService<QuartzHostService>();
+            services.AddQuartz(); 
             // 注入job服务
             services.AddJobs();
             // 采用单例模式实现。  

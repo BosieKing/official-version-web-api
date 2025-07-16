@@ -63,8 +63,8 @@
 
   <ItemGroup>
     <Folder Include="ActionFilters\Center\" />
-    <Folder Include="Controllers\FrontDesk\" />
     <Folder Include="OtherFiles\Log\" />
+    <Folder Include="wwwroot\CarouselPics\" />
   </ItemGroup>
 
   <ItemGroup>

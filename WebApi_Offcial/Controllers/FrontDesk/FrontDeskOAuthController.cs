@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DataSphere.ES;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Commons.Domain;
 using Model.DTOs.Center.Captch;
 using Model.DTOs.FronDesk.FrontDeskOAuth;
+using Model.DTOs.FronDesk.PostHomePage;
 using Service.Center.Captcha;
 using Service.FrontDesk.FrontDeskOAuth;
 using SharedLibrary.Consts;
@@ -36,7 +38,10 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             _httpContextAccessor = httpContextAccessor;
             _frontDeskOAuthService = frontDeskOAuthService;
         }
-        #endregion       
+        #endregion
 
+        #region 注册
+       
+        #endregion
     }
 }

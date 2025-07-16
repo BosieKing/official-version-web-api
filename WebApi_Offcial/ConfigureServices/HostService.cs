@@ -1,5 +1,7 @@
 ﻿using Quartz;
 using Quartz.Spi;
+using System.Threading;
+using TencentCloud.Sts.V20180813.Models;
 using WebApi_Offcial.Quartz;
 
 namespace WebApi_Offcial.ConfigureServices
@@ -7,7 +9,7 @@ namespace WebApi_Offcial.ConfigureServices
     /// <summary>
     /// 应用启动和关闭事件
     /// </summary>
-    public class QuartzHostService : IHostedService
+    public class HostService : IHostedService
     {
         private readonly IJobFactory _jobFactory;
         private readonly ISchedulerFactory _schedulerFactory;
@@ -19,7 +21,7 @@ namespace WebApi_Offcial.ConfigureServices
         /// </summary>
         /// <param name="jobFactory">任务工厂</param>
         /// <param name="schedulerFactory">调度器工厂</param>
-        public QuartzHostService(IJobFactory jobFactory, ISchedulerFactory schedulerFactory, IEnumerable<JobDescription> jobDescriptions)
+        public HostService(IJobFactory jobFactory, ISchedulerFactory schedulerFactory, IEnumerable<JobDescription> jobDescriptions)
         {
             this._jobFactory = jobFactory;
             this._schedulerFactory = schedulerFactory;
@@ -33,6 +35,26 @@ namespace WebApi_Offcial.ConfigureServices
         /// <returns></returns>
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            await StartQuartz(cancellationToken);
+        }
+
+        /// <summary>
+        /// 关闭事件
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            // 释放资源
+            await StopQuartz(cancellationToken);            
+        }
+
+        #region Quartz
+        /// <summary>
+        /// 开启Quartz任务
+        /// </summary>
+        private async Task StartQuartz(CancellationToken cancellationToken) {
+
             // 通过工厂得到一个调度器      
             this._scheduler = await _schedulerFactory.GetScheduler(cancellationToken);// 传入token以便在程序停止的时候释放资源
             // 告诉调度器创建任务使用JobFactory的实现，而我们自己定义的实现是从依赖注入容器中获取
@@ -56,14 +78,12 @@ namespace WebApi_Offcial.ConfigureServices
         }
 
         /// <summary>
-        /// 关闭事件
+        /// 停止Quartz任务
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task StopAsync(CancellationToken cancellationToken)
+        private async Task StopQuartz(CancellationToken cancellationToken)
         {
             // 释放资源
-            return this._scheduler?.Shutdown(cancellationToken) ?? Task.CompletedTask;
+             this._scheduler?.Shutdown(cancellationToken);
         }
 
         /// <summary>
@@ -92,6 +112,17 @@ namespace WebApi_Offcial.ConfigureServices
                 .WithIdentity(description.TriggerId)
                 .Build();
         }
+        #endregion
+
+        #region 系统相关缓存服务
+        /// <summary>
+        /// 开启Quartz任务
+        /// </summary>
+        private async Task InitializeCache(CancellationToken cancellationToken)
+        {
+            
+        }
+        #endregion
 
     }
 }

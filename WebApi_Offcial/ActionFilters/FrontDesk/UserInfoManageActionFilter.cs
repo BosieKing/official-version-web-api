@@ -89,7 +89,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool result = await _userInfoDao.IdExisted<T_User>(userId);
             if (!result)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.Fail(_stringLocalizer["UserNotRegister"].Value);
             }
             return ServiceResult.Successed();
         }
@@ -105,7 +105,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool result = await _userInfoDao.SingleDataExisted<T_User>(p => p.Id == userId && p.Password == input.OldPassword);
             if (!result)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["OldPasswordError"].Value);
+                return ServiceResult.Fail(_stringLocalizer["OldPasswordError"].Value);
             }
             return ServiceResult.Successed();
         }

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections;
+using TencentCloud.Tcr.V20190924.Models;
 
 namespace UtilityToolkit.Utils
 {

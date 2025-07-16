@@ -83,7 +83,7 @@ namespace UtilityToolkit.Helpers
         /// <returns></returns>
         public static bool HasRole(string[] roleIds, string routerName)
         {
-            if (roleIds == null || roleIds.Length == 0 || routerName.IsNullOrEmpty() )
+            if (roleIds == null || roleIds.Length == 0 || routerName.IsNullOrEmpty())
             {
                 return false;
             }
@@ -97,10 +97,43 @@ namespace UtilityToolkit.Helpers
             IEnumerable<DropdownDataResult> routers = values.Select(p => p.ToObject<List<DropdownDataResult>>()).SelectMany(p => p);
             return routers.Count() > 0 && routers.Any(p => p.Name == routerName);
         }
+
+        /// <summary>
+        /// 轮播图集合是否有修改
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>true代表没有修改，false代表修改</remarks>
+        public static bool IsCarouselPicChange(string version, out string cacheVersion)
+        {
+            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.BaseData).redisClient;
+            string key = "IsCarouselPicChange";
+            string value = client.Get(key);
+            // 不存在则缓存
+            if (value.IsNullOrEmpty())
+            {
+                cacheVersion = DateTime.Now.ToLongDateString();
+                client.Set(key, cacheVersion);
+                return false;
+            }
+            cacheVersion = value;
+            return value == version;
+        }
+
+        /// <summary>
+        /// 更新轮播图集合修改标记
+        /// </summary>
+        /// <returns></returns>
+        public static void CarouselPicChange()
+        {
+            CSRedisClient client = ClinetPool.FirstOrDefault(p => p.CACHE_TYPE == (int)CacheTypeEnum.BaseData).redisClient;
+            string key = "IsCarouselPicChange";
+            client.Set(key, DateTime.Now.ToLongDateString());
+
+        }
         #endregion
 
         #region 用户信息
-       
+
         /// <summary>
         /// 判断Token是否被拉黑
         /// </summary>
@@ -156,7 +189,7 @@ namespace UtilityToolkit.Helpers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static string[] GetFocusUserIds(long userId) 
+        public static string[] GetFocusUserIds(long userId)
         {
             var client = GetClient(CacheTypeEnum.PostCache);
             string key = PostConst.POST_FOCUS_USERIDS + userId.ToString();
@@ -164,6 +197,8 @@ namespace UtilityToolkit.Helpers
             return focusUserIds;
         }
         #endregion
+
+
 
     }
 }

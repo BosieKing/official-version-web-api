@@ -45,7 +45,7 @@ namespace WebApi_Offcial.ActionFilters
                 {
                     context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                     // 管道短路
-                    context.Result = new JsonResult(ServiceResult.IsFailure("无权访问"));
+                    context.Result = new JsonResult(ServiceResult.Fail("无权访问"));
                     return Task.CompletedTask;
                 }
             }

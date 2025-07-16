@@ -79,7 +79,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             bool accountExist = await _userManageDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone);
             if (accountExist)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["PhoneExisted"].Value);
+                return ServiceResult.Fail(_stringLocalizer["PhoneExisted"].Value);
             }
             return ServiceResult.Successed();
         }
@@ -93,14 +93,14 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             bool accountExist = await _userManageDao.IdExisted<T_User>(input.UserId);
             if (!accountExist)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.Fail(_stringLocalizer["UserNotRegister"].Value);
             }
             if (input.RoleIds.Count() > 0)
             {
                 bool roIdsExist = await _userManageDao.BatchDataExisted<T_Role>(input.RoleIds.Count(), p => input.RoleIds.Contains(p.Id));
                 if (!roIdsExist)
                 {
-                    return ServiceResult.IsFailure(_stringLocalizer["RoleNotExist"].Value);
+                    return ServiceResult.Fail(_stringLocalizer["RoleNotExist"].Value);
                 }
             }
             return ServiceResult.Successed();
@@ -116,7 +116,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
             bool accountExist = await _userManageDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone && p.Id != input.Id);
             if (accountExist)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["PhoneExisted"].Value);
+                return ServiceResult.Fail(_stringLocalizer["PhoneExisted"].Value);
             }
             return ServiceResult.Successed();
         }

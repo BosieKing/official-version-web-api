@@ -99,7 +99,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool accountExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.Fail(_stringLocalizer["UserNotRegister"].Value);
             }
             // 允许密码出错有效时间
             int pwdExpirationTime = ConfigSettingTool.CaptchaConfigOptions.PasswordErrorCountExpirationTime * 60;
@@ -116,7 +116,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 // 剩余过期时间
                 long expTime = redisClient.Ttl(passwordErrorCountKey);
-                return ServiceResult.IsFailure(_stringLocalizer["PasswrodErrorWait"].Value.Replace("@", $"{expTime / 60}"));
+                return ServiceResult.Fail(_stringLocalizer["PasswrodErrorWait"].Value.Replace("@", $"{expTime / 60}"));
             }
             // 判断密码是否匹配
             bool passWordExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone && p.Password == input.Password, true);
@@ -125,7 +125,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             {
                 passwordErrorCount++;
                 redisClient.Set(passwordErrorCountKey, passwordErrorCount, pwdExpirationTime);
-                return ServiceResult.IsFailure(_stringLocalizer["PasswrodError"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
+                return ServiceResult.Fail(_stringLocalizer["PasswrodError"].Value.Replace("@", $"{pwdErrorMaxCount - passwordErrorCount}"));
             }
             // 完全匹配删除Key
             redisClient.Del(passwordErrorCountKey);
@@ -151,7 +151,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool accountExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.Fail(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
             ServiceResult phoneCodeResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Login, input.Phone, input.VerifyCode);
@@ -174,7 +174,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool hasRegiste = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (hasRegiste)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["UserExisted"].Value);
+                return ServiceResult.Fail(_stringLocalizer["UserExisted"].Value);
             }
             // 验证验证码是否匹配
             ServiceResult codeVerifyResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.Register, input.Phone, input.VerifyCode);
@@ -196,7 +196,7 @@ namespace WebApi_Offcial.ActionFilters.FrontDesk
             bool accountExist = await _frontDeskOAuthDao.SingleDataExisted<T_User>(p => p.Phone == input.Phone, true);
             if (!accountExist)
             {
-                return ServiceResult.IsFailure(_stringLocalizer["UserNotRegister"].Value);
+                return ServiceResult.Fail(_stringLocalizer["UserNotRegister"].Value);
             }
             // 验证验证码是否匹配
             ServiceResult codeVerifyResult = await _captchaService.PhoneCodeVerify(VerificationCodeTypeEnum.ForgetPwd, input.Phone, input.VerifyCode);
