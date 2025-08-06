@@ -130,7 +130,7 @@ namespace IDataSphere.Extensions
                             // sources = sources.Where(Expression.Lambda<Func<TSource, bool>>(methodCallExpression, p));
                         }
                         break;
-                    case "DateTime":
+                    case "CourseDate":
                         if (value != null && value.ToString() != "" && value.ToString() != "0001/1/1 0:00:00")
                         {
                             if (item.Name.EndsWith("StartTime"))

@@ -152,8 +152,8 @@ if(this.data.InputType == "GetPage"){
                     case "Char":
                         typeName = "char";
                         break;
-                    case "DateTime":
-                        typeName = "DateTime";
+                    case "CourseDate":
+                        typeName = "CourseDate";
                         break;
                 }
             
@@ -305,8 +305,8 @@ if(this.data.InputType == "GetPage"){
                     case "Char":
                         typeName = "char";
                         break;
-                    case "DateTime":
-                        typeName = "DateTime";
+                    case "CourseDate":
+                        typeName = "CourseDate";
                         break;
                 }
                 

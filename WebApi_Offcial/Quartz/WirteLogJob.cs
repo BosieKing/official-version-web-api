@@ -1,7 +1,4 @@
-﻿using IDataSphere.Interfaces.BackEnd;
-using Model.Repositotys.Log;
-using Quartz;
-using UtilityToolkit.Helpers;
+﻿using Quartz;
 
 namespace WebApi_Offcial.Quartz
 {
@@ -11,15 +8,14 @@ namespace WebApi_Offcial.Quartz
     [DisallowConcurrentExecution]
     public class WirteLogJob : IJob
     {
-        private readonly IErrorLogDao _errorLogDao;
-
+     
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="errorLogDao"></param>
-        public WirteLogJob(IErrorLogDao errorLogDao)
+        public WirteLogJob()
         {
-            _errorLogDao = errorLogDao;
+           
         }
         /// <summary>
         /// 执行
@@ -28,8 +24,6 @@ namespace WebApi_Offcial.Quartz
         /// <returns></returns>
         public Task Execute(IJobExecutionContext context)
         {
-            var list = QueueSingletonHelper<TL_ErrorLog>.Instance.GetQueue(5);
-            _errorLogDao.BatchAddAsync(list);
             return Task.CompletedTask;
         }
     }

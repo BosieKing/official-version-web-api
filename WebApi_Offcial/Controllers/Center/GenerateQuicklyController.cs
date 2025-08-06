@@ -24,9 +24,9 @@ namespace WebApi_Offcial.Controllers.Center
         /// <returns></returns>
         [HttpPost("Create")]
         [AllowAnonymous]
-        public string Create(string classNamePrefix, string chinesesName, string tableName, TableGroupEnum tableSource, SwaggerGroupEnum swaggerGroupEnumName)
+        public string Create(string classNamePrefix, string chinesesName, string tableName, SwaggerGroupEnum swaggerGroupEnumName)
         {
-            GenerateQuicklyInput input = new GenerateQuicklyInput(classNamePrefix, chinesesName, tableName, swaggerGroupEnumName, tableSource);
+            GenerateQuicklyInput input = new GenerateQuicklyInput(classNamePrefix, chinesesName, tableName, swaggerGroupEnumName);
             GenerateQuicklyTool tool = new GenerateQuicklyTool(input);
             tool.Generate();
             return "生成成功";

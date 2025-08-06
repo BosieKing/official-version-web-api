@@ -34,8 +34,8 @@ namespace UtilityToolkit.Tools
 
             // 自定义携带内容
             claimList.Add(new Claim(ClaimsUserConst.USER_ID, tokenResult.UserId));
-            claimList.Add(new Claim(ClaimsUserConst.ROLE_IDs, tokenResult.RoleIds));
-            claimList.Add(new Claim(ClaimsUserConst.SCHEME_NAME, tokenResult.SchemeName));
+           // claimList.Add(new Claim(ClaimsUserConst.ROLE_IDs, tokenResult.RoleIds));
+           //  claimList.Add(new Claim(ClaimsUserConst.SCHEME_NAME, tokenResult.SchemeName));
             if (IsSuperManage)
             {
                 claimList.Add(new Claim(ClaimsUserConst.IS_SUPERMANAGE, "true"));

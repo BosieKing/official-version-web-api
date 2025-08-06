@@ -49,3 +49,5 @@ namespace Model.Repositotys
         public DateTime? UpdateTime { get; set; }
     }   
 }
+// Add-Migration v1 -Project IDataSphere
+// Update-Database -Project IDataSphere

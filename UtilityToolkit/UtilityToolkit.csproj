@@ -16,6 +16,7 @@
     <PackageReference Include="NPOI" Version="2.7.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="TencentCloudSDK" Version="3.0.1013" />
   </ItemGroup>
 

@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	 <NoWarn>CS0693</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="Interfaces\BackEnd\" />
   </ItemGroup>
 
   <ItemGroup>

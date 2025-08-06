@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Model.Repositotys;
+using Model.Repositotys.Service;
 using System.Data;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -57,7 +58,7 @@ namespace IDataSphere.DatabaseContexts
             foreach (var entity in entityList)
             {
                 // 否则默认是继承的是最高级父类
-                 if (entity.Entity.GetType().IsSubclassOf(typeof(EntityBaseDO)))
+                if (entity.Entity.GetType().IsSubclassOf(typeof(EntityBaseDO)))
                 {
                     var obj = entity.Entity as EntityBaseDO;
                     switch (entity.State)
@@ -103,12 +104,19 @@ namespace IDataSphere.DatabaseContexts
         private ModelBuilder EntityInjection(ModelBuilder modelBuilder)
         {
             Assembly assembly = Assembly.Load("Model");
-            List<Type> types = assembly.GetTypes().Where(p => p.IsClass && !p.IsInterface && !p.IsSealed && p.Namespace.EndsWith("Repositotys") && p.Name != nameof(EntityBaseDO) )
-                                                  .Where(p => p.BaseType.Name == nameof(EntityBaseDO))
+            Console.WriteLine("-------------------------开始" );
+            List<Type> types = assembly.GetTypes().Where(p => p.IsClass && !p.IsInterface && !p.IsSealed && p.Namespace.Contains("Repositotys") && p.Name != nameof(EntityBaseDO))
                                                   .ToList();
+            foreach (var item in types)
+            {
+                Console.WriteLine("-------------------------" + item.Name);
+            }
             types.ForEach(item =>
             {
-                modelBuilder.Entity(item).HasQueryFilter(FakeDeleteQueryFilterExpression(item));
+                if (item.IsSubclassOf(typeof(EntityBaseDO)))
+                {
+                    modelBuilder.Entity(item).HasQueryFilter(FakeDeleteQueryFilterExpression(item));
+                }
             });
             return modelBuilder;
         }
@@ -144,5 +152,6 @@ namespace IDataSphere.DatabaseContexts
         }
         #endregion
 
+      
     }
 }

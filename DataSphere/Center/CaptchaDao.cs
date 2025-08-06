@@ -8,7 +8,7 @@ namespace DataSphere.Center
     /// <summary>
     /// 验证码业务访问数据实现类
     /// </summary>
-    public class CaptchaDao : BaseDao<T_User>, ICaptchaDao
+    public class CaptchaDao : Repository<T_User>, ICaptchaDao
     {
         public CaptchaDao(SqlDbContext dbContext) : base(dbContext)
         {
@@ -22,7 +22,7 @@ namespace DataSphere.Center
         /// <returns></returns>
         public async Task<string> GetPhone(long userId)
         {
-            var phone = await dbContext.UserRep.Where(p => p.Id == userId).Select(p => p.Phone).FirstOrDefaultAsync();
+            var phone = await _db.UserRep.Where(p => p.Id == userId).Select(p => p.Phone).FirstOrDefaultAsync();
             return phone;
         }
     }

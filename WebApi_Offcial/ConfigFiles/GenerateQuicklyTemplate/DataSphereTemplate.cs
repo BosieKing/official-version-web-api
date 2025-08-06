@@ -86,7 +86,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             
             #line default
             #line hidden
-            this.Write("Dao : BaseDao<");
+            this.Write("Dao : Repository<");
             
             #line 21 "D:\Student\Net项目\github项目\webapi项目\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName));
@@ -107,7 +107,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             
             #line default
             #line hidden
-            this.Write(@"Dao(SqlDbContext dbContext) : base(dbContext)
+            this.Write(@"Dao(SqlDbContext _db) : base(_db)
         {
 
         }
@@ -133,7 +133,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             
             #line default
             #line hidden
-            this.Write("PageInput input) \r\n        {\r\n             var query = from data in dbContext.");
+            this.Write("PageInput input) \r\n        {\r\n             var query = from data in _db.");
             
             #line 39 "D:\Student\Net项目\github项目\webapi项目\WebApi_Offcial\ConfigFiles\GenerateQuicklyTemplate\DataSphereTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.data.TableName.Split("_")[1]));
@@ -142,9 +142,9 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
             #line hidden
             this.Write(@"Rep
                         .Where(!input.Name.IsNullOrEmpty(), p => EF.Functions.Like(p.Name, $""%{input.Name}%""))
-                        join createUser in dbContext.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
+                        join createUser in _db.UserRep on data.CreatedUserId equals createUser.Id into createUserResult
                         from createUser in createUserResult.DefaultIfEmpty()
-                        join updateUser in dbContext.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult
+                        join updateUser in _db.UserRep on data.UpdateUserId equals updateUser.Id into updateUserResult
                         from updateUser in updateUserResult.DefaultIfEmpty()
                         select new
                         {

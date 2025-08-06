@@ -21,4 +21,8 @@
     <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositotys\BasicData\" />
+  </ItemGroup>
+
 </Project>

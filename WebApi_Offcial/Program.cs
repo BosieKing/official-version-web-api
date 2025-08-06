@@ -17,19 +17,18 @@ using WebApi_Offcial.MiddleWares;
 using Yitter.IdGenerator;
 
 var builder = WebApplication.CreateBuilder(args);
-// ×¢ÈëÒµÎñÅäÖÃ
+
 builder.Configuration.AddJsonFile("serversettings.json");
 
-// Ä£ĞÍ°ó¶¨
+
 builder.Configuration.AddConfigSettingBind();
 
-// ×¢ÈëHttp·şÎñ·ÃÎÊ
 builder.Services.AddHttpContextAccessor();
 
-// ×¢ÈëMySqlÊı¾İ¿â³Ø·şÎñ
+
 builder.Services.AddPooledDbContextFactory<SqlDbContext>(options =>
 {
-    // Ê¹ÓÃ Pomelo Ìá¹©µÄ MySQL Á¬½Ó·½·¨
+
     options.UseMySql(
         ConfigSettingTool.ConnectionConfigOptions.DefaultConnectionStr,
         ServerVersion.AutoDetect(ConfigSettingTool.ConnectionConfigOptions.DefaultConnectionStr)
@@ -37,152 +36,149 @@ builder.Services.AddPooledDbContextFactory<SqlDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
-// ×¢ÈëÏìÓ¦Ê½Ñ¹Ëõ·şÎñ
+
 builder.Services.AddResponseCompression();
 
-// ×¢ÈëHttpClientFactory
+
 builder.Services.AddHttpClient();
 
-// AddSignalRCore±ÈAddSignalR¶àµ÷ÓÃ
+
 builder.Services.AddSignalRCore();
 
-// ×¢Èë¿ØÖÆÆ÷·şÎñ
-// È«²¿µÄ¿ØÖÆÆ÷Ôö¼Ó¼øÈ¨¹ıÂËÆ÷
-// ¸ñÊ½»¯Êä³ö
 builder.Services.AddControllers(option => option.Filters.Add(new AuthorizeFilter()))
 .AddDataAnnotationsLocalization(option =>
 {
-    // Ìá¹©¶àÓïÑÔÄ£°å
+
     option.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(UserTips));
 })
 .AddNewtonsoftJson(p =>
 {
-    // Êä³öµÄÊ±¼ä¸ñÊ½»¯
+
     p.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-    // ºöÂÔÑ­»·ÒıÓÃ
+
     p.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 })
 .ConfigureApiBehaviorOptions(options =>
 {
-    // ÓÑºÃ»¯Ä£ĞÍÑéÖ¤Ê§°Ü
+
     options.InvalidModelStateResponseFactory = (context) =>
     {
         var error = context.ModelState;
-        return new JsonResult(ServiceResult.Fail("Ä£ĞÍÑéÖ¤Ê§°Ü"));
+        return new JsonResult(ServiceResult.Fail("å‚æ•°é”™è¯¯"));
     };
 });
 
-// Ê¹ÓÃ Autofac ×÷Îª DI ÈİÆ÷
+
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 
-// AutoFac·şÎñ×¢Èë
+
 builder.Host.ConfigureContainer<ContainerBuilder>(p =>
 {
     p.RegisterModule<ServiceRegister>();
 });
 
-// ×¢Èë·Ö²¼Ê½Ñ©»¨º¯Êı
+
 YitIdHelper.SetIdGenerator(new IdGeneratorOptions { WorkerId = 1 });
 
-// ×¢ÈëJwtÈÏÖ¤·şÎñ
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddScheme<JwtBearerOptions, JwtHandler>(JwtBearerDefaults.AuthenticationScheme, null);
 
-// ×¢Èë×îĞ¡API·şÎñ£¬ÎªÁËÔÚSwaggerÖĞÕ¹Ê¾
+
 builder.Services.AddEndpointsApiExplorer();
 
-// ×¢ÈëSwaggerÎÄµµ·şÎñ
+
 builder.Services.AddSwaggerDoc();
 
-// Ìæ»»ÎªLog4NetÈÕÖ¾
+
 builder.Logging.AddLog4Net("ConfigFiles/Log4net.config");
 
-// Ìí¼Ó±¾µØ»¯¶àÓïÑÔ·şÎñ
+
 builder.Services.AddLocalization();
 
-// ĞŞ¸ÄÄ£ĞÍÑéÖ¤·µ»Ø¸ñÊ½
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    // ĞŞ¸ÄÄ£ĞÍÑéÖ¤·µ»Ø¸ñÊ½
+
     options.InvalidModelStateResponseFactory = (context) =>
     {
         var errorMsgs = context.ModelState.Values.SelectMany(p => p.Errors.Select(e => e.ErrorMessage)).ToArray();
         return new JsonResult(ServiceResult.Fail(String.Join(",", errorMsgs)));
     };
 });
-// Ôö¼Ó¿çÓòÖ§³Ö
+
+// Program.cs
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy => policy
-            .AllowAnyOrigin()    // ÔÊĞíÈÎºÎÓòÃû
-            .AllowAnyMethod()    // ÔÊĞíÈÎºÎ HTTP ·½·¨£¨GET/POST/PUTµÈ£©
-            .AllowAnyHeader());  // ÔÊĞíÈÎºÎÇëÇóÍ·
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()  // å…è®¸æ‰€æœ‰æ¥æºï¼ˆç”Ÿäº§ç¯å¢ƒåº”é™åˆ¶ï¼‰
+              .AllowAnyMethod()  // å…è®¸æ‰€æœ‰ HTTP æ–¹æ³•
+              .AllowAnyHeader()  // å…è®¸æ‰€æœ‰å¤´ï¼ˆåŒ…æ‹¬ Authorizationï¼‰
+              .SetPreflightMaxAge(TimeSpan.FromMinutes(10)); // ç¼“å­˜ OPTIONS ç»“æœ
+    });
 });
 
-
-// ×¢ÈëÇëÇó·ÖÎö·şÎñ
 builder.Services.AddMiniProfiler(option =>
 {
-    //  ÅäÖÃ»ù´¡Â·ÓÉÂ·¾¶
+
     option.RouteBasePath = "/profiler";
 });
 
-// ×¢ÈëÖ÷»úÊÂ¼ş
+
 builder.Services.AddHostedService<HostService>();
 
-// ×¢Èë¶¨Ê±ÈÎÎñ
+
 builder.Services.AddCustomizeQuartz();
 
 var app = builder.Build();
 
-// ÆôÓÃ±¾µØ»¯Ö§³Ö
-// ´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡¿ÉÖ§³ÖµÄÓïÑÔ
+
 CultureInfo[] languages = app.Configuration.GetSection("UserTipsConfig").GetChildren().Select(p => new CultureInfo(p.Value)).ToArray();
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
-    // Ä¬ÈÏÓïÑÔÎªzh-CN
+
     DefaultRequestCulture = new RequestCulture(culture: languages[0], uiCulture: languages[0]),
     SupportedCultures = languages,
     SupportedUICultures = languages
 });
-// ÆôÓÃwwwrootÎÄ¼ş
+
+app.UseCors("AllowAll");
+
 app.UseStaticFiles();
 
 
-// ÆôÓÃ·ÖÎö
+
 app.UseMiniProfiler();
 
-// ÆôÓÃÈİ´íÖĞ¼ä¼ş
 app.UserFaultToleranceMiddleware();
 
-// ÆôÓÃ·şÎñÆ÷»º´æ
+
 app.UseResponseCaching();
 
-// ÆôÓÃÏìÓ¦Ñ¹Ëõ
+
 app.UseResponseCompression();
 
-// ÆôÓÃ¿çÓò
+
 app.UseCors("AllowAll");
 
-// Ó³ÉäÊôĞÔÂ·ÓÉ¿ØÖÆÆ÷  
+
 app.MapControllers();
 
-// ÆôÓÃÂ·ÓÉÆ¥Åä
+
 app.UseRouting();
 
-// ÆôÓÃ¼øÈ¨ÖĞ¼ä¼ş
+
 app.UseAuthentication();
 
-// ÆôÓÃÊÚÈ¨ÖĞ¼ä¼ş
+
 app.UseAuthorization();
 
-// ÆôÓÃSwagger
+
 app.UseSwagger();
 app.UseSwaggerUIOption();
 
-// ÆôÓÃÖÕ½áµãÆ¥Åä
+
 app.UseEndpoints(o => o.MapControllers());
 
-// ÉèÖÃÖÕ½áµã
+
 app.Run();

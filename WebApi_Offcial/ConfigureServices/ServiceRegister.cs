@@ -6,6 +6,7 @@ using Nest;
 using SharedLibrary.Consts;
 using System.Reflection;
 using System.Runtime.Loader;
+using UtilityToolkit.Helpers.WxLogin;
 
 namespace WebApi_Offcial.ConfigureServices
 {
@@ -14,7 +15,6 @@ namespace WebApi_Offcial.ConfigureServices
     /// </summary>
     public class ServiceRegister : Autofac.Module
     {
-        private const string SERVICE_ASSEMBLY_NAME = "Service";
         private const string DAO_ASSEMBLY_NAME = "DataSphere";
         private const string WEBAPI_ASSEMBLY_NAME = "WebApi_Offcial";
 
@@ -29,17 +29,10 @@ namespace WebApi_Offcial.ConfigureServices
                    .Where(p => p.Name.EndsWith("ActionFilter"))
                    .InstancePerLifetimeScope();
 
-            // Service层业务类注入
-            builder.RegisterAssemblyTypes(GetAssembly(SERVICE_ASSEMBLY_NAME))
-                   .Where(p => p.Name.EndsWith("ServiceImpl"))
-                   .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope();
-
             // DataSphere层注入数据库访问类
             builder.RegisterAssemblyTypes(GetAssembly(DAO_ASSEMBLY_NAME))
                    .Where(p => p.Name.EndsWith("Dao"))
                    .AsImplementedInterfaces()
-
                    .InstancePerLifetimeScope();
 
             // DataSphere层注入ES链接
@@ -49,6 +42,9 @@ namespace WebApi_Offcial.ConfigureServices
 
             // 注入ES链接
             builder.RegisterType<ElasticSearchHelper>().AsImplementedInterfaces().InstancePerLifetimeScope();
+
+            // 注入WX登录类
+            builder.RegisterType<WxLoginHelper>().InstancePerLifetimeScope();
 
             // 注入Http上下文
             builder.RegisterType<HttpContextAccessor>().InstancePerLifetimeScope();

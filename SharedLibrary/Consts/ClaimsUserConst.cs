@@ -23,7 +23,7 @@
         /// <summary>
         /// token中的SchemeName字段，用于标识不同租户业务的切换
         /// </summary>
-        public const string SCHEME_NAME = "SchemeName";
+       // public const string SCHEME_NAME = "SchemeName";
 
         /// <summary>
         /// 当为超管的时候，颁发的token会携带此字段

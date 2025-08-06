@@ -1,4 +1,4 @@
-﻿using Model.Repositotys.BasicData;
+﻿using SharedLibrary.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -37,7 +37,7 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 性别
         /// </summary>
-        public short Sex { get; set; }
+        public SexEnum Sex { get; set; }
 
         /// <summary>
         /// 头像路径
@@ -53,7 +53,27 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 小程序ID
         /// </summary>
-        public string UnionId { get; set; }
+        [MaxLength(50)]
+        public string OpenId { get; set; }
 
+        /// <summary>
+        /// 报名参加课程表
+        /// </summary>
+        public List<T_CourseSignUp> CourseSignUps { get; set; }
+
+        /// <summary>
+        /// 报名参加私教表
+        /// </summary>
+        public List<T_PersonalCourseSignUp> PersonalCourseSignUps { get; set; }
+
+        /// <summary>
+        /// 我的卡包
+        /// </summary>
+        public List<T_MyCard>  MyCards { get; set; }
+
+        /// <summary>
+        /// 自我介绍
+        /// </summary>
+        public string? SelfIntroduce { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Model.Repositotys.BasicData;
 using Model.Repositotys.Service;
 
 namespace IDataSphere.DatabaseContexts
@@ -15,8 +14,33 @@ namespace IDataSphere.DatabaseContexts
         public DbSet<T_User> UserRep { get; set; }
 
         /// <summary>
-        /// 角色表
+        /// 老师表
         /// </summary>
-        public DbSet<T_Role> RoleRep { get; set; }
+        public DbSet<T_Teacher> TeacherRep { get; set; }
+
+        /// <summary>
+        /// 课程表
+        /// </summary>
+        public DbSet<T_Course> CourseRep { get; set; }
+
+        /// <summary>
+        /// 用户预约课程表
+        /// </summary>
+        public DbSet<T_CourseSignUp> CourseSignUpRep { get; set; }
+
+        /// <summary>
+        /// 私教表
+        /// </summary>
+        public DbSet<T_PersonalCourse> PersonalCourseRep { get; set; }
+
+        /// <summary>
+        /// 用户预约私教表
+        /// </summary>
+        public DbSet<T_PersonalCourseSignUp> PersonalCourseSignUpRep { get; set; }
+
+        /// <summary>
+        /// 我的卡包
+        /// </summary>
+        public DbSet<T_MyCard> MyCardRep { get; set; }
     }
 }

@@ -1,13 +1,27 @@
-﻿using Model.Repositotys.Service;
+﻿using Model.Commons.Domain;
+using Model.Commons.SharedData;
+using Model.DTOs.FronDesk.Home;
+using Model.Repositotys.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UtilityToolkit.Helpers.WxLogin.Dto;
 
 namespace IDataSphere.Interfaces.FronDesk
 {
-    public interface IHomeDao : IBaseDao<T_User>
+    public interface IHomeDao : IRepository<T_User>
     {
+        Task<dynamic> GetCourseSignUpAvaratUrlList(GetCourseSignUpAvaratUrlListInput input);
+        Task<dynamic> GetCourseList(GetCourseListInput input);
+        Task<dynamic> GetTeacherList(GetTeacherListInput input);
+        Task<dynamic> GetPersonalCourseList(GetPersonalCourseListInput input);
+        Task<dynamic> GetPersonalCourseTimeList(GetPersonalCoureseTimeListInput input);
+        Task<ServiceResult> AddPersonalCourseBooking(AddPersonalCourseBookingInput input);
+        Task<ServiceResult> AddCourseBooking(AddCourseBookingInput input);
+        Task<dynamic> WxLogin(WxLoginInput input);
+        Task<dynamic> GetMyCardList(GetMyCardListInput input);
+        Task<dynamic> GetUseCardRecodeList(GetUseCardRecodeListInput input);
     }
 }

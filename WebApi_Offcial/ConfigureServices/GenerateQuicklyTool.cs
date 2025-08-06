@@ -173,11 +173,11 @@ public class GenerateQuicklyInput
 
     public string InputType { get; set; }
 
-    public GenerateQuicklyInput(string classNamePrefix, string chinesesName, string tableName, SwaggerGroupEnum enums, TableGroupEnum tableGroup)
+    public GenerateQuicklyInput(string classNamePrefix, string chinesesName, string tableName, SwaggerGroupEnum enums)
     {
         this.ClassNamePrefix = classNamePrefix;
         this.ChinesesName = chinesesName;
-        this.TableGroupName = Enum.GetName(typeof(TableGroupEnum), tableGroup);
+        
         switch (enums)
         {
             case SwaggerGroupEnum.BackEnd:
