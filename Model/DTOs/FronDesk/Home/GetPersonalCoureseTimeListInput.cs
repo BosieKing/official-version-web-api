@@ -5,7 +5,7 @@
         /// <summary>
         /// 老师id
         /// </summary>
-        public long UserId { get; set; }
+        public long TeacherId { get; set; }
 
         /// <summary>
         /// 日期

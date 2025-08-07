@@ -121,7 +121,6 @@ namespace WebApi_Offcial.Controllers.FrontDesk
             return ServiceResult.SetData(await _homeDao.GetPersonalCourseTimeList(input));
         }
 
-
         /// <summary>
         /// 获取课程列表
         /// </summary>
@@ -131,6 +130,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         {
             return ServiceResult.SetData(await _homeDao.GetCourseList(input));
         }
+
 
         /// <summary>
         /// 获取课程报名用户头像列表
@@ -161,6 +161,27 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         public async Task<ServiceResult> GetUseCardRecodeList([FromQuery] GetUseCardRecodeListInput input)
         {
             return ServiceResult.SetData(await _homeDao.GetUseCardRecodeList(input));
+        }
+
+
+        /// <summary>
+        /// 获取我的课程预约集合
+        /// </summary>
+        [HttpGet("GetMyCourseSignUpList")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> GetMyCourseSignUpList([FromQuery] GetMyCourseSignUpListInput input)
+        {
+            return ServiceResult.SetData(await _homeDao.GetMyCourseSignUpList(input));
+        }
+
+        /// <summary>
+        /// 获取我的私教预约集合
+        /// </summary>
+        [HttpGet("GetMyPersonalCourseSignUpList")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> GetMyPersonalCourseSignUpList([FromQuery] GetMyCourseSignUpListInput input)
+        {
+            return ServiceResult.SetData(await _homeDao.GetMyPersonalCourseSignUpList(input));
         }
         #endregion
 
@@ -195,6 +216,28 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         public async Task<ServiceResult> WxLogin([FromBody] WxLoginInput input)
         {
             return ServiceResult.SetData(await _homeDao.WxLogin(input));
+        }
+        #endregion
+
+        #region 取消
+        /// <summary>
+        /// 取消课程预约
+        /// </summary>
+        [HttpPost("CancelCourseSignUp")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> CancelCourseSignUp([FromBody] IdInput input)
+        {
+            return await _homeDao.CancelCourseSignUp(input);
+        }
+
+        /// <summary>
+        /// 取消私教预约
+        /// </summary>
+        [HttpPost("CancelPersonalCourseSignUp")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> CancelPersonalCourseSignUp([FromBody] IdInput input)
+        {
+            return await _homeDao.CancelPersonalCourseSignUp(input);
         }
         #endregion
     }

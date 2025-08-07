@@ -23,5 +23,9 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<dynamic> WxLogin(WxLoginInput input);
         Task<dynamic> GetMyCardList(GetMyCardListInput input);
         Task<dynamic> GetUseCardRecodeList(GetUseCardRecodeListInput input);
+        Task<dynamic> GetMyCourseSignUpList(GetMyCourseSignUpListInput input);
+        Task<dynamic> GetMyPersonalCourseSignUpList(GetMyCourseSignUpListInput input);
+        Task<ServiceResult> CancelPersonalCourseSignUp(IdInput input);
+        Task<ServiceResult> CancelCourseSignUp(IdInput input);
     }
 }

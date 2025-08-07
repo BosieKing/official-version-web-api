@@ -57,7 +57,7 @@ namespace UtilityToolkit.Extensions
                 // 获取枚举属性值名称
                 // 非枚举抛出异常
                 if (!enumType.IsEnum)
-                    throw new ArgumentException("Type '" + enumType.Name + "' is not an enum.");
+                    throw new ArgumentException("DanceType '" + enumType.Name + "' is not an enum.");
                 var fieldNames = Enum.GetNames(enumType);
                 foreach (var item in fieldNames)
                 {

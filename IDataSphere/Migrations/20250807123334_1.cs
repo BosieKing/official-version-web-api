@@ -36,6 +36,7 @@ namespace IDataSphere.Migrations
                     UserIdentityType = table.Column<int>(type: "int", nullable: false),
                     SelfIntroduce = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    RateCount = table.Column<int>(type: "int", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedUserId = table.Column<long>(type: "bigint", nullable: false),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -126,7 +127,6 @@ namespace IDataSphere.Migrations
                     Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MaxParticipants = table.Column<int>(type: "int", nullable: true),
-                    Price = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DanceType = table.Column<int>(type: "int", nullable: false),
                     Address = table.Column<string>(type: "longtext", nullable: false)
@@ -191,7 +191,7 @@ namespace IDataSphere.Migrations
                 {
                     TeacherId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<int>(type: "int", nullable: false),
+                    DanceType = table.Column<int>(type: "int", nullable: false),
                     T_TeacherId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
@@ -212,7 +212,6 @@ namespace IDataSphere.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    TeacherId = table.Column<long>(type: "bigint", nullable: false),
                     DanceType = table.Column<int>(type: "int", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
                     CourseType = table.Column<int>(type: "int", nullable: false),
@@ -229,8 +228,8 @@ namespace IDataSphere.Migrations
                 {
                     table.PrimaryKey("PK_T_MyCard", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_T_MyCard_T_User_TeacherId",
-                        column: x => x.TeacherId,
+                        name: "FK_T_MyCard_T_User_UserId",
+                        column: x => x.UserId,
                         principalTable: "T_User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -245,9 +244,9 @@ namespace IDataSphere.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     CourseId = table.Column<long>(type: "bigint", nullable: false),
+                    CardId = table.Column<long>(type: "bigint", nullable: false),
                     IsCancel = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsPay = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsUse = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsFinish = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedUserId = table.Column<long>(type: "bigint", nullable: false),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -261,6 +260,12 @@ namespace IDataSphere.Migrations
                         name: "FK_T_CourseSignUp_T_Course_CourseId",
                         column: x => x.CourseId,
                         principalTable: "T_Course",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_T_CourseSignUp_T_MyCard_CardId",
+                        column: x => x.CardId,
+                        principalTable: "T_MyCard",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -280,9 +285,9 @@ namespace IDataSphere.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     PersonalCourseId = table.Column<long>(type: "bigint", nullable: false),
+                    CardId = table.Column<long>(type: "bigint", nullable: false),
                     IsCancel = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsPay = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsUse = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsFinish = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CreatedUserId = table.Column<long>(type: "bigint", nullable: false),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
@@ -292,6 +297,12 @@ namespace IDataSphere.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_T_PersonalCourseSignUp", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_T_PersonalCourseSignUp_T_MyCard_CardId",
+                        column: x => x.CardId,
+                        principalTable: "T_MyCard",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_T_PersonalCourseSignUp_T_PersonalCourse_PersonalCourseId",
                         column: x => x.PersonalCourseId,
@@ -313,6 +324,11 @@ namespace IDataSphere.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_T_CourseSignUp_CardId",
+                table: "T_CourseSignUp",
+                column: "CardId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_T_CourseSignUp_CourseId",
                 table: "T_CourseSignUp",
                 column: "CourseId");
@@ -323,14 +339,19 @@ namespace IDataSphere.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_MyCard_TeacherId",
+                name: "IX_T_MyCard_UserId",
                 table: "T_MyCard",
-                column: "TeacherId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_T_PersonalCourse_TeacherId",
                 table: "T_PersonalCourse",
                 column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_PersonalCourseSignUp_CardId",
+                table: "T_PersonalCourseSignUp",
+                column: "CardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_T_PersonalCourseSignUp_PersonalCourseId",
@@ -354,9 +375,6 @@ namespace IDataSphere.Migrations
                 name: "T_CourseSignUp");
 
             migrationBuilder.DropTable(
-                name: "T_MyCard");
-
-            migrationBuilder.DropTable(
                 name: "T_PersonalCourseSignUp");
 
             migrationBuilder.DropTable(
@@ -367,6 +385,9 @@ namespace IDataSphere.Migrations
 
             migrationBuilder.DropTable(
                 name: "T_Course");
+
+            migrationBuilder.DropTable(
+                name: "T_MyCard");
 
             migrationBuilder.DropTable(
                 name: "T_PersonalCourse");

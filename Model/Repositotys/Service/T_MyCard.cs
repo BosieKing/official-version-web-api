@@ -13,6 +13,7 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 用户ID
         /// </summary>
+        [Column("UserId")]
         public long UserId { get; set; }
 
         /// <summary>
@@ -23,31 +24,37 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 舞蹈类型
         /// </summary>
+        [Column("DanceType")]
         public DanceTypeEnum DanceType { get; set; }
 
         /// <summary>
         /// 剩余可消费次数
         /// </summary>
+        [Column("Count")]
         public int Count { get; set; }
 
         /// <summary>
         /// 班级类型
         /// </summary>
+        [Column("CourseType")]
         public CourseTypeEnum CourseType { get; set; }
 
         /// <summary>
         /// 是否已激活
         /// </summary>
+        [Column("IsActivated")]
         public bool IsActivated { get; set; } = true;
 
         /// <summary>
         /// 有效期开始时间
         /// </summary>
+        [Column("ValidFrom")]
         public DateTime? ValidFrom { get; set; }
 
         /// <summary>
         /// 有效期结束时间
         /// </summary>
+        [Column("ValidTo")]
         public DateTime? ValidTo { get; set; }
     }
 }

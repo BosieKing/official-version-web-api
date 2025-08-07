@@ -160,7 +160,7 @@ namespace DataSphere
         /// <param name="input">分页输入参数</param>
         /// <param name="output">分页输出参数（用于接收结果）</param>
         /// <returns>填充后的分页输出对象</returns>
-        public async Task<PageResult> AdaptPage<TEntity, TInput>(
+        public async Task<PageResult> ToPage<TEntity, TInput>(
             IQueryable<TEntity> query,
             TInput input)
             where TInput : PageInput         

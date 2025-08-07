@@ -13,6 +13,7 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 老师id
         /// </summary>   
+        [Column("TeacherId")]
         public long TeacherId { get; set; }
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace Model.Repositotys.Service
         /// </summary>
         [Required]
         [MaxLength(50)]
+        [Column("Title")]
         public string Title { get; set; }
 
         /// <summary>
@@ -37,13 +39,15 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 课程开始时间（仅存储时分秒）
         /// </summary>
-        [Required]   
+        [Required]
+        [Column("StartTime")]
         public TimeSpan StartTime { get; set; }
 
         /// <summary>
         /// 课程结束时间（仅存储时分秒）
         /// </summary>
-        [Required]  
+        [Required]
+        [Column("EndTime")]
         public TimeSpan EndTime { get; set; }
 
         /// <summary>
@@ -57,37 +61,38 @@ namespace Model.Repositotys.Service
         /// 海报图片路径
         /// </summary>
         [MaxLength(255)]
+        [Column("PosterUrl")]
         public string PosterUrl { get; set; }
 
         /// <summary>
         /// 课程描述（可选）
         /// </summary>
         [MaxLength(500)]
+        [Column("Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// 最大参与人数
         /// </summary>
+        [Column("MaxParticipants")]
         public int? MaxParticipants { get; set; }
-
-        /// <summary>
-        /// 课程价格（单位：分）
-        /// </summary>
-        public int Price { get; set; }
 
         /// <summary>
         /// 是否启用
         /// </summary>
+        [Column("IsActive")]
         public bool IsActive { get; set; } = true;
 
         /// <summary>
         /// 舞蹈类型
         /// </summary>
+        [Column("DanceType")]
         public DanceTypeEnum DanceType { get; set; }
 
         /// <summary>
         /// 地址
         /// </summary>
+        [Column("Address")]
         public string Address { get; set; } = string.Empty;
 
         /// <summary>

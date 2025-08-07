@@ -13,6 +13,7 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 老师id
         /// </summary>   
+        [Column("TeacherId")]
         public long TeacherId { get; set; }
 
         /// <summary>
@@ -23,50 +24,53 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 课程开始时间（仅存储时分秒）
         /// </summary>
-        [Required]   
+        [Required]
+        [Column("StartTime")]
         public TimeSpan StartTime { get; set; }
 
         /// <summary>
         /// 课程结束时间（仅存储时分秒）
         /// </summary>
-        [Required]  
+        [Required]
+        [Column("EndTime")]
         public TimeSpan EndTime { get; set; }
 
         /// <summary>
         /// 课程日期（仅存储年月日）
         /// </summary>
         [Required]
+        [Column("CourseDate")]
         public DateTime CourseDate { get; set; }
 
         /// <summary>
         /// 课程描述（可选）
         /// </summary>
         [MaxLength(500)]
+        [Column("Description")]
         public string Description { get; set; }
-
-        /// <summary>
-        /// 课程价格
-        /// </summary>
-        public int Price { get; set; }
 
         /// <summary>
         /// 是否启用
         /// </summary>
+        [Column("IsActive")]
         public bool IsActive { get; set; } = true;
 
         /// <summary>
         /// 舞蹈类型
         /// </summary>
+        [Column("DanceType")]
         public DanceTypeEnum DanceType { get; set; }
 
         /// <summary>
         /// 地址
         /// </summary>
+        [Column("Address")]
         public string Address { get; set; } = string.Empty;
 
         /// <summary>
         /// 是否被预约
         /// </summary>
+        [Column("IsBooking")]
         public bool IsBooking { get; set; } = false;
 
         /// <summary>

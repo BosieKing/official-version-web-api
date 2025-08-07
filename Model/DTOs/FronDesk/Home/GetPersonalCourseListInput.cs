@@ -12,5 +12,10 @@ namespace Model.DTOs.FronDesk.Home
         /// 舞蹈类型
         /// </summary>
         public DanceTypeEnum? DanceType { get; set; }
+
+        /// <summary>
+        /// 私教老师id
+        /// </summary>
+        public long TeacherId { get; set; } = 0;
     }
 }

@@ -155,7 +155,7 @@ namespace WebApi_Offcial.ConfigFiles.GenerateQuicklyTemplate
                             UpdateUserName = updateUser.NickName,
                             UpdateTime = data.UpdateTime
                         };
-            return await base.AdaptPage(query, input.PageSize, input.PageNo);
+            return await base.ToPage(query, input.PageSize, input.PageNo);
         }
         #endregion
 

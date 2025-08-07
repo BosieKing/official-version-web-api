@@ -13,6 +13,7 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 用户id
         /// </summary>
+        [Column("UserId")]
         public long UserId { get; set; }
 
         /// <summary>
@@ -23,6 +24,7 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 课程Id
         /// </summary>
+        [Column("CourseId")]
         public long CourseId { get; set; }
 
         /// <summary>
@@ -33,13 +35,24 @@ namespace Model.Repositotys.Service
         /// <summary>
         /// 消耗的卡的id
         /// </summary>
+        [Column("CardId")]
         public long CardId { get; set; } = 0;
+
+        /// <summary>
+        /// 消耗的卡
+        /// </summary>
+        public T_MyCard Card { get; set; }
 
         /// <summary>
         /// 是否取消
         /// </summary>
+        [Column("IsCancel")]
         public bool IsCancel { get; set; } = false;
 
-
+        /// <summary>
+        /// 是否完成
+        /// </summary>
+        [Column("IsFinish")]
+        public bool IsFinish { get; set; } = false;
     }
 }
