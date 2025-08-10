@@ -1,4 +1,5 @@
-﻿using Model.Commons.Domain;
+﻿using Microsoft.AspNetCore.Http;
+using Model.Commons.Domain;
 using Model.Commons.SharedData;
 using Model.DTOs.FronDesk.Home;
 using Model.Repositotys.Service;
@@ -27,5 +28,6 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<dynamic> GetMyPersonalCourseSignUpList(GetMyCourseSignUpListInput input);
         Task<ServiceResult> CancelPersonalCourseSignUp(IdInput input);
         Task<ServiceResult> CancelCourseSignUp(IdInput input);
+        Task<ServiceResult> UploadAratav(IFormFile file);
     }
 }

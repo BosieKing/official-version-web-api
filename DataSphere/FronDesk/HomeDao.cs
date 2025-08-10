@@ -2,6 +2,7 @@
 using IDataSphere.Extensions;
 using IDataSphere.Interfaces.FronDesk;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.CoreData;
@@ -180,6 +181,7 @@ namespace DataSphere.FronDesk
                 {
                     MyCardId = p.Id,
                     p.Count,
+                    p.TotalCount,
                     p.CourseType,
                     p.DanceType,
                     p.ValidTo,
@@ -513,6 +515,99 @@ namespace DataSphere.FronDesk
          
             return ServiceResult.Successed();
 
+        }
+        #endregion
+
+        #region 文件上传服务
+        /// <summary>
+        /// 修改头像
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult> UploadAratav(IFormFile file)
+        {
+            // 获取用户信息
+            var user = await _db.UserRep.Where(p => p.Id == 706182181593157).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return ServiceResult.Fail("用户不存在");
+            }
+
+            // 检查是否是默认头像
+            bool isDefaultAvatar = user.AvatarUrl == "/Avatars/teacher-default-avatar-girl.png" ||
+                                  user.AvatarUrl == "/Avatars/teacher-default-avatar-boy.png";
+
+            // 验证上传文件
+            if (file == null || file.Length == 0)
+            {
+                return ServiceResult.Fail("请选择有效的文件");
+            }
+
+            // 验证文件类型
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                return ServiceResult.Fail("仅支持JPG、PNG、GIF格式的图片");
+            }
+
+            // 准备新头像路径
+            var avatarsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Avatars");
+            if (!Directory.Exists(avatarsDir))
+            {
+                Directory.CreateDirectory(avatarsDir);
+            }
+            var newFileName = $"{user.Id}{DateTime.Now.Ticks}{fileExtension}";
+            var newFilePath = Path.Combine(avatarsDir, newFileName);
+            var newAvatarUrl = $"/Avatars/{newFileName}";
+            try
+            {
+                // 保存新头像
+                using (var stream = new FileStream(newFilePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // 记录旧头像路径（非默认头像时需要后续删除）
+                string oldAvatarPath = null;
+                if (!isDefaultAvatar && !string.IsNullOrEmpty(user.AvatarUrl))
+                {
+                    oldAvatarPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", user.AvatarUrl.TrimStart('/'));
+                }
+
+                // 更新数据库
+                user.AvatarUrl = newAvatarUrl;
+                _db.UserRep.Update(user);
+                await _db.SaveChangesAsync();
+
+                // 成功后删除旧头像（如果是自定义头像）
+                if (oldAvatarPath != null && System.IO.File.Exists(oldAvatarPath))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(oldAvatarPath);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+
+                // 10. 返回完整URL
+                var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
+                var fullUrl = $"{baseUrl}/{user.AvatarUrl.TrimStart('/')}";
+
+                return ServiceResult.SetData(fullUrl);
+            }
+            catch (Exception ex)
+            {
+                // 11. 发生异常时删除可能已上传的新头像
+                if (System.IO.File.Exists(newFilePath))
+                {
+                    System.IO.File.Delete(newFilePath);
+                }
+
+                return ServiceResult.Fail($"头像上传失败: {ex.Message}");
+            }
         }
         #endregion
     }

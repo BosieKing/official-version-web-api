@@ -28,10 +28,16 @@ namespace Model.Repositotys.Service
         public DanceTypeEnum DanceType { get; set; }
 
         /// <summary>
-        /// 剩余可消费次数
+        /// 剩余可消费次数，使用一次，则扣
         /// </summary>
         [Column("Count")]
         public int Count { get; set; }
+
+        /// <summary>
+        /// 总可消费次数
+        /// </summary>
+        [Column("TotalCount")]
+        public int TotalCount { get; set; }
 
         /// <summary>
         /// 班级类型

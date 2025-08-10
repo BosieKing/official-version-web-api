@@ -80,8 +80,6 @@ namespace WebApi_Offcial.Controllers.FrontDesk
                     ImageUrls = imageUrls,
                     Version = cacheVersion,
                     LogoIconUrl = $"{baseUrl}/{"/System/logo.png".TrimStart('/')}",
-                    DefaultBgUrl = $"{baseUrl}/{"/System/teacher-detail-bg.png".TrimStart('/')}",
-                    NoCourseTipUrl = $"{baseUrl}/{"/System/no-course-tip.png".TrimStart('/')}",
                 });
             }
             catch (Exception ex)
@@ -99,6 +97,7 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         public async Task<ServiceResult> GetTeacherList([FromQuery]  GetTeacherListInput input)
         {
             return ServiceResult.SetData( await _homeDao.GetTeacherList(input));
+
         }
 
         /// <summary>
@@ -238,6 +237,19 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         public async Task<ServiceResult> CancelPersonalCourseSignUp([FromBody] IdInput input)
         {
             return await _homeDao.CancelPersonalCourseSignUp(input);
+        }
+        #endregion
+
+        #region 上传文件
+        /// <summary>
+        /// 上传头像
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPost("UploadAratav")]
+        public async Task<ServiceResult> UploadAratav([FromForm] IFormFile file)
+        {
+            return await _homeDao.UploadAratav(file);
         }
         #endregion
     }
