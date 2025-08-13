@@ -29,5 +29,6 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<ServiceResult> CancelPersonalCourseSignUp(IdInput input);
         Task<ServiceResult> CancelCourseSignUp(IdInput input);
         Task<ServiceResult> UploadAratav(IFormFile file);
+        Task<dynamic> GetCourseSignUpDetail(IdInput input);
     }
 }

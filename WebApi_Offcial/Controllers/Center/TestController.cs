@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Repositotys.Log;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 using SharedLibrary.Enums;
 using StackExchange.Profiling;
+using System.Text;
+using System.Threading.Channels;
 using UtilityToolkit.Helpers;
 
 namespace WebApi_Offcial.Controllers.Center
@@ -16,25 +20,32 @@ namespace WebApi_Offcial.Controllers.Center
     [AllowAnonymous]
     public class TestController : ControllerBase
     {
-        /// <summary>
-        /// 抛出异常测试队列信息
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("throwEx")]
-        public async Task<ActionResult<dynamic>> throwEx()
+        private readonly IConnection _rabbitMQConn;
+        public TestController(IConnection rabbitMQConn)
         {
-            var html = MiniProfiler.Current.RenderIncludes(HttpContext); 
-            return html.Value;
+            this._rabbitMQConn = rabbitMQConn;
         }
-
         /// <summary>
-        /// 获取队列长度
+        /// 发送消息
         /// </summary>
         /// <returns></returns>
-        [HttpGet("getQueueCount")]
-        public async Task<ActionResult<long>> getQueueCount()
+        [HttpGet("Seed")]
+        public ActionResult<dynamic> Seed(string mes)
         {
-            return QueueSingletonHelper<TL_ErrorLog>.Instance.Count();
+            var model = _rabbitMQConn.CreateModel();
+      
+
+            for (int i = 0; i < 100; i++)
+            {
+                model.BasicPublish(
+exchange: "amq.fanout",
+routingKey: "other", // 不匹配 BindingKey
+body: Encoding.UTF8.GetBytes($"我是通过应用发送的{i}条消息")
+);
+
+            }
+
+            return true;
         }
     }
 }

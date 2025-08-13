@@ -182,6 +182,16 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         {
             return ServiceResult.SetData(await _homeDao.GetMyPersonalCourseSignUpList(input));
         }
+
+        /// <summary>
+        /// 获取课程详情
+        /// </summary>
+        [HttpGet("GetCourseSignUpDetail")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> GetCourseSignUpDetail([FromQuery] IdInput input)
+        {
+            return ServiceResult.SetData(await _homeDao.GetCourseSignUpDetail(input));
+        }
         #endregion
 
         #region 新增

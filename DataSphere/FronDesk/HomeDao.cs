@@ -31,6 +31,7 @@ namespace DataSphere.FronDesk
     public class HomeDao : Repository<T_User>, IHomeDao
     {
         #region 构造函数
+        private long __userid = 706182181593157;
         private readonly WxLoginHelper _wxLoginHelper;
         public HomeDao(SqlDbContext dbContext, WxLoginHelper wxLoginHelper) : base(dbContext)
         {
@@ -65,19 +66,30 @@ namespace DataSphere.FronDesk
         public async Task<dynamic> GetPersonalCourseList(GetPersonalCourseListInput input)
         {
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
-            var query = _db.TeacherRep.Where(p => p.UserIdentityType == UserIdentityTypeEnum.Teacher)
-                .Where(p => p.PersonalCourses.Any(p => p.CourseDate >= DateTime.Today))
+            var now = DateTime.Now;
+            var today = now.Date;
+
+            var query = _db.TeacherRep
+                .Where(p => p.UserIdentityType == UserIdentityTypeEnum.Teacher)
+                .Where(p => p.PersonalCourses.Any(p => p.CourseDate >= today))
                 .Where(input.TeacherId != 0, p => p.Id == input.TeacherId)
-                .Where(input.DanceType != null, p => p.DanceTypes.Any(d => d.DanceType == input.DanceType.Value)).Select(p => new
+                .Where(input.DanceType != null, p => p.DanceTypes.Any(d => d.DanceType == input.DanceType.Value))
+                .Select(p => new
                 {
                     TeacherId = p.Id,
                     NickName = p.NickName,
                     AvatarUrl = $"{baseUrl}/{p.AvatarUrl.TrimStart('/')}",
                     DanceType = p.DanceTypes.First().DanceType,
-                    Count = p.PersonalCourses.Where(p => p.IsBooking == false && p.CourseDate >= DateTime.Today).Count(),
+                    Count = p.PersonalCourses
+                        .Where(c => !c.IsBooking &&
+                                   (c.CourseDate > today ||
+                                   (c.CourseDate == today &&
+                                    c.StartTime > now.TimeOfDay)))
+                        .Count(),
                     RateCount = p.RateCount,
                     SelfIntroduce = p.SelfIntroduce
                 });
+
             return await query.ToListAsync();
         }
 
@@ -104,10 +116,10 @@ namespace DataSphere.FronDesk
                                                PosterUrl = $"{baseUrl}/{c.PosterUrl.TrimStart('/')}",
                                                Description = c.Description,
                                                MaxParticipants = c.MaxParticipants,
-                                               IsBooking = false,
+                                               IsBooking = c.CourseSignUp.Any(p => p.UserId == __userid && p.IsCancel == false),
                                                Address = c.Address,
                                                Phone = c.Teacher.Phone,
-                                               SignUpCount = c.CourseSignUp.Count,
+                                               SignUpCount = c.CourseSignUp.Count(p => p.IsCancel == false),
                                                TeacherName = c.Teacher.NickName,
                                            }).OrderBy(p => p.CourseDate).ThenBy(p => p.StartTime);
             if (input.Limit != null)
@@ -130,7 +142,7 @@ namespace DataSphere.FronDesk
         {
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
             var query = _db.CourseSignUpRep
-                .Where(p => p.CourseId == input.CourseId)
+                .Where(p => p.CourseId == input.CourseId && !p.IsCancel)
                 .Select(c => new
                 {
                     UserId = c.Id,
@@ -176,7 +188,7 @@ namespace DataSphere.FronDesk
         public async Task<dynamic> GetMyCardList(GetMyCardListInput input)
         {
             var query = _db.MyCardRep
-                .Where(p => p.UserId == 706182181593157)
+                .Where(p => p.UserId == __userid)
                 .Select(p => new
                 {
                     MyCardId = p.Id,
@@ -198,7 +210,7 @@ namespace DataSphere.FronDesk
             if (input.CourseType == CourseTypeEnum.OneOnOne)
             {
                 var query = _db.PersonalCourseSignUpRep
-                                 .Where(p => p.UserId == 706182181593157)
+                                 .Where(p => p.UserId == __userid)
                                  .Where(p => p.CardId == input.CardId)
                                  .Include(p => p.PersonalCourse).ThenInclude(p => p.Teacher)
                                  .Select(p => new
@@ -214,16 +226,16 @@ namespace DataSphere.FronDesk
             else
             {
                 var query = _db.CourseSignUpRep
-                                 .Where(p => p.UserId == 706182181593157)
+                                 .Where(p => p.UserId == __userid)
                                  .Where(p => p.CardId == input.CardId)
                                  .Include(p => p.Course).ThenInclude(p => p.Teacher)
                                  .Select(p => new
                                  {
-                                    p.CreatedTime,
-                                    TeacherName = p.Course.Title,
-                                    StartTime = p.Course.StartTime,
-                                    EndTime = p.Course.EndTime,
-                                    CourseDate = p.Course.CourseDate,
+                                     p.CreatedTime,
+                                     TeacherName = p.Course.Title,
+                                     StartTime = p.Course.StartTime,
+                                     EndTime = p.Course.EndTime,
+                                     CourseDate = p.Course.CourseDate,
                                  });
                 return await query.ToListAsync();
             }
@@ -238,7 +250,7 @@ namespace DataSphere.FronDesk
         {
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
             var query = _db.CourseSignUpRep
-                                 .Where(p => p.UserId == 706182181593157)                         
+                                 .Where(p => p.UserId == __userid)
                                  .Select(p => new
                                  {
                                      CourseId = p.CourseId,
@@ -251,8 +263,8 @@ namespace DataSphere.FronDesk
                                      PicUrl = $"{baseUrl}/{p.Course.PosterUrl.TrimStart('/')}",
                                      SelfIntroduce = p.Course.Teacher.SelfIntroduce,
                                      CoureseTitle = p.Course.Title,
-                                     Description =  p.Course.Description,
-                                     StartTime =  p.Course.StartTime,
+                                     Description = p.Course.Description,
+                                     StartTime = p.Course.StartTime,
                                      EndTime = p.Course.EndTime,
                                      CreatedTime = p.CreatedTime,
                                      CardCourseType = p.Card.CourseType,
@@ -262,7 +274,6 @@ namespace DataSphere.FronDesk
                                      TeacherName = p.Course.Teacher.NickName,
                                      TeacherPhone = p.Course.Teacher.Phone,
                                      MaxParticipants = p.Course.MaxParticipants,
-                                  
                                  }).OrderByDescending(p => p.SignUpId);
             return await base.ToPage(query, input);
         }
@@ -275,7 +286,7 @@ namespace DataSphere.FronDesk
         {
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
             var query = _db.PersonalCourseSignUpRep
-                                 .Where(p => p.UserId == 706182181593157)
+                                 .Where(p => p.UserId == __userid)
                                  .Select(p => new
                                  {
                                      SignUpId = p.Id,
@@ -285,8 +296,7 @@ namespace DataSphere.FronDesk
                                      IsCancel = p.IsCancel,
                                      CourseDate = p.PersonalCourse.CourseDate,
                                      PicUrl = $"{baseUrl}/{p.PersonalCourse.Teacher.AvatarUrl.TrimStart('/')}",
-                                     CoureseTitle = p.PersonalCourse.Teacher.NickName + "私教课",     
-                                     TeacherPhone = p.PersonalCourse.Teacher.Phone ,
+                                     CoureseTitle = p.PersonalCourse.Teacher.NickName + "私教课",
                                      Description = p.PersonalCourse.Description,
                                      StartTime = p.PersonalCourse.StartTime,
                                      EndTime = p.PersonalCourse.EndTime,
@@ -297,6 +307,41 @@ namespace DataSphere.FronDesk
                                      IsFinish = p.IsFinish,
                                  }).OrderByDescending(p => p.SignUpId);
             return await base.ToPage(query, input);
+        }
+
+        /// <summary>
+        /// 获取课程详情
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<dynamic> GetCourseSignUpDetail(IdInput input)
+        {
+
+            var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
+            var query = _db.CourseRep.Where(p => p.Id == input.Id)
+                                 .Select(p => new
+                                 {
+                                     CourseId = p.Id,
+                                     Title = p.Title,
+                                     TeacherName = p.Teacher.NickName,
+                                     p.CourseDate,
+                                     p.StartTime,
+                                     p.EndTime,
+                                     p.Address,
+                                     TeacherPhone = p.Teacher.Phone,
+                                     p.Description,
+                                     SignUpCount = p.CourseSignUp.Where(p => p.IsCancel == false).Count(),
+                                     p.MaxParticipants,
+                                     BookingInfo = p.CourseSignUp.Where(c => c.UserId == __userid && c.IsCancel == false).Select(p => new
+                                     {
+                                         p.IsFinish,
+                                         p.IsCancel,
+                                     }).FirstOrDefault(),
+
+                                 });
+            return await query.FirstOrDefaultAsync();
+
+
         }
         #endregion
 
@@ -311,16 +356,16 @@ namespace DataSphere.FronDesk
             try
             {
                 var list = await _db.PersonalCourseRep.Where(p => input.Ids.Contains(p.Id) && p.IsBooking == false).ToListAsync();
-                var card = await _db.MyCardRep.AsTracking().FirstOrDefaultAsync(p => p.UserId == 706182181593157 && p.CourseType == CourseTypeEnum.OneOnOne && list.FirstOrDefault().DanceType == p.DanceType && p.ValidTo >= DateTime.Now);
-                if (card == null) 
+                var card = await _db.MyCardRep.AsTracking().FirstOrDefaultAsync(p => p.UserId == __userid && p.CourseType == CourseTypeEnum.OneOnOne && list.FirstOrDefault().DanceType == p.DanceType && p.ValidTo >= DateTime.Now);
+                if (card == null)
                 {
                     return ServiceResult.Fail("你还未拥有该舞蹈类型的私教卡");
                 }
                 if (input.Ids.Count() != list.Count)
                 {
                     return ServiceResult.Fail("选择的时间已经被其他用户预定");
-                }              
-                if (card.Count - list.Count < 0 )
+                }
+                if (card.Count - list.Count < 0)
                 {
                     return ServiceResult.Fail("卡片剩余次数不足以抵消预约时间段数量");
                 }
@@ -329,7 +374,7 @@ namespace DataSphere.FronDesk
                 {
                     item.IsBooking = true;
                     T_PersonalCourseSignUp signUp = new T_PersonalCourseSignUp();
-                    signUp.UserId = 706182181593157;
+                    signUp.UserId = __userid;
                     signUp.PersonalCourseId = item.Id;
                     signUp.CardId = card.Id;
                     signUpList.Add(signUp);
@@ -358,14 +403,15 @@ namespace DataSphere.FronDesk
             try
             {
                 var data = await _db.CourseRep.Where(p => input.Id == p.Id).Include(p => p.CourseSignUp).FirstOrDefaultAsync();
-                if (data == null) {
+                if (data == null)
+                {
                     return ServiceResult.Fail("课程不存在啊");
                 }
-                if (data.CourseSignUp.Any(p => p.CourseId == input.Id && p.UserId == 706182181593157 && p.IsCancel == false))
+                if (data.CourseSignUp.Any(p => p.CourseId == input.Id && p.UserId == __userid && p.IsCancel == false))
                 {
                     return ServiceResult.Fail("您已经预定了该课程，请勿重复预约");
                 }
-                var card = await _db.MyCardRep.AsTracking().FirstOrDefaultAsync(p => p.UserId == 706182181593157 && p.CourseType == data.CourseType && p.DanceType == data.DanceType && p.ValidTo >= DateTime.Now);
+                var card = await _db.MyCardRep.AsTracking().FirstOrDefaultAsync(p => p.UserId == __userid && p.CourseType == data.CourseType && p.DanceType == data.DanceType && p.ValidTo >= DateTime.Now);
                 if (card == null)
                 {
                     return ServiceResult.Fail("您还未用有该舞蹈类型的课程卡");
@@ -377,9 +423,9 @@ namespace DataSphere.FronDesk
                 if (data.CourseSignUp.Count() + 1 > data.MaxParticipants)
                 {
                     return ServiceResult.Fail("预约人数已满，请选择其他课程");
-                } 
+                }
                 var signUp = new T_CourseSignUp();
-                signUp.UserId = 706182181593157;
+                signUp.UserId = __userid;
                 signUp.CourseId = input.Id;
                 signUp.CardId = card.Id;
                 card.Count = card.Count - 1;
@@ -435,7 +481,7 @@ namespace DataSphere.FronDesk
                 var tokenInfoModel = new TokenInfoModel();
                 tokenInfoModel.UserId = newUser.Id.ToString();
                 tokenInfoModel.RoleIds = "";
-                 newUser.AvatarUrl = $"{baseUrl}/{newUser.AvatarUrl.TrimStart('/')}";
+                newUser.AvatarUrl = $"{baseUrl}/{newUser.AvatarUrl.TrimStart('/')}";
                 return new
                 {
                     token = TokenTool.CreateToken(tokenInfoModel),
@@ -454,10 +500,10 @@ namespace DataSphere.FronDesk
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<ServiceResult> CancelCourseSignUp(IdInput input) 
+        public async Task<ServiceResult> CancelCourseSignUp(IdInput input)
         {
 
-            var data = await _db.CourseSignUpRep.Where(p => p.Id == input.Id && p.UserId == 706182181593157).Include(p => p.Course).AsTracking().FirstOrDefaultAsync();
+            var data = await _db.CourseSignUpRep.Where(p => p.Id == input.Id && p.UserId == __userid).Include(p => p.Course).AsTracking().FirstOrDefaultAsync();
             if (data.IsCancel)
             {
                 return ServiceResult.Fail("已取消预约");
@@ -472,7 +518,9 @@ namespace DataSphere.FronDesk
                 return ServiceResult.Fail("无法取消预约，请至少提前12小时取消");
             }
             data.IsCancel = true;
-            return ServiceResult.Successed();            
+             _db.Update(data);
+            await _db.SaveChangesAsync();
+            return ServiceResult.Successed();
         }
 
         /// <summary>
@@ -486,7 +534,7 @@ namespace DataSphere.FronDesk
             try
             {
 
-                var data = await _db.PersonalCourseSignUpRep.Where(p => p.Id == input.Id && p.UserId == 706182181593157).Include(p => p.PersonalCourse).Include(p => p.Card).AsTracking().FirstOrDefaultAsync();
+                var data = await _db.PersonalCourseSignUpRep.Where(p => p.Id == input.Id && p.UserId == __userid).Include(p => p.PersonalCourse).Include(p => p.Card).AsTracking().FirstOrDefaultAsync();
                 if (data.IsCancel)
                 {
                     return ServiceResult.Fail("已取消预约");
@@ -512,7 +560,7 @@ namespace DataSphere.FronDesk
                 await tra.RollbackAsync();
                 throw;
             }
-         
+
             return ServiceResult.Successed();
 
         }
@@ -527,7 +575,7 @@ namespace DataSphere.FronDesk
         public async Task<ServiceResult> UploadAratav(IFormFile file)
         {
             // 获取用户信息
-            var user = await _db.UserRep.Where(p => p.Id == 706182181593157).FirstOrDefaultAsync();
+            var user = await _db.UserRep.Where(p => p.Id == __userid).FirstOrDefaultAsync();
             if (user == null)
             {
                 return ServiceResult.Fail("用户不存在");
