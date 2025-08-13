@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UtilityToolkit.Helpers.WxLogin.Dto;
+using UtilityToolkit.Tools;
 
 namespace UtilityToolkit.Helpers.WxLogin
 {
@@ -23,15 +24,17 @@ namespace UtilityToolkit.Helpers.WxLogin
         /// <exception cref="Exception"></exception>
         public async Task<(string phone ,string openId)> Login(WxLoginInput input)
         {
-            // 小程序id
-            string appId = "wx20d923cb97bb2abf";
-            // 密钥
-            string appSecret = "765b08052408626854482802029936b0";
+            //// 小程序id
+            //string appId = "wx20d923cb97bb2abf";
+            //// 密钥
+            //string appSecret = "765b08052408626854482802029936b0";
+
+
             // 调用微信接口换取 openid
             using (var client = new HttpClient())
             {
                 // 发送请求
-                string url = $"https://api.weixin.qq.com/sns/jscode2session?appid={appId}&secret={appSecret}&js_code={input.Code}&grant_type=authorization_code";
+                string url = $"https://api.weixin.qq.com/sns/jscode2session?appid={ConfigSettingTool.WXConfig.AppId}&secret={ConfigSettingTool.WXConfig.AppSecret}&js_code={input.Code}&grant_type=authorization_code";
                 HttpResponseMessage response = await client.GetAsync(url);
                 // 读取结果
                 string responseBody = await response.Content.ReadAsStringAsync();

@@ -43,5 +43,11 @@ namespace UtilityToolkit.Tools
         /// </summary>
 
         public static readonly SystemConfig SystemConfig = new SystemConfig();
+
+        /// <summary>
+        /// 微信配置
+        /// </summary>
+
+        public static readonly WXConfig WXConfig = new WXConfig();
     }
 }
