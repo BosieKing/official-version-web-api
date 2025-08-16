@@ -13,12 +13,17 @@ namespace UtilityToolkit.Helpers
         /// <returns></returns>
         public IConnection GetConnection()
         {
-            var conn = new ConnectionFactory();
+            ConnectionFactory conn = new ConnectionFactory();
             conn.HostName = "localhost";
             conn.VirtualHost = "/";
             conn.UserName = "guest";
             conn.Password = "guest";
             conn.Port = 5672;
+            conn.AutomaticRecoveryEnabled = true;
+            conn.NetworkRecoveryInterval = TimeSpan.FromSeconds(1);
+            conn.TopologyRecoveryEnabled = true;
+
+           
             return conn.CreateConnection();
         }
 

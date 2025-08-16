@@ -79,7 +79,6 @@ namespace WebApi_Offcial.Controllers.FrontDesk
                 {
                     ImageUrls = imageUrls,
                     Version = cacheVersion,
-                    LogoIconUrl = $"{baseUrl}/{"/System/logo.png".TrimStart('/')}",
                 });
             }
             catch (Exception ex)
@@ -218,13 +217,23 @@ namespace WebApi_Offcial.Controllers.FrontDesk
 
         #region 登录
         /// <summary>
-        /// 微信登录
+        ///  微信登录-企业认证版本
         /// </summary>
-        [HttpPost("wxLogin")]
+        [HttpPost("WxLoginByOpenId")]
         [AllowAnonymous]
-        public async Task<ServiceResult> WxLogin([FromBody] WxLoginInput input)
+        public async Task<ServiceResult> WxLoginByOpenId([FromBody] WxLoginByOpenIdInput input)
         {
-            return ServiceResult.SetData(await _homeDao.WxLogin(input));
+            return ServiceResult.SetData(await _homeDao.WxLoginByOpenId(input));
+        }
+
+        /// <summary>
+        ///  微信登录-个人认证版本-通过电话号码+验证码
+        /// </summary>
+        [HttpPost("WxLoginByPhone")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> WxLoginByPhone([FromBody] WxLoginByPhoneInput input)
+        {
+            return ServiceResult.SetData(await _homeDao.WxLoginByPhone(input));
         }
         #endregion
 

@@ -444,9 +444,9 @@ namespace DataSphere.FronDesk
 
         #region 登录
         /// <summary>
-        /// 微信登录
+        /// 微信登录-企业认证版本
         /// </summary>
-        public async Task<dynamic> WxLogin(WxLoginInput input)
+        public async Task<dynamic> WxLoginByOpenId(WxLoginByOpenIdInput input)
         {
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
             var resutl = await _wxLoginHelper.Login(input);
@@ -491,6 +491,50 @@ namespace DataSphere.FronDesk
 
         }
 
+        /// <summary>
+        /// 微信登录-个人认证版本-电话号码
+        /// </summary>
+        public async Task<dynamic> WxLoginByPhone(WxLoginByPhoneInput input)
+        {
+            var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
+            string token = string.Empty;
+            // 判断系统中有没有该用户
+            var user = await _db.UserRep.FirstOrDefaultAsync(p => p.Phone == input.Phone);
+            if (user != null)
+            {
+                var tokenInfoModel = new TokenInfoModel();
+                tokenInfoModel.UserId = user.Id.ToString();
+                tokenInfoModel.RoleIds = "";
+                user.AvatarUrl = $"{baseUrl}/{user.AvatarUrl.TrimStart('/')}";
+                return new
+                {
+                    token = TokenTool.CreateToken(tokenInfoModel),
+                    user = user
+                };
+            }
+            else
+            {
+                var newUser = new T_User();
+                newUser.NickName = "可爱的小羊";
+                newUser.AvatarUrl = "/Avatars/teacher-default-avatar-boy.png";
+                newUser.Phone = input.Phone;
+                newUser.Password = "sdfsdfsdfsdfsdfsdfsdfdfsdfsdf";
+                newUser.Sex = SexEnum.UNKnown;
+                newUser.SelfIntroduce = "爱生活、爱跳舞";
+                await _db.AddAsync(newUser);
+                await _db.SaveChangesAsync();
+                var tokenInfoModel = new TokenInfoModel();
+                tokenInfoModel.UserId = newUser.Id.ToString();
+                tokenInfoModel.RoleIds = "";
+                newUser.AvatarUrl = $"{baseUrl}/{newUser.AvatarUrl.TrimStart('/')}";
+                return new
+                {
+                    token = TokenTool.CreateToken(tokenInfoModel),
+                    user = newUser
+                };
+            }
+
+        }
 
         #endregion
 
@@ -518,7 +562,7 @@ namespace DataSphere.FronDesk
                 return ServiceResult.Fail("无法取消预约，请至少提前12小时取消");
             }
             data.IsCancel = true;
-             _db.Update(data);
+            _db.Update(data);
             await _db.SaveChangesAsync();
             return ServiceResult.Successed();
         }
@@ -605,9 +649,12 @@ namespace DataSphere.FronDesk
             {
                 Directory.CreateDirectory(avatarsDir);
             }
-            var newFileName = $"{user.Id}{DateTime.Now.Ticks}{fileExtension}";
+
+            // 生成唯一文件名（使用GUID+时间戳）
+            var newFileName = $"{Guid.NewGuid().ToString("N")[..8]}_{DateTime.Now:yyMMddHHmmss}{fileExtension}";
             var newFilePath = Path.Combine(avatarsDir, newFileName);
             var newAvatarUrl = $"/Avatars/{newFileName}";
+
             try
             {
                 // 保存新头像
@@ -637,26 +684,28 @@ namespace DataSphere.FronDesk
                     }
                     catch (Exception ex)
                     {
+
                     }
                 }
 
-                // 10. 返回完整URL
+                // 返回完整URL
                 var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
-                var fullUrl = $"{baseUrl}/{user.AvatarUrl.TrimStart('/')}";
+                var fullUrl = $"{baseUrl}{newAvatarUrl}"; // 注意这里不需要TrimStart，因为newAvatarUrl已经是正确格式
 
                 return ServiceResult.SetData(fullUrl);
             }
             catch (Exception ex)
             {
-                // 11. 发生异常时删除可能已上传的新头像
+                // 发生异常时删除可能已上传的新头像
                 if (System.IO.File.Exists(newFilePath))
                 {
                     System.IO.File.Delete(newFilePath);
                 }
-
                 return ServiceResult.Fail($"头像上传失败: {ex.Message}");
             }
+
         }
         #endregion
     }
 }
+    

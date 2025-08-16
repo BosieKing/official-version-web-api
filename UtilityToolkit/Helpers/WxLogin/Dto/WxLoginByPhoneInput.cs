@@ -9,7 +9,7 @@ namespace UtilityToolkit.Helpers.WxLogin.Dto
     /// <summary>
     /// 微信登录输入类
     /// </summary>
-    public class WxLoginInput
+    public class WxLoginByPhoneInput
     {
         /// <summary>
         /// 电话号码
@@ -20,10 +20,5 @@ namespace UtilityToolkit.Helpers.WxLogin.Dto
         /// code
         /// </summary>
         public string Code { get; set; }
-
-        /// <summary>
-        /// 偏移码
-        /// </summary>
-        public string Iv { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UtilityToolkit.Helpers.WxLogin.Dto;
 using UtilityToolkit.Tools;
+using UtilityToolkit.Utils;
 
 namespace UtilityToolkit.Helpers.WxLogin
 {
@@ -22,19 +23,23 @@ namespace UtilityToolkit.Helpers.WxLogin
         /// <param name="code"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<(string phone ,string openId)> Login(WxLoginInput input)
+        public async Task<(string phone ,string openId)> Login(WxLoginByOpenIdInput input)
         {
-            //// 小程序id
-            //string appId = "wx20d923cb97bb2abf";
-            //// 密钥
-            //string appSecret = "765b08052408626854482802029936b0";
+            // 测试小程序id
+            string appId = "wx20d923cb97bb2abf";
+            // 密钥
+            string appSecret = "765b08052408626854482802029936b0";
 
+            //// 小程序id
+            //string appId = ConfigSettingTool.WXConfig.AppId;
+            //// 密钥
+            //string appSecret = "ConfigSettingTool.WXConfig.AppSecret";
 
             // 调用微信接口换取 openid
             using (var client = new HttpClient())
             {
                 // 发送请求
-                string url = $"https://api.weixin.qq.com/sns/jscode2session?appid={ConfigSettingTool.WXConfig.AppId}&secret={ConfigSettingTool.WXConfig.AppSecret}&js_code={input.Code}&grant_type=authorization_code";
+                string url = $"https://api.weixin.qq.com/sns/jscode2session?appid={appId}&secret={appSecret}&js_code={input.Code}&grant_type=authorization_code";
                 HttpResponseMessage response = await client.GetAsync(url);
                 // 读取结果
                 string responseBody = await response.Content.ReadAsStringAsync();
@@ -44,9 +49,16 @@ namespace UtilityToolkit.Helpers.WxLogin
                 {
                     throw new Exception($"微信登录失败: {wxResult.Errmsg}");
                 }
-                // 开始解密手机号
-                string phone = DecryptPhoneNumber(input.Phone, wxResult.SessionKey, input.Iv);
-                return (phone,wxResult.Openid);
+                if (!input.Phone.IsNullOrEmpty())
+                {
+                    // 开始解密手机号
+                    string phone = DecryptPhoneNumber(input.Phone, wxResult.SessionKey, input.Iv);
+                    return (phone, wxResult.Openid);
+                }
+                else
+                {
+                    return ("", wxResult.Openid);
+                }
             }
         }
 

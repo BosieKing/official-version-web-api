@@ -21,7 +21,7 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<dynamic> GetPersonalCourseTimeList(GetPersonalCoureseTimeListInput input);
         Task<ServiceResult> AddPersonalCourseBooking(AddPersonalCourseBookingInput input);
         Task<ServiceResult> AddCourseBooking(AddCourseBookingInput input);
-        Task<dynamic> WxLogin(WxLoginInput input);
+        Task<dynamic> WxLoginByOpenId(WxLoginByOpenIdInput input);
         Task<dynamic> GetMyCardList(GetMyCardListInput input);
         Task<dynamic> GetUseCardRecodeList(GetUseCardRecodeListInput input);
         Task<dynamic> GetMyCourseSignUpList(GetMyCourseSignUpListInput input);
@@ -30,5 +30,6 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<ServiceResult> CancelCourseSignUp(IdInput input);
         Task<ServiceResult> UploadAratav(IFormFile file);
         Task<dynamic> GetCourseSignUpDetail(IdInput input);
+        Task<dynamic> WxLoginByPhone(WxLoginByPhoneInput input);
     }
 }
