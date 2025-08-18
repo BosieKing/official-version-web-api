@@ -12,6 +12,7 @@ using Model.DTOs.FronDesk.Home;
 using Model.Repositotys.Service;
 using Nest;
 using Newtonsoft.Json;
+using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Utilities.Encoders;
 using SharedLibrary.Enums;
@@ -19,6 +20,7 @@ using TencentCloud.Ame.V20190916.Models;
 using TencentCloud.Cdn.V20180606.Models;
 using TencentCloud.Mrs.V20200910.Models;
 using TencentCloud.Wedata.V20210820.Models;
+using UtilityToolkit.Extensions;
 using UtilityToolkit.Helpers.WxLogin;
 using UtilityToolkit.Helpers.WxLogin.Dto;
 using UtilityToolkit.Tools;
@@ -101,7 +103,8 @@ namespace DataSphere.FronDesk
         {
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
             var query = _db.CourseRep.Where(input.DanceType != null, p => p.DanceType == input.DanceType)
-                                           .Where(input.CourseDate != null, p => p.CourseDate == input.CourseDate)
+                                           .Where(input.CourseDate == null,p => p.CourseDate >= DateTime.Now.Date)
+                                           .Where(input.CourseDate != null, p => p.CourseDate == input.CourseDate && p.CourseDate >= DateTime.Now.Date )
                                            .Where(input.TeacherId != null, p => p.TeacherId == input.TeacherId)
                                            .Select(c => new
                                            {
@@ -248,9 +251,13 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<dynamic> GetMyCourseSignUpList(GetMyCourseSignUpListInput input)
         {
+            var today = DateTime.Today;
+            var dayAfterTomorrow = today.AddDays(2).AddDays(1); // 后天23:59:59
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
             var query = _db.CourseSignUpRep
                                  .Where(p => p.UserId == __userid)
+                                 .Where(input.SearchType == 1 , c => !c.IsCancel && !c.IsFinish )
+                                 .Where(input.SearchType == 2, c => c.IsFinish)
                                  .Select(p => new
                                  {
                                      CourseId = p.CourseId,
@@ -284,9 +291,13 @@ namespace DataSphere.FronDesk
         /// <returns></returns>
         public async Task<dynamic> GetMyPersonalCourseSignUpList(GetMyCourseSignUpListInput input)
         {
+            var today = DateTime.Today;
+            var dayAfterTomorrow = today.AddDays(2).AddDays(1); // 后天23:59:59
             var baseUrl = ConfigSettingTool.SystemConfig.DomainAddress.TrimEnd('/');
             var query = _db.PersonalCourseSignUpRep
                                  .Where(p => p.UserId == __userid)
+                                 .Where(input.SearchType == 1, c => !c.IsCancel && !c.IsFinish)
+                                 .Where(input.SearchType == 2, c => c.IsFinish)
                                  .Select(p => new
                                  {
                                      SignUpId = p.Id,
@@ -342,6 +353,88 @@ namespace DataSphere.FronDesk
             return await query.FirstOrDefaultAsync();
 
 
+        }
+
+        /// <summary>
+        /// 获取数量
+        /// </summary>
+        /// <returns></returns>
+        public async Task<dynamic> GetSignCount() 
+        {
+            var result = await _db.UserRep
+                             .Where(p => p.Id == __userid)
+                             .Select(p => new {
+                                 // 数量统计（仍在数据库执行）
+                                 FinishCourseCount = p.CourseSignUps.Count(c => c.IsFinish),
+                                 FinishPersonalCourseCount = p.PersonalCourseSignUps.Count(c => c.IsFinish),
+                                 CourseCount = p.CourseSignUps.Count(c => !c.IsCancel && !c.IsFinish),
+                                 PersonalCourseCount = p.PersonalCourseSignUps.Count(c => !c.IsCancel && !c.IsFinish),
+                                 CourseTimes = p.CourseSignUps
+                                     .Where(c => c.IsFinish)
+                                     .Select(c => new { c.Course.StartTime, c.Course.EndTime })
+                                     .ToList(),
+                                 PersonalCourseTimes = p.PersonalCourseSignUps
+                                     .Where(c => c.IsFinish)
+                                     .Select(c => new { c.PersonalCourse.StartTime, c.PersonalCourse.EndTime })
+                                     .ToList()
+                             })
+                             .AsNoTracking() // 提高性能
+                             .FirstOrDefaultAsync();
+
+           
+                // 客户端计算总时长（小时）
+                var courseTotalHours = result.CourseTimes?
+                    .Sum(t => (t.EndTime - t.StartTime).TotalHours) ?? 0;
+
+                var personalCourseTotalHours = result.PersonalCourseTimes?
+                    .Sum(t => (t.EndTime - t.StartTime).TotalHours) ?? 0;
+
+                // 最终结果
+                var finalResult = new
+                {
+                    result.FinishCourseCount,
+                    result.FinishPersonalCourseCount,
+                    result.CourseCount,
+                    result.PersonalCourseCount,
+                    CourseTotalHours = courseTotalHours,
+                    PersonalCourseTotalHours = personalCourseTotalHours
+                };
+            return finalResult;
+        }
+
+        /// <summary>
+        /// 获取最近要上的私教课
+        /// </summary>
+        /// <returns></returns>
+        public async Task<dynamic> GetRemindCourseList() 
+        {
+            var query = await _db.UserRep.Where(p => p.Id == __userid).Select(p => new { 
+            
+             CourseList = p.CourseSignUps.Select(s => new {
+                 SignUpId = s.Id,
+                 Title = s.Course.Title,
+                 s.Course.StartTime,
+                 s.Course.EndTime,
+                 s.Course.CourseDate,
+                 TeacherName = s.Course.Teacher.NickName,
+                 Address =s.Course.Address,
+                 Type  =1,
+             }),
+             PersonCourseList = p.PersonalCourseSignUps.Select(s => new {
+                 SignUpId = s.Id,
+                 Title = s.PersonalCourse.DanceType.GetDescription() + "私教课",
+                 s.PersonalCourse.StartTime,
+                 s.PersonalCourse.EndTime,
+                 s.PersonalCourse.CourseDate,
+                 TeacherName = s.PersonalCourse.Teacher.NickName,
+                 Address = s.PersonalCourse.Address,
+                 Type = 2,
+             }),
+
+            }).FirstOrDefaultAsync();
+            return query.CourseList.Union(query.PersonCourseList).OrderByDescending(p => p.CourseDate).ThenByDescending(p => p.StartTime);
+        
+        
         }
         #endregion
 
@@ -605,6 +698,78 @@ namespace DataSphere.FronDesk
                 throw;
             }
 
+            return ServiceResult.Successed();
+
+        }
+
+        /// <summary>
+        /// 定时任务，自动确认已经完成的私教课程
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult> FinshPersonalCourseSignUp()
+        {
+            var tra = await _db.Database.BeginTransactionAsync();
+            try
+            {
+                var now = DateTime.Now;
+                var today = now.Date;
+                var finishedCourses = await _db.PersonalCourseSignUpRep
+                    .Include(p => p.PersonalCourse)
+                    .Where(p => !p.IsCancel && !p.IsFinish)
+                    .Where(p => p.PersonalCourse.CourseDate <= today)
+                    .Where(p => now.TimeOfDay > p.PersonalCourse.EndTime)
+                    .AsTracking()
+                    .ToListAsync();
+                finishedCourses.ForEach(p =>
+                {
+                    p.IsFinish = true;
+                });
+                 _db.UpdateRange(finishedCourses);
+                await _db.SaveChangesAsync();
+                await tra.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await tra.RollbackAsync();
+                throw ex;
+            }
+            return ServiceResult.Successed();
+
+        }
+
+        /// <summary>
+        /// 定时任务，自动确认已经完成的班级课程
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ServiceResult> FinshCourseSignUp()
+        {
+            var tra = await _db.Database.BeginTransactionAsync();
+            try
+            {
+                var now = DateTime.Now;
+                var today = now.Date;
+                var finishedCourses = await _db.CourseSignUpRep
+                    .Include(p => p.Course)
+                    .Where(p => !p.IsCancel && !p.IsFinish)
+                    .Where(p => p.Course.CourseDate <= today)
+                    .Where(p => now.TimeOfDay > p.Course.EndTime)
+                    .AsTracking()
+                    .ToListAsync();
+                finishedCourses.ForEach(p =>
+                {
+                    p.IsFinish = true;
+                });
+                _db.UpdateRange(finishedCourses);
+                await _db.SaveChangesAsync();
+                await tra.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await tra.RollbackAsync();
+                throw ex;
+            }
             return ServiceResult.Successed();
 
         }

@@ -37,8 +37,8 @@ namespace WebApi_Offcial.MiddleWares
         {
             // 配套实现，如注入一个服务，则需要添加一个描述类
             // 不通过接口注入，不然在JobFactory中无法找到对应的实例
-            services.AddSingleton<WirteLogJob>();
-            services.AddSingleton(new JobDescription(jobType: typeof(WirteLogJob), cronExpression: "*/5 * * * * ?"));
+            services.AddSingleton<FinshedCourseJob>();
+            services.AddSingleton(new JobDescription(jobType: typeof(FinshedCourseJob), cronExpression: "0 * * * * ?"));
         }
     }
 }

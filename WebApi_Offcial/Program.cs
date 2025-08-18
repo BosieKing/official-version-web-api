@@ -188,10 +188,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.UseSwagger();
-app.UseSwaggerUIOption();
-
-
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUIOption();
+}
 app.UseEndpoints(o => o.MapControllers());
 
 

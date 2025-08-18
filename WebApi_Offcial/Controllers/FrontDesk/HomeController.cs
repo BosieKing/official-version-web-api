@@ -191,6 +191,26 @@ namespace WebApi_Offcial.Controllers.FrontDesk
         {
             return ServiceResult.SetData(await _homeDao.GetCourseSignUpDetail(input));
         }
+
+        /// <summary>
+        /// 获取上课数量
+        /// </summary>
+        [HttpGet("GetSignCount")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> GetSignCount()
+        {
+            return ServiceResult.SetData(await _homeDao.GetSignCount());
+        }
+
+        /// <summary>
+        /// 获取最近要上课的课
+        /// </summary>
+        [HttpGet("GetRemindCourseList")]
+        [AllowAnonymous]
+        public async Task<ServiceResult> GetRemindCourseList()
+        {
+            return ServiceResult.SetData(await _homeDao.GetRemindCourseList());
+        }
         #endregion
 
         #region 新增

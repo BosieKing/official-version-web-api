@@ -31,5 +31,9 @@ namespace IDataSphere.Interfaces.FronDesk
         Task<ServiceResult> UploadAratav(IFormFile file);
         Task<dynamic> GetCourseSignUpDetail(IdInput input);
         Task<dynamic> WxLoginByPhone(WxLoginByPhoneInput input);
+        Task<dynamic> GetSignCount();
+        Task<ServiceResult> FinshCourseSignUp();
+        Task<ServiceResult> FinshPersonalCourseSignUp();
+        Task<dynamic> GetRemindCourseList();
     }
 }

@@ -9,5 +9,6 @@ namespace Model.DTOs.FronDesk.Home
 {
     public class GetMyCourseSignUpListInput:PageInput
     {
+        public int SearchType { get; set; }
     }
 }
