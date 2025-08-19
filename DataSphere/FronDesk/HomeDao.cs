@@ -86,7 +86,7 @@ namespace DataSphere.FronDesk
                         .Where(c => !c.IsBooking &&
                                    (c.CourseDate > today ||
                                    (c.CourseDate == today &&
-                                    c.StartTime > now.TimeOfDay)))
+                                    c.StartTime > now)))
                         .Count(),
                     RateCount = p.RateCount,
                     SelfIntroduce = p.SelfIntroduce
@@ -124,7 +124,7 @@ namespace DataSphere.FronDesk
                                                Phone = c.Teacher.Phone,
                                                SignUpCount = c.CourseSignUp.Count(p => p.IsCancel == false),
                                                TeacherName = c.Teacher.NickName,
-                                           }).OrderBy(p => p.CourseDate).ThenBy(p => p.StartTime);
+                                           }).OrderBy(p => p.StartTime);
             if (input.Limit != null)
             {
                 return await query.Take(input.Limit.Value).ToListAsync();
@@ -369,37 +369,14 @@ namespace DataSphere.FronDesk
                                  FinishPersonalCourseCount = p.PersonalCourseSignUps.Count(c => c.IsFinish),
                                  CourseCount = p.CourseSignUps.Count(c => !c.IsCancel && !c.IsFinish),
                                  PersonalCourseCount = p.PersonalCourseSignUps.Count(c => !c.IsCancel && !c.IsFinish),
-                                 CourseTimes = p.CourseSignUps
-                                     .Where(c => c.IsFinish)
-                                     .Select(c => new { c.Course.StartTime, c.Course.EndTime })
-                                     .ToList(),
-                                 PersonalCourseTimes = p.PersonalCourseSignUps
-                                     .Where(c => c.IsFinish)
-                                     .Select(c => new { c.PersonalCourse.StartTime, c.PersonalCourse.EndTime })
-                                     .ToList()
+                                 CourseTotalHours = p.CourseSignUps.Where(c => c.IsFinish).Sum(p => EF.Functions.DateDiffHour(p.Course.StartTime, p.Course.EndTime)),
+                                 PersonalCourseTotalHours = p.PersonalCourseSignUps.Where(c => c.IsFinish).Sum(p => EF.Functions.DateDiffHour(p.PersonalCourse.StartTime, p.PersonalCourse.EndTime)),
                              })
                              .AsNoTracking() // 提高性能
                              .FirstOrDefaultAsync();
 
            
-                // 客户端计算总时长（小时）
-                var courseTotalHours = result.CourseTimes?
-                    .Sum(t => (t.EndTime - t.StartTime).TotalHours) ?? 0;
-
-                var personalCourseTotalHours = result.PersonalCourseTimes?
-                    .Sum(t => (t.EndTime - t.StartTime).TotalHours) ?? 0;
-
-                // 最终结果
-                var finalResult = new
-                {
-                    result.FinishCourseCount,
-                    result.FinishPersonalCourseCount,
-                    result.CourseCount,
-                    result.PersonalCourseCount,
-                    CourseTotalHours = courseTotalHours,
-                    PersonalCourseTotalHours = personalCourseTotalHours
-                };
-            return finalResult;
+            return result;
         }
 
         /// <summary>
@@ -432,7 +409,7 @@ namespace DataSphere.FronDesk
              }),
 
             }).FirstOrDefaultAsync();
-            return query.CourseList.Union(query.PersonCourseList).OrderByDescending(p => p.CourseDate).ThenByDescending(p => p.StartTime);
+            return query.CourseList.Union(query.PersonCourseList).OrderByDescending(p => p.StartTime);
         
         
         }
@@ -649,8 +626,7 @@ namespace DataSphere.FronDesk
             {
                 return ServiceResult.Fail("课程已结束无法取消");
             }
-            var startTime = data.Course.CourseDate.AddTicks(data.Course.StartTime.Ticks);
-            if (DateTime.Now.AddHours(12) >= startTime)
+            if (DateTime.Now.AddHours(12) >= data.Course.StartTime)
             {
                 return ServiceResult.Fail("无法取消预约，请至少提前12小时取消");
             }
@@ -680,8 +656,7 @@ namespace DataSphere.FronDesk
                 {
                     return ServiceResult.Fail("已结束无法取消");
                 }
-                var startTime = data.PersonalCourse.CourseDate.AddTicks(data.PersonalCourse.StartTime.Ticks);
-                if (DateTime.Now.AddHours(12) >= startTime)
+                if (DateTime.Now.AddHours(12) >= data.PersonalCourse.StartTime)
                 {
                     return ServiceResult.Fail("无法取消预约，请至少提前12小时取消");
                 }
@@ -718,7 +693,7 @@ namespace DataSphere.FronDesk
                     .Include(p => p.PersonalCourse)
                     .Where(p => !p.IsCancel && !p.IsFinish)
                     .Where(p => p.PersonalCourse.CourseDate <= today)
-                    .Where(p => now.TimeOfDay > p.PersonalCourse.EndTime)
+                    .Where(p => now > p.PersonalCourse.EndTime)
                     .AsTracking()
                     .ToListAsync();
                 finishedCourses.ForEach(p =>
@@ -754,7 +729,7 @@ namespace DataSphere.FronDesk
                     .Include(p => p.Course)
                     .Where(p => !p.IsCancel && !p.IsFinish)
                     .Where(p => p.Course.CourseDate <= today)
-                    .Where(p => now.TimeOfDay > p.Course.EndTime)
+                    .Where(p => now > p.Course.EndTime)
                     .AsTracking()
                     .ToListAsync();
                 finishedCourses.ForEach(p =>

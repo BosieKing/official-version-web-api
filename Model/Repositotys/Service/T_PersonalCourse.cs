@@ -26,14 +26,14 @@ namespace Model.Repositotys.Service
         /// </summary>
         [Required]
         [Column("StartTime")]
-        public TimeSpan StartTime { get; set; }
+        public DateTime StartTime { get; set; }
 
         /// <summary>
         /// 课程结束时间（仅存储时分秒）
         /// </summary>
         [Required]
         [Column("EndTime")]
-        public TimeSpan EndTime { get; set; }
+        public DateTime EndTime { get; set; }
 
         /// <summary>
         /// 课程日期（仅存储年月日）
