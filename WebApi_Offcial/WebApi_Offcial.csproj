@@ -62,7 +62,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ActionFilters\BackEnd\" />
     <Folder Include="ActionFilters\Center\" />
     <Folder Include="OtherFiles\Log\" />
     <Folder Include="wwwroot\CarouselPics\" />

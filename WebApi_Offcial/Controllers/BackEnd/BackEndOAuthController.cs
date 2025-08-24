@@ -48,7 +48,7 @@ namespace WebApi_Offcial.Controllers.BackEnd
         public async Task<ActionResult<ServiceResult>> LoginByPassword([FromBody] BackEndLoginByPasswordInput input)
         {
             // 设置返回头
-            (string Token, string RefreshToken) result = await _backOAuthDao.LoginByPassWord(input);
+            (string Token, string RefreshToken) result = await _backOAuthDao.LoginByPassword(input);
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = result.Token;
             _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = result.RefreshToken;
             return ServiceResult.SetData(true);
