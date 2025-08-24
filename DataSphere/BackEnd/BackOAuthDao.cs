@@ -1,19 +1,13 @@
 ﻿using IDataSphere.DatabaseContexts;
 using IDataSphere.Interfaces.BackEnd;
-using IDataSphere.Interfaces.FronDesk;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Model.Commons.Domain;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Model.Commons.CoreData;
 using Model.DTOs.BackEnd.BackEndOAuth;
 using Model.Repositotys.Service;
 using SharedLibrary.Consts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TencentCloud.Cam.V20190116.Models;
-using UtilityToolkit.Helpers.WxLogin.Dto;
+using UtilityToolkit.Tools;
+using UtilityToolkit.Utils;
 
 namespace DataSphere.BackEnd
 {
@@ -23,9 +17,10 @@ namespace DataSphere.BackEnd
     public class BackOAuthDao : Repository<T_User>, IBackEndOAuthDao
     {
         #region 构造函数
-     
-        public BackOAuthDao(SqlDbContext sqlDbContext) : base(sqlDbContext)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public BackOAuthDao(SqlDbContext sqlDbContext, IHttpContextAccessor httpContextAccessor) : base(sqlDbContext)
         {
+            _httpContextAccessor = httpContextAccessor;
         }
         #endregion
 
@@ -36,11 +31,26 @@ namespace DataSphere.BackEnd
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<dynamic> LoginByPassword(BackEndLoginByPasswordInput input) 
-        { 
-        
-        
-        
+        public async Task<dynamic> LoginByPassword(BackEndLoginByPasswordInput input)
+        {
+            string cryptoPasswor = PasswordCryptoUtil.Decrypt(input.Password);
+            var user = await _db.ManagerRep.Include(p => p.ManagerRoles)
+                .ThenInclude(p => p.Roles)
+                .ThenInclude(p => p.RoleMenus)
+                .ThenInclude(p => p.Menu)
+                .FirstOrDefaultAsync(p => p.Phone == input.Phone && p.Password == cryptoPasswor);
+            TokenInfoModel tokenInfo = new();
+            tokenInfo.UserId = user.Id.ToString();
+            tokenInfo.RoleIds = string.Join(",", user.ManagerRoles
+                                                .SelectMany(managerRole => managerRole.Roles)
+                                                .SelectMany(role => role.RoleMenus)
+                                                .Select(roleMenu => roleMenu.Menu.ControllerRouter)
+                                                .ToArray());
+            string token = TokenTool.CreateToken(tokenInfo);
+            string refreshToken = TokenTool.CreateRefreshToken(tokenInfo, input.IsRemember);
+            _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_Token_Head] = token;
+            _httpContextAccessor.HttpContext.Response.Headers[ClaimsUserConst.HTTP_REFRESHToken_Head] = refreshToken;
+            return true;
         }
 
 

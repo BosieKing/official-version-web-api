@@ -109,7 +109,7 @@ namespace WebApi_Offcial.ActionFilters.BackEnd
                 return ServiceResult.Fail($"请耐心等待{expTime / 60}秒");
             }
             // 判断密码是否正确
-            bool passWordExist = await _backEndOAuthDao.SingleDataExisted<T_User>(p=> p.Phone == input.Phone && p.Password == PassWordCryptoUtil.Decrypt(input.Password));
+            bool passWordExist = await _backEndOAuthDao.SingleDataExisted<T_User>(p=> p.Phone == input.Phone && p.Password == PasswordCryptoUtil.Decrypt(input.Password));
             // 密码不存在
             if (!passWordExist)
             {

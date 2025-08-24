@@ -16,7 +16,7 @@ namespace IDataSphere.DatabaseContexts
         /// <summary>
         /// 老师表
         /// </summary>
-        public DbSet<T_Teacher> TeacherRep { get; set; }
+        public DbSet<T_Manager> TeacherRep { get; set; }
 
         /// <summary>
         /// 课程表
@@ -42,5 +42,16 @@ namespace IDataSphere.DatabaseContexts
         /// 我的卡包
         /// </summary>
         public DbSet<T_MyCard> MyCardRep { get; set; }
+
+
+        /// <summary>
+        /// 管理者
+        /// </summary>
+        public DbSet<T_Manager> ManagerRep { get; set; }
+
+        /// <summary>
+        /// 角色
+        /// </summary>
+        public DbSet<T_Role> RoleRep { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace UtilityToolkit.Utils
     /// <summary>
     /// 密码处理
     /// </summary>
-    public static class PassWordCryptoUtil
+    public static class PasswordCryptoUtil
     {
         /// <summary>
         /// 公钥加密
