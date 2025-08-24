@@ -1,8 +1,12 @@
 ﻿using IDataSphere.DatabaseContexts;
 using IDataSphere.Interfaces.BackEnd;
 using IDataSphere.Interfaces.FronDesk;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Model.Commons.Domain;
 using Model.DTOs.BackEnd.BackEndOAuth;
 using Model.Repositotys.Service;
+using SharedLibrary.Consts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +23,7 @@ namespace DataSphere.BackEnd
     public class BackOAuthDao : Repository<T_User>, IBackOAuthDao
     {
         #region 构造函数
+     
         public BackOAuthDao(SqlDbContext sqlDbContext) : base(sqlDbContext)
         {
         }
@@ -27,15 +32,18 @@ namespace DataSphere.BackEnd
 
         #region 登录相关
         /// <summary>
-        /// 密码登录
+        /// 电话号码的登录
         /// </summary>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<dynamic> BackEndLoginByPassword(BackEndLoginByPasswordInput input)
+        public async Task<dynamic> LoginByPassword(BackEndLoginByPasswordInput input) 
         { 
-
+        
         
         
         }
+
+
         #endregion
 
         #region 
