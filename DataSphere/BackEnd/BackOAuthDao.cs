@@ -20,7 +20,7 @@ namespace DataSphere.BackEnd
     /// <summary>
     /// 后台权限管理
     /// </summary>
-    public class BackOAuthDao : Repository<T_User>, IBackOAuthDao
+    public class BackOAuthDao : Repository<T_User>, IBackEndOAuthDao
     {
         #region 构造函数
      

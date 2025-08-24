@@ -7,6 +7,7 @@ using Service.Center.Captcha;
 using SharedLibrary.Consts;
 using SharedLibrary.Enums;
 using UtilityToolkit.Helpers;
+using WebApi_Offcial.ActionFilters.BackEnd;
 
 namespace WebApi_Offcial.Controllers.BackEnd
 {
@@ -16,16 +17,17 @@ namespace WebApi_Offcial.Controllers.BackEnd
     [ApiController]
     [Route("BackOAuth")]
     [ApiDescription(SwaggerGroupEnum.BackEnd)]
+    [ServiceFilter(typeof(BackEndOAuthActionFilter))]
     public class BackEndOAuthController : BaseController
     {
         #region 构造函数
         private readonly ICaptchaService _captchaService;
-        private readonly IBackOAuthDao _backOAuthDao;
+        private readonly IBackEndOAuthDao _backOAuthDao;
         private readonly IHttpContextAccessor _httpContextAccessor;
         /// <summary>
         /// 构造函数
         /// </summary>
-        public BackEndOAuthController(IBackOAuthDao backOAuthDao,
+        public BackEndOAuthController(IBackEndOAuthDao backOAuthDao,
             ICaptchaService captchaService,
             IHttpContextAccessor httpContextAccess)
         {
