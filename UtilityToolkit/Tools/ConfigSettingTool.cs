@@ -49,5 +49,11 @@ namespace UtilityToolkit.Tools
         /// </summary>
 
         public static readonly WXConfig WXConfig = new WXConfig();
+
+        /// <summary>
+        /// Minio配置
+        /// </summary>
+
+        public static readonly MinIOConfig MinIOConfig = new MinIOConfig();
     }
 }

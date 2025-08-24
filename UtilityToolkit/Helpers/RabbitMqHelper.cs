@@ -7,6 +7,12 @@ namespace UtilityToolkit.Helpers
     /// </summary>
     public class RabbitMQHelper
     {
+        private readonly IConnection connection;
+        public RabbitMQHelper(IConnection connection)
+        {
+            this.connection = connection;
+        }
+
         /// <summary>
         /// 获取连接
         /// </summary>
@@ -22,12 +28,9 @@ namespace UtilityToolkit.Helpers
             conn.AutomaticRecoveryEnabled = true;
             conn.NetworkRecoveryInterval = TimeSpan.FromSeconds(1);
             conn.TopologyRecoveryEnabled = true;
-
-           
             return conn.CreateConnection();
         }
 
-     
 
     }
 }

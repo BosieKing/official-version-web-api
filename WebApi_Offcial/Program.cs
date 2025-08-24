@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Model.Commons.Domain;
 using Newtonsoft.Json;
+using OnceMi.AspNetCore.OSS;
 using Quartz;
 using RabbitMQ.Client;
 using System.Globalization;
@@ -138,8 +139,12 @@ builder.Services.AddHostedService<HostService>();
 builder.Services.AddCustomizeQuartz();
 
 // 对RabbitMQ服务进行单例注册
-//builder.Services.AddSingleton<RabbitMQHelper>();
-//builder.Services.AddSingleton<IConnection>(provider => provider.GetRequiredService<RabbitMQHelper>().GetConnection());
+builder.Services.AddSingleton<RabbitMQHelper>();
+builder.Services.AddSingleton<IConnection>(provider => provider.GetRequiredService<RabbitMQHelper>().GetConnection());
+
+// 注入minio服务
+builder.Services.AddOSSService(ConfigSettingTool.MinIOConfig.DefaultKey, "MinIOConfig");
+builder.Services.AddScoped<MinIOStrategyHelper>();
 
 
 

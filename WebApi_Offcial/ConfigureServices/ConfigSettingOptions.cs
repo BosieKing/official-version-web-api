@@ -40,6 +40,7 @@ namespace WebApi_Offcial.ConfigureServices
             configuration.GetSection(nameof(ElasticSearchConfig)).Bind(ConfigSettingTool.ElasticSearchConfig);
             configuration.GetSection(nameof(SystemConfig)).Bind(ConfigSettingTool.SystemConfig);
             configuration.GetSection(nameof(WXConfig)).Bind(ConfigSettingTool.WXConfig);
+            configuration.GetSection(nameof(MinIOConfig)).Bind(ConfigSettingTool.MinIOConfig);
             return configuration;
         }
     }
